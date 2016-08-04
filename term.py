@@ -1,4 +1,4 @@
-from rc import TERM_COLOR, APPLY_COLOR
+from rc import TERM_COLOR, APPLY_COLOR, ERROR_PRE
 import cmd
 import traceback
 import shlex
@@ -11,7 +11,7 @@ WELCOME_STRING = APPLY_COLOR("BOLD_YELLOW", "Welcome to VON!")
 GOODBYE_STRING = APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D")
 
 
-class VonTerminal(cmd.Cmd):
+class VonTerminal(cmd.Cmd, controller.VonController):
 	prompt = PROMPT_TEXT
 	def emptyline(self):
 		pass
@@ -30,9 +30,35 @@ class VonTerminal(cmd.Cmd):
 				traceback.print_exc()
 		print "\n" + GOODBYE_STRING 
 
+	def onecmd(self, line):
+		"""Interpret the argument as though it had been typed in response
+		to the prompt."""
+		if line.strip() == "":
+			return self.emptyline()
+		_ = shlex.split(line)
+		cmd = _[0]
+		argv = _[1:]
+		self.lastcmd = line
+		if line == 'EOF' :
+			self.lastcmd = ''
+			return 1
+		else:
+			try:
+				func = getattr(self, 'do_' + cmd)
+			except AttributeError:
+				return self.default(line)
+			return func(argv)
 
-	def do_EOF(self, arg):
-		return 1
+	def direct(self, cargs):
+		# cargs = sys.argv ostensibly
+		if len(cargs) == 0:
+			print "No command given"
+		cmd = cargs[0]
+		if hasattr(self, 'do_' + cmd):
+			func = getattr(self, 'do_' + cmd)
+			func(cargs[1:])
+		else:
+			print ERROR_PRE, "Command {} not recognized".format(cmd)
 
 	def do_help(self, arg):
 		if arg:
@@ -49,8 +75,6 @@ class VonTerminal(cmd.Cmd):
 				if name[:3] == 'do_' and name != 'do_help' and name != 'do_EOF':
 					print name[3:]
 	
-	def do_add(self, arg):
-		controller.do_add(shlex.split(arg))
 
 if __name__ == "__main__":
 	VonTerminal().run()

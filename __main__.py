@@ -7,4 +7,4 @@ if __name__ == "__main__":
 	if len(sys.argv) == 1:
 		cmd.run()
 	else:
-		cmd.onecmd(' '.join(sys.argv[1:]))
+		cmd.direct(sys.argv[1:]) # to preserve command line quotes etc

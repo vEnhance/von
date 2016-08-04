@@ -1,7 +1,8 @@
 import os
 
 VON_BASE_PATH = "/home/evan/Documents/Oly-Math/Database/" # TODO for public, use better
-VON_INDEX_NAME = "index.yaml"
+VON_INDEX_NAME = "index"
+VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
 EDITOR = os.environ.get('EDITOR','vim') #that easy!
 
 SEPERATOR = '\n---\n'
@@ -57,3 +58,6 @@ if USE_COLOR is False:
 
 def APPLY_COLOR(color_name, s):	
 	return TERM_COLOR[color_name] + s + TERM_COLOR["RESET"]
+
+ERROR_PRE = APPLY_COLOR("RED", "Error:")
+WARN_PRE  = APPLY_COLOR("MAGENTA", "Warn:")

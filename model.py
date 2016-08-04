@@ -1,22 +1,31 @@
 import os
 import collections
-from rc import SEPERATOR, VON_BASE_PATH, APPLY_COLOR, VON_INDEX_NAME
+from rc import SEPERATOR, VON_BASE_PATH, APPLY_COLOR, VON_INDEX_PATH, WARN_PRE
 import yaml
+import cPickle as pickle
 
-VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
-
-class yamlOpen(collections.MutableMapping):
-	def __init__(self, path, mode = 'r'):
+class pickleOpen(collections.MutableMapping):
+	def __init__(self, path, mode='r'):
+		if not os.path.isfile(path):
+			if mode == 'w':
+				self.store = {}
+			else:
+				raise IOError, '{} not here!'.format(path)
+		else:
+			with open(path) as f:
+				try:
+					self.store = pickle.load(f)
+				except:
+					print WARN_PRE, "Index corrupted, reading fresh..."
+					self.store = {}
 		self.path = path
 		self.mode = mode
-		with open(self.path) as f:
-			self.store = yaml.load(''.join(f.readlines()))
 	def __enter__(self):
 		return self
 	def __exit__(self, type, value, traceback):
 		if self.mode == 'w':
 			with open(self.path, 'w') as f:
-				print >>f, yaml.dump(self.store)
+				pickle.dump(self.store, f)
 	def __getitem__(self, key):
 		return self.store[key]
 	def __setitem__(self, key, value):
@@ -66,13 +75,20 @@ def getAllProblems():
 				ret.append(makeProblemFromText(path, ''.join(f.readlines())))
 	return ret
 
-def addToCache(path, problem):
-	with yamlOpen(VON_INDEX_NAME, 'w') as index:
-		p = problem
-		index[p.source] = { 'desc' : p.desc, 'tags': p.tags, 'path' : path }
+def getProblemBySource(source):
+	with pickleOpen(VON_INDEX_PATH) as index:
+		ppath = index.get(source)['path']
+	with open(ppath) as f:
+		p = makeProblemFromText(ppath, ''.join(f))
+	return p
 
-def writeCache(d):
-	with yamlOpen(VON_INDEX_PATH, 'w') as index:
+def addToCache(problem):
+	with pickleOpen(VON_INDEX_PATH, 'w') as index:
+		p = problem
+		index[p.source] = { 'desc' : p.desc, 'tags': p.tags, 'path' : p.path }
+
+def setEntireCache(d):
+	with pickleOpen(VON_INDEX_PATH, 'w') as index:
 		index.set(d)
 
 def rebuildCache():
@@ -82,7 +98,7 @@ def rebuildCache():
 			print APPLY_COLOR("RED", "Duplicate problem ")+p.source+" is being skipped..."
 		else:
 			d[p.source] = { 'desc' : p.desc, 'tags' : p.tags, 'path' : p.path}
-	writeCache(d)
+	setEntireCache(d)
 
 if __name__ == "__main__":
 	rebuildCache()

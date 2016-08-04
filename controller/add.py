@@ -1,4 +1,4 @@
-from rc import EDITOR, VON_BASE_PATH, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT
+from rc import EDITOR, VON_BASE_PATH, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, ERROR_PRE
 import model
 
 import clipboard
@@ -123,6 +123,9 @@ parser.add_argument('filename', default = None, nargs = '?',
 def main(argv):
 	opts = parser.parse_args(argv)
 	if opts.filename is not None:
+		if not os.path.isfile(opts.filename):
+			print ERROR_PRE, opts.filename, "doesn't exist"
+			return
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())
 	else:
