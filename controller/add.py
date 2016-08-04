@@ -1,4 +1,5 @@
 from rc import EDITOR, VON_BASE_PATH, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT
+import model
 
 import clipboard
 import datetime
@@ -106,16 +107,21 @@ def do_add_problem(raw_text):
 	if out_yaml is None:
 		print "Aborting due to empty input..."
 		return
+	out_text = NSEPERATOR.join([out_yaml]+bodies)
 	with open(target, 'w') as f:
-		print >>f, NSEPERATOR.join([out_yaml]+bodies)
+		print >>f, out_text
 	print "Wrote to", target
+
+	# Now update cache
+	p = model.makeProblemFromText(target, out_text)
+	model.addToCache(p)
 
 parser = argparse.ArgumentParser(prog='add', description='Adds a problem to VON.')
 parser.add_argument('filename', default = None, nargs = '?',
 		help="If specified, uses contents of file as body")
 
-def main(args):
-	opts = parser.parse_args(args)
+def main(argv):
+	opts = parser.parse_args(argv)
 	if opts.filename is not None:
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())

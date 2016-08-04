@@ -1,1 +1,1 @@
-from controller.add import main as add
+from controller.add import main as do_add

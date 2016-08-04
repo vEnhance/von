@@ -2,6 +2,7 @@ from rc import TERM_COLOR, APPLY_COLOR
 import cmd
 import traceback
 import shlex
+import controller
 
 
 PROMPT_TEXT = TERM_COLOR["BOLD_CYAN"] + "von" \
@@ -47,6 +48,9 @@ class VonTerminal(cmd.Cmd):
 			for name in sorted(self.get_names()):
 				if name[:3] == 'do_' and name != 'do_help' and name != 'do_EOF':
 					print name[3:]
+	
+	def do_add(self, arg):
+		controller.do_add(shlex.split(arg))
 
 if __name__ == "__main__":
 	VonTerminal().run()

@@ -1,23 +1,44 @@
 import os
+import collections
 from rc import SEPERATOR, VON_BASE_PATH, APPLY_COLOR, VON_INDEX_NAME
 import yaml
 
-INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
+VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
 
-global CACHE # meow
-if os.path.isfile(INDEX_PATH):
-	with open(INDEX_PATH) as f:
-		CACHE = yaml.load(f)
-else:
-	CACHE = {}
-
+class yamlOpen(collections.MutableMapping):
+	def __init__(self, path, mode = 'r'):
+		self.path = path
+		self.mode = mode
+		with open(self.path) as f:
+			self.store = yaml.load(''.join(f.readlines()))
+	def __enter__(self):
+		return self
+	def __exit__(self, type, value, traceback):
+		if self.mode == 'w':
+			with open(self.path, 'w') as f:
+				print >>f, yaml.dump(self.store)
+	def __getitem__(self, key):
+		return self.store[key]
+	def __setitem__(self, key, value):
+		self.store[key] = value
+	def __delitem__(self, key):
+		del self.store[key]
+	def __iter__(self):
+		return iter(self.store)
+	def __len__(self):
+		return len(self.store)
+	def set(self, store):
+		self.store = store
+	
 class Problem:
 	bodies = []         # statement, sol, comments, ...
 	desc = ""           # e.g. "Fiendish inequality"
 	source = ""         # used as problem ID, e.g. "USAMO 2000/6"
 	tags = []           # tags for the problem
+	path = ""           # path to problem TeX file
 
-	def __init__(self, **kwargs):
+	def __init__(self, path, **kwargs):
+		self.path = path
 		for key in kwargs:
 			setattr(self, key, kwargs[key])
 
@@ -29,39 +50,39 @@ class Problem:
 		return "({p.source}) {p.state}".format(p=self)
 
 
-def readProblem(text):
+def makeProblemFromText(path, text):
 	x = text.split(SEPERATOR)
 	data = yaml.load(x[0])
 	data['bodies'] = x[1:]
-	return Problem(**data)
+	return Problem(path, **data)
 
 def getAllProblems():
-	# TODO: this is expensive
 	ret = []
-
 	for root, _, filenames in os.walk(VON_BASE_PATH):
 		for fname in filenames:
 			if not '.tex' in fname: continue
-			with open(os.path.join(root, fname)) as f:
-				ret.append(readProblem(''.join(f.readlines())))
+			path = os.path.join(root, fname)
+			with open(path) as f:
+				ret.append(makeProblemFromText(path, ''.join(f.readlines())))
 	return ret
 
-def addCache(problem):
-	p = problem
-	CACHE[p.source] = { 'desc' : p.desc, 'tags' : p.tags }
+def addToCache(path, problem):
+	with yamlOpen(VON_INDEX_NAME, 'w') as index:
+		p = problem
+		index[p.source] = { 'desc' : p.desc, 'tags': p.tags, 'path' : path }
 
-def writeCache():
-	with open(INDEX_PATH, 'w') as f:
-		print >>f, yaml.dump(CACHE)
+def writeCache(d):
+	with yamlOpen(VON_INDEX_PATH, 'w') as index:
+		index.set(d)
 
 def rebuildCache():
-	CACHE.clear()
+	d = {}
 	for p in getAllProblems():
-		if p.source in CACHE:
+		if p.source in d:
 			print APPLY_COLOR("RED", "Duplicate problem ")+p.source+" is being skipped..."
 		else:
-			CACHE[p.source] = { 'desc' : p.desc, 'tags' : p.tags }
-	writeCache()
+			d[p.source] = { 'desc' : p.desc, 'tags' : p.tags, 'path' : p.path}
+	writeCache(d)
 
 if __name__ == "__main__":
 	rebuildCache()
