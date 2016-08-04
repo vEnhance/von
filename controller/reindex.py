@@ -6,4 +6,4 @@ parser = argparse.ArgumentParser(prog='reindex', description='Rebuilds the probl
 
 def main(argv):
 	opts = parser.parse_args(argv)
-	model.rebuildCache()
+	model.rebuildIndex()

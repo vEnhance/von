@@ -13,4 +13,4 @@ def main(argv):
 		print ERROR_PRE, "Not found"
 	else:
 		subprocess.call([EDITOR, p.path])
-		model.addToCache(p) # update cache after editing problem
+		model.addToIndex(p) # update cache after editing problem

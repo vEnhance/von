@@ -58,6 +58,10 @@ class Problem:
 	def __repr__(self):
 		return "({p.source}) {p.state}".format(p=self)
 
+	@property
+	def summary(self):
+		"""For storage in pickle"""
+		return { 'desc' : self.desc, 'tags' : self.tags, 'path' : self.path }
 
 def makeProblemFromText(path, text):
 	x = text.split(SEPERATOR)
@@ -84,23 +88,20 @@ def getProblemBySource(source):
 		p = makeProblemFromText(ppath, ''.join(f))
 	return p
 
-def addToCache(problem):
+def addToIndex(problem):
 	with pickleOpen(VON_INDEX_PATH, 'w') as index:
 		p = problem
-		index[p.source] = { 'desc' : p.desc, 'tags': p.tags, 'path' : p.path }
+		index[p.source] = p.summary
 
-def setEntireCache(d):
+def setEntireIndex(d):
 	with pickleOpen(VON_INDEX_PATH, 'w') as index:
 		index.set(d)
 
-def rebuildCache():
+def rebuildIndex():
 	d = {}
 	for p in getAllProblems():
 		if p.source in d:
 			print APPLY_COLOR("RED", "Duplicate problem ")+p.source+" is being skipped..."
 		else:
-			d[p.source] = { 'desc' : p.desc, 'tags' : p.tags, 'path' : p.path}
-	setEntireCache(d)
-
-if __name__ == "__main__":
-	rebuildCache()
+			d[p.source] = p.summary
+	setEntireIndex(d)

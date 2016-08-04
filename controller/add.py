@@ -114,7 +114,7 @@ def do_add_problem(raw_text):
 
 	# Now update cache
 	p = model.makeProblemFromText(target, out_text)
-	model.addToCache(p)
+	model.addToIndex(p)
 
 parser = argparse.ArgumentParser(prog='add', description='Adds a problem to VON.')
 parser.add_argument('filename', default = None, nargs = '?',
