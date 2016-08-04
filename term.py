@@ -1,20 +1,32 @@
 from rc import TERM_COLOR, APPLY_COLOR, ERROR_PRE
+import os
 import cmd
 import traceback
 import shlex
 import controller
+import glob
 
+import readline
+readline.set_completer_delims(' \t\n')
 
 PROMPT_TEXT = TERM_COLOR["BOLD_CYAN"] + "von" \
 		+ TERM_COLOR["GREEN"] + ":) " + TERM_COLOR["RESET"]
 WELCOME_STRING = APPLY_COLOR("BOLD_YELLOW", "Welcome to VON!")
 GOODBYE_STRING = APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D")
 
+def _complete_path(path):
+	if os.path.isdir(path):
+		return glob.glob(os.path.join(path, '*'))
+	else:
+		return glob.glob(path+'*')
 
 class VonTerminal(cmd.Cmd, controller.VonController):
 	prompt = PROMPT_TEXT
 	def emptyline(self):
 		pass
+
+	def completedefault(self, text, line, start_idx, end_idx):
+		return _complete_path(text)
 
 	def run(self):
 		print WELCOME_STRING
@@ -74,10 +86,5 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 			for name in sorted(self.get_names()):
 				if name[:3] == 'do_' and name != 'do_help' and name != 'do_EOF':
 					print name[3:]
-	
-
-if __name__ == "__main__":
-	VonTerminal().run()
-
 	
 # vim: fdm=marker
