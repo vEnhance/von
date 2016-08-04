@@ -108,7 +108,7 @@ def do_add_problem(raw_text):
 		return
 	with open(target, 'w') as f:
 		print >>f, NSEPERATOR.join([out_yaml]+bodies)
-
+	print "Wrote to", target
 
 parser = argparse.ArgumentParser(prog='add', description='Adds a problem to VON.')
 parser.add_argument('filename', default = None, nargs = '?',

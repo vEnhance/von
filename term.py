@@ -3,8 +3,6 @@ import cmd
 import traceback
 import shlex
 
-from controller.add import main as controller_add
-
 # Color names {{{
 TERM_COLOR = {}
 TERM_COLOR["NORMAL"]          = ""
@@ -80,9 +78,6 @@ class VonTerminal(cmd.Cmd):
 			for name in sorted(self.get_names()):
 				if name[:3] == 'do_' and name != 'do_help' and name != 'do_EOF':
 					print name[3:]
-
-	def do_add(self, arg):
-		controller_add(shlex.split(arg))
 
 if __name__ == "__main__":
 	VonTerminal().run()
