@@ -77,6 +77,8 @@ def getAllProblems():
 
 def getProblemBySource(source):
 	with pickleOpen(VON_INDEX_PATH) as index:
+		if not source in index:
+			return None
 		ppath = index.get(source)['path']
 	with open(ppath) as f:
 		p = makeProblemFromText(ppath, ''.join(f))
