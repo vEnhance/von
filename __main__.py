@@ -2,7 +2,6 @@ import term
 import sys
 import controller
 
-
 if __name__ == "__main__":
 	if len(sys.argv) == 1:
 		cmd = term.VonTerminal()
