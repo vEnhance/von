@@ -40,6 +40,7 @@ def get_bodies(raw_text):
 		raw_ps = user_file_input(initial = initial, extension = ".tex")
 		if raw_ps.count(SEPERATOR) >= 1:
 			bodies = [_.strip() for _ in raw_ps.split(SEPERATOR)[1:]]
+			if bodies[0] == '': return None
 			return bodies
 		elif raw_ps.strip() == "":
 			return None
@@ -72,6 +73,8 @@ def get_yaml_info():
 		raw_yaml = user_file_input(initial = initial, extension = ".yaml")
 		try:
 			d = yaml.load(raw_yaml)
+			if d is None:
+				return (None, None)
 			assert 'path' in d, "Path is mandatory"
 			assert 'source' in d, "Source is mandatory"
 			if d['path'][-1] != '/':
@@ -97,11 +100,11 @@ def do_add_problem(raw_text):
 	# Get problem and solution
 	bodies = get_bodies(raw_text)
 	if bodies is None:
-		print "Aborting due to empty file"
+		print "Aborting due to empty input..."
 		return
 	target, out_yaml = get_yaml_info()
-	if out_yaml == '':
-		print "Aborting due to empty file"
+	if out_yaml is None:
+		print "Aborting due to empty input..."
 		return
 	with open(target, 'w') as f:
 		print >>f, NSEPERATOR.join([out_yaml]+bodies)
