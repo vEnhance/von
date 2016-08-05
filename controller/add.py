@@ -108,13 +108,7 @@ def do_add_problem(raw_text):
 		print "Aborting due to empty input..."
 		return
 	out_text = NSEPERATOR.join([out_yaml]+bodies)
-	with open(target, 'w') as f:
-		print >>f, out_text
-	print "Wrote to", target
-
-	# Now update cache
-	p = model.makeProblemFromText(target, out_text)
-	model.addToIndex(p)
+	model.addProblemByFileContents(target, out_text)
 
 parser = argparse.ArgumentParser(prog='add', description='Adds a problem to VON.')
 parser.add_argument('filename', default = None, nargs = '?',

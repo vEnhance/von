@@ -3,7 +3,10 @@ import os
 VON_BASE_PATH = "/home/evan/Documents/Oly-Math/Database/" # TODO for public, use better
 VON_INDEX_NAME = "index"
 VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
-EDITOR = os.environ.get('EDITOR','vim') #that easy!
+VON_CACHE_NAME = "cache"
+VON_CACHE_PATH = os.path.join(VON_BASE_PATH, VON_CACHE_NAME)
+
+EDITOR = os.environ.get('EDITOR','vim') # that easy!
 
 SEPERATOR = '\n---\n'
 NSEPERATOR = '\n' + SEPERATOR + '\n'
@@ -61,3 +64,5 @@ def APPLY_COLOR(color_name, s):
 
 ERROR_PRE = APPLY_COLOR("RED", "Error:")
 WARN_PRE  = APPLY_COLOR("MAGENTA", "Warn:")
+
+KEY_CHAR = '~'

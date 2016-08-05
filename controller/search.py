@@ -1,0 +1,18 @@
+from rc import APPLY_COLOR, KEY_CHAR
+import argparse
+import model
+
+parser = argparse.ArgumentParser(prog='search', description='Searches for problems by tags or text.')
+parser.add_argument('words', nargs='+', help="Terms you want to search for. To find tags, use #tag.")
+
+TAG_CHARS = '#'
+
+def main(argv):
+	opts = parser.parse_args(argv)
+	tags = [t[1:] for t in opts.words if t[0] in TAG_CHARS]
+	terms = [t[1:] for t in opts.words if t[0] not in TAG_CHARS]
+
+	result = model.runSearch(tags, terms)
+
+	for i, entry in enumerate(result):
+		print entry
