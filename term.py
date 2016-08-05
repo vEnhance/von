@@ -72,15 +72,16 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 		else:
 			print ERROR_PRE, "Command {} not recognized".format(cmd)
 
-	def do_help(self, arg):
+	def do_help(self, argv):
+		arg = ''.join(argv)
 		if arg:
 			try:
 				func = getattr(self, 'do_' + arg)
 			except AttributeError:
 				print 'Command {} not found'.format(arg)
 			else:
-				print APPLY_COLOR("MAGENTA", "Running `{} --help`...".format(arg))
-				func('--help')
+				print APPLY_COLOR("MAGENTA", "Getting `{} --help`...".format(arg))
+				func(['--help'])
 		else:
 			print "Here is a list of available commands:"
 			for name in sorted(self.get_names()):
