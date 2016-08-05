@@ -6,7 +6,8 @@ parser = argparse.ArgumentParser(prog='search',\
 		description='Searches for problems by tags or text.')
 parser.add_argument('words', nargs='+',\
 		help="Terms you want to search for. To find tags, use #tag.")
-parser.add_argument('-r', '--refine', action = "store_const", default = False, const = True,\
+parser.add_argument('-r', '--refine', action = "store_const",\
+		default = False, const = True,\
 		help = "Prune through the Cache rather than the whole database.")
 # TODO eventually maybe don't put numbers on everything
 

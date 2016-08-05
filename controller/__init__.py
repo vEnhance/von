@@ -6,6 +6,7 @@ from controller.edit import main as do_edit
 from controller.reindex import main as do_reindex
 from controller.search import main as do_search
 from controller.show import main as do_show
+from controller.ss import main as do_ss
 
 class VonController:
 	# Complicated
@@ -19,15 +20,13 @@ class VonController:
 		do_search(argv)
 	def do_show(self, argv):
 		do_show(argv)
+	def do_ss(self, argv):
+		do_ss(argv)
+	do_status = do_ss
 
 	# Shorter ones
-
 	def do_clear(self, argv):
-		parser = argparse.ArgumentParser(prog='clear', description='Clears the Cache.')
+		parser = argparse.ArgumentParser(prog='clear',\
+				description='Clears the Cache.')
 		opts = parser.parse_args(argv)
 		model.clearCache()
-	def do_ss(self, argv):
-		parser = argparse.ArgumentParser(prog='ss', description='Prints the Cache.')
-		for entry in model.readCache():
-			print entry
-	do_status = do_ss

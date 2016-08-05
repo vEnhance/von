@@ -69,7 +69,7 @@ class Problem:
 	def __repr__(self):
 		s = ""
 		if self.i is not None:
-			s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(self.i) + "]")
+			s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(self.n) + "]")
 			s += " \t"
 		s +=  APPLY_COLOR("BOLD_BLUE", "(" + self.source + ")")
 		s += " "
@@ -80,6 +80,9 @@ class Problem:
 		s += self.state.strip()
 		return s
 
+	@property
+	def n(self):
+		return self.i + 1 if self.i is not None else None
 	@property
 	def entry(self):
 		"""Returns an IndexEntry for storage in pickle"""
@@ -99,9 +102,9 @@ class IndexEntry:
 	def __repr__(self):
 		s = ""
 		if self.i is not None:
-			s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(self.i) + "]")
+			s += APPLY_COLOR("BOLD_BLUE", "[" + KEY_CHAR + str(self.n) + "]")
 			s += " \t"
-		s +=  APPLY_COLOR("BOLD_BLUE", "(" + self.source + ")")
+		s +=  APPLY_COLOR("BOLD_RED", "(" + self.source + ")")
 		s += " "
 		s +=  self.desc
 		return s
@@ -109,6 +112,9 @@ class IndexEntry:
 	def entry(self):
 		print WARN_PRE, "sketchy af"
 		return self
+	@property
+	def n(self):
+		return self.i + 1 if self.i is not None else None
 	@property
 	def full(self):
 		p = makeProblemFromPath(self.path)
@@ -134,9 +140,9 @@ def getAllProblems():
 				ret.append(makeProblemFromPath(path))
 	return ret
 
-def getEntryByCacheNum(i):
+def getEntryByCacheNum(n):
 	with pickleDict(VON_CACHE_PATH) as cache:
-		return cache[i]
+		return cache[n-1]
 
 def getEntryBySource(source):
 	with pickleDict(VON_INDEX_PATH) as index:
@@ -148,7 +154,7 @@ def getEntryBySource(source):
 def getEntryByKey(key):
 	# TODO this shouldn't actually be in mode, but blah
 	if key[0] == KEY_CHAR:
-		return getEntryByCacheNum(i = int(key[1:]))
+		return getEntryByCacheNum(n = int(key[1:]))
 	else:
 		return getEntryBySource(source = key)
 
