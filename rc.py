@@ -30,5 +30,5 @@ TAG_HINT_TEXT = """# Some hints for tags:
   # Part III: @inversion @polar @projective @harmonic @miquel @spiralsim @mixtilinear"""
 
 USE_COLOR = True
-KEY_CHAR = '~'
+KEY_CHAR = 'C~'
 TAG_CHARS = '#@'

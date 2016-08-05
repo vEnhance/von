@@ -144,7 +144,7 @@ def getEntryBySource(source):
 
 def getEntryByKey(key):
 	# TODO this shouldn't actually be in mode, but blah
-	if key[0] == KEY_CHAR:
+	if key.startswith(KEY_CHAR):
 		return getEntryByCacheNum(n = int(key[1:]))
 	else:
 		return getEntryBySource(source = key)
