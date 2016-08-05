@@ -66,3 +66,4 @@ ERROR_PRE = APPLY_COLOR("RED", "Error:")
 WARN_PRE  = APPLY_COLOR("MAGENTA", "Warn:")
 
 KEY_CHAR = '~'
+TAG_CHARS = '#@'

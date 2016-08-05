@@ -56,6 +56,8 @@ class Problem:
 	source = ""         # used as problem ID, e.g. "USAMO 2000/6"
 	tags = []           # tags for the problem
 	path = ""           # path to problem TeX file
+	i = None            # position in Cache, if any
+
 	def __init__(self, path, **kwargs):
 		self.path = path
 		for key in kwargs:
@@ -65,7 +67,18 @@ class Problem:
 	def state(self):
 		return self.bodies[0]
 	def __repr__(self):
-		return "({p.source}) {p.state}".format(p=self)
+		s = ""
+		if self.i is not None:
+			s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(self.i) + "]")
+			s += " \t"
+		s +=  APPLY_COLOR("BOLD_BLUE", "(" + self.source + ")")
+		s += " "
+		s +=  self.desc
+		s += "\n"
+		s += APPLY_COLOR("BOLD_MAGENTA", ' '.join(self.tags))
+		s += "\n"
+		s += self.state.strip()
+		return s
 
 	@property
 	def entry(self):
@@ -96,6 +109,11 @@ class IndexEntry:
 	def entry(self):
 		print WARN_PRE, "sketchy af"
 		return self
+	@property
+	def full(self):
+		p = makeProblemFromPath(self.path)
+		p.i = self.i
+		return p
 
 def makeProblemFromPath(path):
 	# Creates a problem instance from a source, without looking at Index
@@ -103,7 +121,7 @@ def makeProblemFromPath(path):
 		text = ''.join(f.readlines())
 	x = text.split(SEPERATOR)
 	data = yaml.load(x[0])
-	data['bodies'] = x[1:]
+	data['bodies'] = [_.strip() for _ in x[1:]]
 	return Problem(path, **data)
 
 def getAllProblems():
@@ -153,7 +171,6 @@ def runSearch(tags, terms, refine = False):
 	else:
 		with pickleDict(VON_CACHE_PATH) as cache:
 			result = [entry for entry in cache if _matches(entry)]
-			cache = result # since we're in the with block now
 	return result
 
 def augmentCache(entries):

@@ -5,6 +5,7 @@ from controller.add import main as do_add
 from controller.edit import main as do_edit
 from controller.reindex import main as do_reindex
 from controller.search import main as do_search
+from controller.show import main as do_show
 
 class VonController:
 	# Complicated
@@ -16,6 +17,8 @@ class VonController:
 		do_reindex(argv)
 	def do_search(self, argv):
 		do_search(argv)
+	def do_show(self, argv):
+		do_show(argv)
 
 	# Shorter ones
 
@@ -27,3 +30,4 @@ class VonController:
 		parser = argparse.ArgumentParser(prog='ss', description='Prints the Cache.')
 		for entry in model.readCache():
 			print entry
+	do_status = do_ss

@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import model
 
-parser = argparse.ArgumentParser(prog='open', description='Opens a problem by source name.')
+parser = argparse.ArgumentParser(prog='edit', description='Opens a problem by source name.')
 parser.add_argument('key', help="The key of the problem to open (either source or cache index).")
 
 def main(argv):
