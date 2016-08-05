@@ -39,7 +39,8 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 
 	def run(self):
 		print WELCOME_STRING
-		os.chdir(VON_BASE_PATH) # set cwd
+		if not os.getcwd().startswith(VON_BASE_PATH):
+			os.chdir(VON_BASE_PATH) # set cwd
 		while 1:
 			try:
 				self.cmdloop()
