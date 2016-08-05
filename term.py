@@ -1,4 +1,7 @@
-from rc import TERM_COLOR, APPLY_COLOR, ERROR_PRE
+from rc import VON_BASE_PATH
+from view import APPLY_COLOR
+import view
+
 import os
 import cmd
 import traceback
@@ -9,8 +12,6 @@ import glob
 import readline
 readline.set_completer_delims(' \t\n')
 
-PROMPT_TEXT = TERM_COLOR["BOLD_CYAN"] + "von" \
-		+ TERM_COLOR["GREEN"] + ":) " + TERM_COLOR["RESET"]
 WELCOME_STRING = APPLY_COLOR("BOLD_YELLOW", "Welcome to VON!")
 GOODBYE_STRING = APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D")
 
@@ -21,7 +22,15 @@ def _complete_path(path):
 		return glob.glob(path+'*')
 
 class VonTerminal(cmd.Cmd, controller.VonController):
-	prompt = PROMPT_TEXT
+	def getcwd(self):
+		return os.getcwd().replace(VON_BASE_PATH.rstrip("/"), '')
+
+	@property
+	def prompt(self):
+		return APPLY_COLOR("BOLD_CYAN", "VON") + \
+				APPLY_COLOR("CYAN", self.getcwd()) + \
+				"\n" + APPLY_COLOR("BOLD_GREEN", ":)") + " "
+
 	def emptyline(self):
 		pass
 
@@ -30,6 +39,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 
 	def run(self):
 		print WELCOME_STRING
+		os.chdir(VON_BASE_PATH) # set cwd
 		while 1:
 			try:
 				self.cmdloop()
@@ -64,13 +74,13 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 	def direct(self, cargs):
 		# cargs = sys.argv ostensibly
 		if len(cargs) == 0:
-			print "No command given"
+			view.error("No command given")
 		cmd = cargs[0]
 		if hasattr(self, 'do_' + cmd):
 			func = getattr(self, 'do_' + cmd)
 			func(cargs[1:])
 		else:
-			print ERROR_PRE, "Command {} not recognized".format(cmd)
+			view.error("Command {} not recognized".format(cmd))
 
 	def do_help(self, argv):
 		arg = ''.join(argv)
@@ -78,7 +88,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 			try:
 				func = getattr(self, 'do_' + arg)
 			except AttributeError:
-				print 'Command {} not found'.format(arg)
+				views.error('Command {} not found'.format(arg))
 			else:
 				print APPLY_COLOR("MAGENTA", "Getting `{} --help`...".format(arg))
 				func(['--help'])

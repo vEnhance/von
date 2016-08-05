@@ -1,7 +1,10 @@
+from rc import SEPERATOR, KEY_CHAR
+from rc import VON_BASE_PATH, VON_INDEX_PATH, VON_CACHE_PATH
+import view
+import random
+
 import os
 import collections
-from rc import SEPERATOR, APPLY_COLOR, WARN_PRE, KEY_CHAR
-from rc import VON_BASE_PATH, VON_INDEX_PATH, VON_CACHE_PATH
 import yaml
 import cPickle as pickle
 
@@ -16,7 +19,7 @@ class pickleObj(collections.MutableMapping):
 				try:
 					self.store = pickle.load(f)
 				except:
-					print WARN_PRE, "Index corrupted, reading fresh..."
+					view.warn("Index corrupted, reading fresh...")
 					self.store = self._initial()
 		self.path = path
 		self.mode = mode
@@ -50,6 +53,12 @@ class pickleList(pickleObj):
 			store[i].i = i
 		self.store = store
 
+def VonIndex(mode = 'r'):
+	return pickleDict(VON_INDEX_PATH, mode)
+def VonCache(mode = 'r'):
+	return pickleList(VON_CACHE_PATH, mode)
+
+
 class Problem:
 	bodies = []         # statement, sol, comments, ...
 	desc = ""           # e.g. "Fiendish inequality"
@@ -67,18 +76,7 @@ class Problem:
 	def state(self):
 		return self.bodies[0]
 	def __repr__(self):
-		s = ""
-		if self.i is not None:
-			s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(self.n) + "]")
-			s += " \t"
-		s +=  APPLY_COLOR("BOLD_BLUE", "(" + self.source + ")")
-		s += " "
-		s +=  self.desc
-		s += "\n"
-		s += APPLY_COLOR("BOLD_MAGENTA", ' '.join(self.tags))
-		s += "\n"
-		s += self.state.strip()
-		return s
+		return self.source
 
 	@property
 	def n(self):
@@ -100,17 +98,10 @@ class IndexEntry:
 	def hasTerm(self, term):
 		return term.lower() in (self.source + ' ' + self.desc).lower()
 	def __repr__(self):
-		s = ""
-		if self.i is not None:
-			s += APPLY_COLOR("BOLD_BLUE", "[" + KEY_CHAR + str(self.n) + "]")
-			s += " \t"
-		s +=  APPLY_COLOR("BOLD_RED", "(" + self.source + ")")
-		s += " "
-		s +=  self.desc
-		return s
+		return self.source
 	@property
 	def entry(self):
-		print WARN_PRE, "sketchy af"
+		view.warn("sketchy af")
 		return self
 	@property
 	def n(self):
@@ -141,11 +132,11 @@ def getAllProblems():
 	return ret
 
 def getEntryByCacheNum(n):
-	with pickleDict(VON_CACHE_PATH) as cache:
+	with VonCache() as cache:
 		return cache[n-1]
 
 def getEntryBySource(source):
-	with pickleDict(VON_INDEX_PATH) as index:
+	with VonIndex() as index:
 		if not source in index:
 			return None
 		path = index.get(source).path
@@ -161,45 +152,62 @@ def getEntryByKey(key):
 def addProblemByFileContents(path, text):
 	with open(path, 'w') as f:
 		print >>f, out_text
-	print "Wrote to", path
+	view.log("Wrote to " + path)
 	# Now update cache
 	p = model.makeProblemFromPath(path)
 	model.addProblemToIndex(p)
 
-def runSearch(tags, terms, refine = False):
+def viewDirectory(path):
+	problems = []
+	dirs = []
+	for item_path in os.listdir(path):
+		if os.path.isfile(item_path) and item_path.endswith('.tex'):
+			problems.append(makeProblemFromPath(item_path))
+		elif os.path.isdir(item_path):
+			dirs.append(item_path)
+		else:
+			pass # not TeX or directory
+	entries = [p.entry for p in problems]
+	if len(problems) > 0:
+		with VonCache('w') as cache:
+			setCache(entries)
+	return (entries, dirs)
+
+def runSearch(tags, terms, path = VON_BASE_PATH, refine = False):
 	def _matches(entry):
 		return all([entry.hasTag(t) for t in tags]) \
-				and all([entry.hasTerm(t) for t in terms])
+				and all([entry.hasTerm(t) for t in terms]) \
+				and entry.path.startswith(path)
 	if refine is False:
-		with pickleDict(VON_INDEX_PATH) as index:
+		with VonIndex() as index:
 			result = [entry for source, entry in index.iteritems() if _matches(entry)]
 			augmentCache(result)
 	else:
-		with pickleDict(VON_CACHE_PATH) as cache:
+		with VonCache() as cache:
 			result = [entry for entry in cache if _matches(entry)]
 	return result
 
 def augmentCache(entries):
-	with pickleList(VON_CACHE_PATH, 'w') as cache:
+	with VonCache('w') as cache:
 		cache.set(cache.store + entries)
 def setCache(entries):
-	with pickleList(VON_CACHE_PATH, 'w') as cache:
+	with VonCache('w') as cache:
 		cache.set(entries)
 def clearCache():
-	with pickleList(VON_CACHE_PATH, 'w') as cache:
+	with VonCache('w') as cache:
 		cache.set([])
 def readCache():
-	with pickleList(VON_CACHE_PATH) as cache:
+	with VonCache() as cache:
 		return cache
 
 # A certain magical Index~ <3
 
 def addEntryToIndex(entry):
-	with pickleDict(VON_INDEX_PATH, 'w') as index:
+	with VonIndex('w') as index:
 		index[entry.source] = entry
 
 def updateEntryByProblem(old, new):
-	with pickleDict(VON_INDEX_PATH, 'w') as index:
+	with VonIndex('w') as index:
 		if old.source != new.source:
 			del index[old.source]
 		index[new.source] = new.entry
@@ -207,20 +215,21 @@ def updateEntryByProblem(old, new):
 	return index[new.source]
 
 def addProblemToIndex(problem):
-	with pickleDict(VON_INDEX_PATH, 'w') as index:
+	with VonIndex('w') as index:
 		p = problem
 		index[p.source] = p.entry
 		return index[p.source]
 
 def setEntireIndex(d):
-	with pickleDict(VON_INDEX_PATH, 'w') as index:
+	with VonIndex('w') as index:
 		index.set(d)
 
 def rebuildIndex():
 	d = {}
 	for p in getAllProblems():
 		if p.source in d:
-			print APPLY_COLOR("RED", "Duplicate problem ")+p.source+" is being skipped..."
-		else:
-			d[p.source] = p.entry
+			fake_source = "DUPLICATE " + str(random.randrange(1e6, 1e7))
+			view.error(p.source + " is being repeated, replacing with " + fake_source)
+			p.source = fake_source
+		d[p.source] = p.entry
 	setEntireIndex(d)

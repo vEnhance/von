@@ -1,4 +1,5 @@
-from rc import EDITOR, VON_BASE_PATH, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, ERROR_PRE
+import view
+from rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT
 import model
 
 import clipboard
@@ -58,7 +59,7 @@ path:   {path}<++>
 tags:   [{now.year}-{now.month:02d}, <++>] # don't forget difficulty and shape!
 
 {hint}
-""".format(path = VON_BASE_PATH, now=datetime.datetime.now(), hint = TAG_HINT_TEXT)
+""".format(path = os.getcwd(), now=datetime.datetime.now(), hint = TAG_HINT_TEXT)
 
 def file_escape(s):
 	s = s.replace("/", "-")
@@ -80,7 +81,6 @@ def get_yaml_info():
 			assert 'source' in d, "Source is mandatory"
 			if d['path'][-1] != '/':
 				d['path'] += '/'
-			print d['path']
 			assert os.path.isdir(d['path']), d['path'] + " directory non-existent"
 			target = d['path'] + file_escape(d['source']) + '.tex'
 			assert not os.path.isfile(target), target + " already taken"
@@ -101,11 +101,11 @@ def do_add_problem(raw_text):
 	# Get problem and solution
 	bodies = get_bodies(raw_text)
 	if bodies is None:
-		print "Aborting due to empty input..."
+		view.warn("Aborting due to empty input...")
 		return
 	target, out_yaml = get_yaml_info()
 	if out_yaml is None:
-		print "Aborting due to empty input..."
+		view.warn("Aborting due to empty input...")
 		return
 	out_text = NSEPERATOR.join([out_yaml]+bodies)
 	model.addProblemByFileContents(target, out_text)
@@ -114,11 +114,11 @@ parser = argparse.ArgumentParser(prog='add', description='Adds a problem to VON.
 parser.add_argument('filename', default = None, nargs = '?',
 		help="If specified, uses contents of file as body")
 
-def main(argv):
+def main(self, argv):
 	opts = parser.parse_args(argv)
 	if opts.filename is not None:
 		if not os.path.isfile(opts.filename):
-			print ERROR_PRE, opts.filename, "doesn't exist"
+			view.error(opts.filename +  " doesn't exist")
 			return
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())

@@ -1,6 +1,6 @@
 import os
 
-VON_BASE_PATH = "/home/evan/Documents/Oly-Math/Database/" # TODO for public, use better
+VON_BASE_PATH = "/home/evan/Dropbox/Documents/Oly-Math/Database/" # TODO for public, use better
 VON_INDEX_NAME = "index"
 VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
 VON_CACHE_NAME = "cache"
@@ -30,40 +30,5 @@ TAG_HINT_TEXT = """# Some hints for tags:
   # Part III: @inversion @polar @projective @harmonic @miquel @spiralsim @mixtilinear"""
 
 USE_COLOR = True
-
-# Color names {{{
-TERM_COLOR = {}
-TERM_COLOR["NORMAL"]          = ""
-TERM_COLOR["RESET"]           = "\033[m"
-TERM_COLOR["BOLD"]            = "\033[1m"
-TERM_COLOR["RED"]             = "\033[31m"
-TERM_COLOR["GREEN"]           = "\033[32m"
-TERM_COLOR["YELLOW"]          = "\033[33m"
-TERM_COLOR["BLUE"]            = "\033[34m"
-TERM_COLOR["MAGENTA"]         = "\033[35m"
-TERM_COLOR["CYAN"]            = "\033[36m"
-TERM_COLOR["BOLD_RED"]        = "\033[1;31m"
-TERM_COLOR["BOLD_GREEN"]      = "\033[1;32m"
-TERM_COLOR["BOLD_YELLOW"]     = "\033[1;33m"
-TERM_COLOR["BOLD_BLUE"]       = "\033[1;34m"
-TERM_COLOR["BOLD_MAGENTA"]    = "\033[1;35m"
-TERM_COLOR["BOLD_CYAN"]       = "\033[1;36m"
-TERM_COLOR["BG_RED"]          = "\033[41m"
-TERM_COLOR["BG_GREEN"]        = "\033[42m"
-TERM_COLOR["BG_YELLOW"]       = "\033[43m"
-TERM_COLOR["BG_BLUE"]         = "\033[44m"
-TERM_COLOR["BG_MAGENTA"]      = "\033[45m"
-TERM_COLOR["BG_CYAN"]         = "\033[46m"
-if USE_COLOR is False:
-	for key in TERM_COLOR.keys():
-		TERM_COLOR[key] = ""
-# }}}
-
-def APPLY_COLOR(color_name, s):	
-	return TERM_COLOR[color_name] + s + TERM_COLOR["RESET"]
-
-ERROR_PRE = APPLY_COLOR("RED", "Error:")
-WARN_PRE  = APPLY_COLOR("MAGENTA", "Warn:")
-
 KEY_CHAR = '~'
 TAG_CHARS = '#@'

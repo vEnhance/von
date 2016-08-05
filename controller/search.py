@@ -1,4 +1,5 @@
-from rc import APPLY_COLOR, KEY_CHAR, TAG_CHARS
+import view
+from rc import KEY_CHAR, TAG_CHARS
 import argparse
 import model
 
@@ -9,9 +10,8 @@ parser.add_argument('words', nargs='+',\
 parser.add_argument('-r', '--refine', action = "store_const",\
 		default = False, const = True,\
 		help = "Prune through the Cache rather than the whole database.")
-# TODO eventually maybe don't put numbers on everything
 
-def main(argv):
+def main(self, argv):
 	opts = parser.parse_args(argv)
 	tags = [t[1:] for t in opts.words if t[0] in TAG_CHARS]
 	terms = [t for t in opts.words if t[0] not in TAG_CHARS]
@@ -19,4 +19,4 @@ def main(argv):
 	result = model.runSearch(tags, terms, refine = opts.refine)
 
 	for i, entry in enumerate(result):
-		print entry
+		view.printEntry(entry)
