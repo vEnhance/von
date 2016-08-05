@@ -142,16 +142,32 @@ def addProblemByFileContents(path, text):
 	p = model.makeProblemFromPath(path)
 	model.addProblemToIndex(p)
 
-def runSearch(tags, terms, set_cache = True):
+def runSearch(tags, terms, refine = False):
 	def _matches(entry):
 		return all([entry.hasTag(t) for t in tags]) \
 				and all([entry.hasTerm(t) for t in terms])
-	with pickleDict(VON_INDEX_PATH) as index:
-		result = [entry for source, entry in index.iteritems() if _matches(entry)]
-	if set_cache:
-		with pickleList(VON_CACHE_PATH, 'w') as cache:
-			cache.set(result)
+	if refine is False:
+		with pickleDict(VON_INDEX_PATH) as index:
+			result = [entry for source, entry in index.iteritems() if _matches(entry)]
+			augmentCache(result)
+	else:
+		with pickleDict(VON_CACHE_PATH) as cache:
+			result = [entry for entry in cache if _matches(entry)]
+			cache = result # since we're in the with block now
 	return result
+
+def augmentCache(entries):
+	with pickleList(VON_CACHE_PATH, 'w') as cache:
+		cache.set(cache.store + entries)
+def setCache(entries):
+	with pickleList(VON_CACHE_PATH, 'w') as cache:
+		cache.set(entries)
+def clearCache():
+	with pickleList(VON_CACHE_PATH, 'w') as cache:
+		cache.set([])
+def readCache():
+	with pickleList(VON_CACHE_PATH) as cache:
+		return cache
 
 # A certain magical Index~ <3
 
@@ -171,6 +187,7 @@ def addProblemToIndex(problem):
 	with pickleDict(VON_INDEX_PATH, 'w') as index:
 		p = problem
 		index[p.source] = p.entry
+		return index[p.source]
 
 def setEntireIndex(d):
 	with pickleDict(VON_INDEX_PATH, 'w') as index:
