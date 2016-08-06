@@ -193,11 +193,10 @@ def runSearch(tags, terms, path = VON_BASE_PATH, refine = False):
 	if refine is False:
 		with VonIndex() as index:
 			result = [entry for source, entry in index.iteritems() if _matches(entry)]
-			setCache(result)
 	else:
 		with VonCache() as cache:
 			result = [entry for entry in cache if _matches(entry)]
-		setCache(result)
+	if len(result) > 0: setCache(result)
 	return result
 
 def augmentCache(entries):
