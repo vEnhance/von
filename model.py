@@ -174,6 +174,7 @@ def viewDirectory(path):
 			dirs.append(item_path)
 		else:
 			pass # not TeX or directory
+	dirs.sort()
 	entries = [p.entry for p in problems]
 	if len(problems) > 0:
 		with VonCache('w') as cache:
