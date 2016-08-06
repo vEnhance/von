@@ -97,6 +97,6 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 			print "Here is a list of available commands:"
 			for name in sorted(self.get_names()):
 				if name[:3] == 'do_' and name != 'do_help' and name != 'do_EOF':
-					print name[3:]
+					print "*", name[3:]
 	
 # vim: fdm=marker
