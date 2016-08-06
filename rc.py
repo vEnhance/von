@@ -14,7 +14,7 @@ NSEPERATOR = '\n' + SEPERATOR + '\n'
 TAG_HINT_TEXT = """# Some hints for tags:
 #
 # *** Difficulty: @trivial @aleph @bet @gimel @dalet @zayin @yod @kurumi
-# *** Sources: @mine @obscure @rare @secret @exam @blind
+# *** Sources: @mine @obscure @rare @secret @exam @blind @aime
 # *** Problem Shape: @yesno @find @construct @bestpossible @hardanswer
 #
 # Quality: @favorite > @nice > @good > @ugly @work
@@ -24,13 +24,13 @@ TAG_HINT_TEXT = """# Some hints for tags:
 # Solution Method: @induct @manysolutions @magic @inefficient  @explicit @compute
 # More tags: @pitfall @troll @intuitive @size @weak @maturity
 #
-# NT tags: @primes @-#adic @QR @pell @smallestprime @mods
+# NT tags: @primes @p-adic @QR @pell @smallestprime @mods
 #          @fermat @zsig @cyclotomic @divis @order @christmas @CRT
 # Algebra tags: @polynomial @trig @roots @calculus
 #          @continuity @irreducible @exactsum @manip
 # Ineq tags: @holder @CDN @schur @AMGM @Titu @homogenize
 #            @dehomogenize @SOS @jensen @isofudge
-# Combinatorics: @greedy @optimization @additivecombo @extreme @invariant
+# Combinatorics: @greedy @optimization @additivecombo @extreme @invariant @free
 #                @pigeonhole @parity @graph @adhoc @EV @combogeo @hall @grid @rigid
 # Geometry tags
   # Part I and II: @anglechase @simtri @pop @homothety

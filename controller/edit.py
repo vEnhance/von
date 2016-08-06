@@ -17,4 +17,4 @@ def main(self, argv):
 		subprocess.call([EDITOR, entry.path])
 		problem = model.makeProblemFromPath(entry.path)
 		new_entry = model.updateEntryByProblem(old=entry, new=problem) # update cache after editing problem
-		view.printProblem(problem)
+		view.printEntry(new_entry, tags=True)

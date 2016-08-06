@@ -55,9 +55,9 @@ def getEntryString(entry, tags = False):
 		s += " \t"
 	s +=  APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
 	s += " "
-	s +=  entry.desc
+	s += entry.desc
 	if tags:
-		s +=  "\t" + APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
+		s +=  "\n\t" + APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
 	return s
 def getDirString(path):
 	return "Directory " + APPLY_COLOR("BOLD_BLUE", path)

@@ -1,6 +1,7 @@
 from rc import VON_BASE_PATH
 from view import APPLY_COLOR
 import view
+import model
 
 import os
 import cmd
@@ -28,7 +29,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 	@property
 	def prompt(self):
 		return APPLY_COLOR("BOLD_CYAN", "VON") + \
-				APPLY_COLOR("CYAN", self.getcwd()) + \
+				APPLY_COLOR("YELLOW", self.getcwd()) + \
 				"\n" + APPLY_COLOR("BOLD_GREEN", ":)") + " "
 
 	def emptyline(self):

@@ -110,7 +110,7 @@ def do_add_problem(raw_text):
 		return
 	out_text = NSEPERATOR.join([out_yaml]+bodies)
 	p = model.addProblemByFileContents(target, out_text)
-	view.printProblem(p)
+	view.printEntry(p.entry, tags=True)
 
 parser = argparse.ArgumentParser(prog='add', description='Adds a problem to VON.')
 parser.add_argument('filename', default = None, nargs = '?',
@@ -120,7 +120,7 @@ def main(self, argv):
 	opts = parser.parse_args(argv)
 	if opts.filename is not None:
 		if not os.path.isfile(opts.filename):
-			view.error(opts.filename +  " doesn't exist")
+			view.error("The file " + opts.filename +  " doesn't exist")
 			return
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())
