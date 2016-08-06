@@ -116,6 +116,10 @@ class IndexEntry:
 		p.i = self.i
 		return p
 
+def getcwd():
+	osdir = os.getcwd()
+	return osdir if osdir.startswith(VON_BASE_PATH) else VON_BASE_PATH
+
 def makeProblemFromPath(path):
 	# Creates a problem instance from a source, without looking at Index
 	with open(path) as f:
@@ -193,6 +197,7 @@ def runSearch(tags, terms, path = VON_BASE_PATH, refine = False):
 	else:
 		with VonCache() as cache:
 			result = [entry for entry in cache if _matches(entry)]
+		setCache(result)
 	return result
 
 def augmentCache(entries):

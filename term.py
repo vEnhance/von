@@ -23,7 +23,7 @@ def _complete_path(path):
 
 class VonTerminal(cmd.Cmd, controller.VonController):
 	def getcwd(self):
-		return os.getcwd().replace(VON_BASE_PATH.rstrip("/"), '')
+		return model.getcwd().replace(VON_BASE_PATH.rstrip("/"), '')
 
 	@property
 	def prompt(self):
@@ -39,8 +39,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 
 	def run(self):
 		print WELCOME_STRING
-		if not os.getcwd().startswith(VON_BASE_PATH):
-			os.chdir(VON_BASE_PATH) # set cwd
+		os.chdir(model.getcwd())
 		while 1:
 			try:
 				self.cmdloop()

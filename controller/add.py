@@ -51,8 +51,7 @@ def get_bodies(raw_text):
 			initial = raw_ps
 	return bodies
 
-DEFAULT_PATH = os.getcwd() if os.getcwd().startswith(VON_BASE_PATH) \
-		else VON_BASE_PATH
+DEFAULT_PATH = model.getcwd()
 YAML_DATA_FILE = """# Input your problem metadata here
 
 source: <++>     # e.g. USAMO 2000/6. This must be unique

@@ -19,7 +19,7 @@ def main(self, argv):
 	os.chdir(opts.path)
 
 	if not opts.quiet:
-		entries, dirs = model.viewDirectory(os.getcwd())
+		entries, dirs = model.viewDirectory(model.getcwd())
 		for d in dirs:
 			view.printDir(d)
 		for e in entries:

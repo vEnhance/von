@@ -2,6 +2,7 @@ import view
 from rc import KEY_CHAR, TAG_CHARS
 import argparse
 import model
+import os
 
 parser = argparse.ArgumentParser(prog='search',\
 		description='Searches for problems by tags or text.')
@@ -16,7 +17,8 @@ def main(self, argv):
 	tags = [t[1:] for t in opts.words if t[0] in TAG_CHARS]
 	terms = [t for t in opts.words if t[0] not in TAG_CHARS]
 
-	result = model.runSearch(tags, terms, refine = opts.refine)
+	result = model.runSearch(tags, terms,\
+			refine = opts.refine, path = model.getcwd())
 
 	for i, entry in enumerate(result):
 		view.printEntry(entry)
