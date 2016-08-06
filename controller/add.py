@@ -110,7 +110,8 @@ def do_add_problem(raw_text):
 		view.warn("Aborting due to empty input...")
 		return
 	out_text = NSEPERATOR.join([out_yaml]+bodies)
-	model.addProblemByFileContents(target, out_text)
+	p = model.addProblemByFileContents(target, out_text)
+	view.printProblem(p)
 
 parser = argparse.ArgumentParser(prog='add', description='Adds a problem to VON.')
 parser.add_argument('filename', default = None, nargs = '?',

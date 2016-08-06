@@ -42,11 +42,11 @@ def getProblemString(problem):
 		s += " \t"
 	s +=  APPLY_COLOR("BOLD_BLUE", "(" + problem.source + ")")
 	s += " "
-	s +=  problem.desc
+	s += problem.desc
+	s += "\n\t"
+	s += APPLY_COLOR("MAGENTA", ' '.join(problem.tags))
 	s += "\n"
-	s += APPLY_COLOR("BOLD_MAGENTA", ' '.join(problem.tags))
-	s += "\n"
-	s += problem.state.strip()
+	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
 def getEntryString(entry, tags = False):
 	s = ""

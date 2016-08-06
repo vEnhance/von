@@ -85,6 +85,10 @@ class Problem:
 	def entry(self):
 		"""Returns an IndexEntry for storage in pickle"""
 		return IndexEntry(source=self.source, desc=self.desc, tags=self.tags, path=self.path)
+	@property
+	def full(self):
+		view.warn("sketchy af")
+		return self
 
 class IndexEntry:
 	desc = ""           # e.g. "Fiendish inequality"
@@ -142,10 +146,7 @@ def getEntryByCacheNum(n):
 
 def getEntryBySource(source):
 	with VonIndex() as index:
-		if not source in index:
-			return None
-		path = index.get(source).path
-	return makeProblemFromPath(path)
+		return index.get(source, None)
 
 def getEntryByKey(key):
 	# TODO this shouldn't actually be in mode, but blah
@@ -161,6 +162,7 @@ def addProblemByFileContents(path, text):
 	# Now update cache
 	p = makeProblemFromPath(path)
 	addProblemToIndex(p)
+	return p
 
 def viewDirectory(path):
 	problems = []

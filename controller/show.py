@@ -15,4 +15,4 @@ def main(self, argv):
 		view.error(opts.key + " not found")
 	else:
 		problem = entry.full
-		views.printProblem(problem)
+		view.printProblem(problem)
