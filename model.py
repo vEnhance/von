@@ -118,6 +118,9 @@ def makeProblemFromPath(path):
 		text = ''.join(f.readlines())
 	x = text.split(SEPERATOR)
 	data = yaml.load(x[0])
+	if data is None:
+		view.warn(path + " gave None for data")
+		return None
 	data['bodies'] = [_.strip() for _ in x[1:]]
 	return Problem(path, **data)
 
@@ -128,7 +131,9 @@ def getAllProblems():
 			if not '.tex' in fname: continue
 			path = os.path.join(root, fname)
 			with open(path) as f:
-				ret.append(makeProblemFromPath(path))
+				p = makeProblemFromPath(path)
+				if p is not None:
+					ret.append(p)
 	return ret
 
 def getEntryByCacheNum(n):
@@ -151,11 +156,11 @@ def getEntryByKey(key):
 
 def addProblemByFileContents(path, text):
 	with open(path, 'w') as f:
-		print >>f, out_text
+		print >>f, text
 	view.log("Wrote to " + path)
 	# Now update cache
-	p = model.makeProblemFromPath(path)
-	model.addProblemToIndex(p)
+	p = makeProblemFromPath(path)
+	addProblemToIndex(p)
 
 def viewDirectory(path):
 	problems = []

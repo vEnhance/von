@@ -1,5 +1,5 @@
 import view
-from rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT
+from rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, VON_BASE_PATH
 import model
 
 import clipboard
@@ -51,6 +51,8 @@ def get_bodies(raw_text):
 			initial = raw_ps
 	return bodies
 
+DEFAULT_PATH = os.getcwd() if os.getcwd().startswith(VON_BASE_PATH) \
+		else VON_BASE_PATH
 YAML_DATA_FILE = """# Input your problem metadata here
 
 source: <++>     # e.g. USAMO 2000/6. This must be unique
@@ -59,7 +61,7 @@ path:   {path}<++>
 tags:   [{now.year}-{now.month:02d}, <++>] # don't forget difficulty and shape!
 
 {hint}
-""".format(path = os.getcwd(), now=datetime.datetime.now(), hint = TAG_HINT_TEXT)
+""".format(path = DEFAULT_PATH, now=datetime.datetime.now(), hint = TAG_HINT_TEXT)
 
 def file_escape(s):
 	s = s.replace("/", "-")
