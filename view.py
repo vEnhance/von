@@ -75,3 +75,5 @@ def error(message):
 	print ERROR_PRE, message
 def log(message):
 	print message
+def out(message):
+	print message
