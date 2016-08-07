@@ -1,15 +1,14 @@
 from rc import EDITOR
 import view
 
-import argparse
 import subprocess
 import model
 
-parser = argparse.ArgumentParser(prog='edit', description='Opens a problem by source name.')
+parser = view.Parser(prog='edit', description='Opens a problem by source name.')
 parser.add_argument('key', help="The key of the problem to open (either source or cache index).")
 
 def main(self, argv):
-	opts = parser.parse_args(argv)
+	opts = parser.process(argv)
 	entry = model.getEntryByKey(opts.key)
 	if entry is None:
 		view.error(opts.key + " not found")

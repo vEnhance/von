@@ -10,7 +10,6 @@ import yaml
 import string
 import os
 import traceback
-import argparse
 
 def user_file_input(initial = "", extension = ".tmp"):
 	"""Opens in $EDITOR a file with content 'initial'
@@ -86,7 +85,7 @@ def get_yaml_info():
 			target = d['path'] + file_escape(d['source']) + '.tex'
 			assert not os.path.isfile(target), target + " already taken"
 		except AssertionError:
-			# TOOD test this
+			# TODO test this
 			traceback.print_exc()
 			alert_error_tryagain("Okie dokie?")
 			initial = raw_yaml
@@ -112,12 +111,12 @@ def do_add_problem(raw_text):
 	p = model.addProblemByFileContents(target, out_text)
 	view.printEntry(p.entry, tags=True)
 
-parser = argparse.ArgumentParser(prog='add', description='Adds a problem to VON.')
+parser = view.Parser(prog='add', description='Adds a problem to VON.')
 parser.add_argument('filename', default = None, nargs = '?',
 		help="If specified, uses contents of file as body")
 
 def main(self, argv):
-	opts = parser.parse_args(argv)
+	opts = parser.process(argv)
 	if opts.filename is not None:
 		if not os.path.isfile(opts.filename):
 			view.error("The file " + opts.filename +  " doesn't exist")

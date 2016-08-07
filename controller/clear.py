@@ -1,8 +1,9 @@
 import model
-import argparse
-parser = argparse.ArgumentParser(prog='clear',\
+import view
+
+parser = view.Parser(prog='clear',\
 		description='Clears the Cache.')
 
 def main(self, argv):
-	opts = parser.parse_args(argv)
+	opts = parser.process(argv)
 	model.clearCache()

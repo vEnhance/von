@@ -1,9 +1,8 @@
 import view
-import argparse
 import model
 import os
 
-parser = argparse.ArgumentParser(prog='search', \
+parser = view.Parser(prog='search', \
 		description='Searches for problems by tags or text.')
 parser.add_argument('s_terms', nargs='*', metavar='term', \
 		help="Terms you want to search for.")
@@ -16,7 +15,7 @@ parser.add_argument('-r', '--refine', action = "store_const", \
 		help = "Prune through the Cache rather than the whole database.")
 
 def main(self, argv):
-	opts = parser.parse_args(argv)
+	opts = parser.process(argv)
 	if len(opts.s_terms + opts.s_tags + opts.s_sources) == 0:
 		view.warn("Must supply at least one search keyword!")
 		return
