@@ -1,23 +1,28 @@
 import view
-from rc import KEY_CHAR, TAG_CHARS
 import argparse
 import model
 import os
 
-parser = argparse.ArgumentParser(prog='search',\
+parser = argparse.ArgumentParser(prog='search', \
 		description='Searches for problems by tags or text.')
-parser.add_argument('words', nargs='+',\
-		help="Terms you want to search for. To find tags, use #tag.")
-parser.add_argument('-r', '--refine', action = "store_const",\
-		default = False, const = True,\
+parser.add_argument('s_terms', nargs='*', metavar='term', \
+		help="Terms you want to search for.")
+parser.add_argument('-t', '--tag', nargs='+', metavar='tag', \
+		dest='s_tags', default = [], help="Tags you want to search for.")
+parser.add_argument('-k', '--source', nargs='+', metavar='source', \
+		dest='s_sources', default =[],  help="Sources you want to search for.")
+parser.add_argument('-r', '--refine', action = "store_const", \
+		default = False, const = True, \
 		help = "Prune through the Cache rather than the whole database.")
 
 def main(self, argv):
 	opts = parser.parse_args(argv)
-	tags = [t[1:] for t in opts.words if t[0] in TAG_CHARS]
-	terms = [t for t in opts.words if t[0] not in TAG_CHARS]
+	if len(opts.s_terms + opts.s_tags + opts.s_sources) == 0:
+		view.warn("Must supply at least one search keyword!")
+		return
 
-	result = model.runSearch(tags, terms,\
+	result = model.runSearch(
+			terms = opts.s_terms, tags = opts.s_tags, sources = opts.s_sources,
 			refine = opts.refine, path = model.getcwd())
 
 	for i, entry in enumerate(result):

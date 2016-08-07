@@ -36,15 +36,7 @@ WARN_PRE  = APPLY_COLOR("BOLD_YELLOW", "Warn:")
 
 
 def getProblemString(problem):
-	s = ""
-	if problem.i is not None:
-		s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(problem.n) + "]")
-		s += " \t"
-	s +=  APPLY_COLOR("BOLD_BLUE", "(" + problem.source + ")")
-	s += " "
-	s += problem.desc
-	s += "\n\t"
-	s += APPLY_COLOR("MAGENTA", ' '.join(problem.tags))
+	s = getEntryString(problem.entry, tags = True)
 	s += "\n"
 	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
@@ -56,6 +48,8 @@ def getEntryString(entry, tags = False):
 	s +=  APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
 	s += " "
 	s += entry.desc
+	s += " " 
+	s += APPLY_COLOR("RED", "#"+ entry.diffstring)
 	if tags:
 		s +=  "\n\t" + APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
 	return s

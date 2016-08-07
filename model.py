@@ -1,7 +1,8 @@
-from rc import SEPERATOR, KEY_CHAR
+from rc import SEPERATOR, KEY_CHAR, DIFFS
 from rc import VON_BASE_PATH, VON_INDEX_PATH, VON_CACHE_PATH
 import view
 import random
+import functools
 
 import os
 import collections
@@ -58,15 +59,36 @@ def VonIndex(mode = 'r'):
 def VonCache(mode = 'r'):
 	return pickleList(VON_CACHE_PATH, mode)
 
-
-class Problem:
-	bodies = []         # statement, sol, comments, ...
+@functools.total_ordering
+class GenericItem: # subclass to Problem, IndexEntry
 	desc = ""           # e.g. "Fiendish inequality"
 	source = ""         # used as problem ID, e.g. "USAMO 2000/6"
 	tags = []           # tags for the problem
 	path = ""           # path to problem TeX file
 	i = None            # position in Cache, if any
 
+	@property
+	def n(self):
+		return self.i + 1 if self.i is not None else None
+	@property
+	def diffvalue(self):
+		for i, d in enumerate(DIFFS):
+			if d in self.tags: return i
+		return -1
+	@property
+	def diffstring(self):
+		for i, d in enumerate(DIFFS):
+			if d in self.tags: return d
+		return "NONE"
+
+	def __eq__(self, other):
+		return self.diffvalue == other.diffvalue
+	def __lt__(self, other):
+		return self.diffvalue < other.diffvalue
+
+
+class Problem(GenericItem):
+	bodies = []         # statement, sol, comments, ...
 	def __init__(self, path, **kwargs):
 		self.path = path
 		for key in kwargs:
@@ -79,20 +101,16 @@ class Problem:
 		return self.source
 
 	@property
-	def n(self):
-		return self.i + 1 if self.i is not None else None
-	@property
 	def entry(self):
 		"""Returns an IndexEntry for storage in pickle"""
-		return IndexEntry(source=self.source, desc=self.desc, tags=self.tags, path=self.path)
+		return IndexEntry(source=self.source, desc=self.desc,\
+				tags=self.tags, path=self.path, i = self.i)
 	@property
 	def full(self):
 		view.warn("sketchy af")
 		return self
 
-class IndexEntry:
-	desc = ""           # e.g. "Fiendish inequality"
-	i = None            # position in Cache, if any
+class IndexEntry(GenericItem):
 	def __init__(self, **kwargs):
 		for key in kwargs:
 			if kwargs[key] is not None:
@@ -100,16 +118,15 @@ class IndexEntry:
 	def hasTag(self, tag):
 		return tag in self.tags
 	def hasTerm(self, term):
-		return term.lower() in (self.source + ' ' + self.desc).lower()
+		return term.lower() in (self.source + ' ' + self.desc).lower() or term in self.tags
+	def hasSource(self, source):
+		return source.lower() in self.source.lower()
 	def __repr__(self):
 		return self.source
 	@property
 	def entry(self):
 		view.warn("sketchy af")
 		return self
-	@property
-	def n(self):
-		return self.i + 1 if self.i is not None else None
 	@property
 	def full(self):
 		p = makeProblemFromPath(self.path)
@@ -183,12 +200,14 @@ def viewDirectory(path):
 	if len(problems) > 0:
 		with VonCache('w') as cache:
 			setCache(entries)
+	entries.sort()
 	return (entries, dirs)
 
-def runSearch(tags, terms, path = VON_BASE_PATH, refine = False):
+def runSearch(terms = [], tags = [], sources = [], path = VON_BASE_PATH, refine = False):
 	def _matches(entry):
-		return all([entry.hasTag(t) for t in tags]) \
-				and all([entry.hasTerm(t) for t in terms]) \
+		return all([entry.hasTag(_) for _ in tags]) \
+				and all([entry.hasTerm(_) for _ in terms]) \
+				and all([entry.hasSource(_) for _ in sources]) \
 				and entry.path.startswith(path)
 	if refine is False:
 		with VonIndex() as index:
@@ -196,6 +215,7 @@ def runSearch(tags, terms, path = VON_BASE_PATH, refine = False):
 	else:
 		with VonCache() as cache:
 			result = [entry for entry in cache if _matches(entry)]
+	result.sort()
 	if len(result) > 0: setCache(result)
 	return result
 

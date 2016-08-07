@@ -8,7 +8,7 @@ import controller.edit
 import controller.reindex
 import controller.search
 import controller.show
-import controller.ss
+import controller.status
 import controller.cd
 
 class VonController:
@@ -16,11 +16,13 @@ class VonController:
 	do_clear = controller.clear.main
 	do_edit = controller.edit.main
 	do_reindex = controller.reindex.main
-	do_search = controller.search.main
 	do_show = controller.show.main
 
-	do_status = controller.ss.main
-	do_ss = controller.ss.main
+	do_search = controller.search.main
+	do_s = controller.search.main
+
+	do_status = controller.status.main
+	do_ss = controller.status.main
 
 	do_cd = controller.cd.main
 	def do_ls(self, argv):

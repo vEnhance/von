@@ -24,19 +24,22 @@ TAG_HINT_TEXT = """# Some hints for tags:
 # Solution Method: @induct @manysolutions @magic @inefficient  @explicit @compute
 # More tags: @pitfall @troll @intuitive @size @weak @maturity
 #
-# NT tags: @primes @p-adic @QR @pell @smallestprime @mods
-#          @fermat @zsig @cyclotomic @divis @order @christmas @CRT
-# Algebra tags: @polynomial @trig @roots @calculus
-#          @continuity @irreducible @exactsum @manip
-# Ineq tags: @holder @CDN @schur @AMGM @Titu @homogenize
-#            @dehomogenize @SOS @jensen @isofudge
-# Combinatorics: @greedy @optimization @additivecombo @extreme @invariant @free
-#                @pigeonhole @parity @graph @adhoc @EV @combogeo @hall @grid @rigid
+# NT:    @primes @p-adic @QR @pell @smallestprime @mods
+#        @fermat @zsig @cyclotomic @divis @order @christmas @CRT
+# Alg:   @polynomial @trig @roots @calculus
+#        @continuity @irreducible @exactsum @manip
+# Ineq:  @holder @CDN @schur @AMGM @Titu @homogenize
+#        @dehomogenize @SOS @jensen @isofudge
+# Combo: @greedy @optimization @additivecombo @extreme @invariant @free
+#        @pigeonhole @parity @graph @adhoc @EV @combogeo @hall @grid @rigid
 # Geometry tags
   # Part I and II: @anglechase @simtri @pop @homothety
   #                @cevalaus @trig @complex @bary @length
-  # Part III: @inversion @polar @projective @harmonic @miquel @spiralsim @mixtilinear"""
+  # Part III:      @inversion @polar @projective @harmonic
+  #                0@miquel @spiralsim @mixtilinear"""
 
 USE_COLOR = True
 KEY_CHAR = 'C~'
-TAG_CHARS = '#@'
+
+DIFFS= ['trivial', 'aleph', 'bet', 'dalet', 'gimel', 
+		'zayin', 'yod', 'kurumi']
