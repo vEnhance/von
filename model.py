@@ -81,10 +81,14 @@ class GenericItem: # subclass to Problem, IndexEntry
 			if d in self.tags: return d
 		return "NONE"
 
+	@property
+	def sortkey(self):
+		return (self.diffvalue, self.source)
+
 	def __eq__(self, other):
-		return self.diffvalue == other.diffvalue
+		return self.sortkey == other.sortkey
 	def __lt__(self, other):
-		return self.diffvalue < other.diffvalue
+		return self.sortkey < other.sortkey
 
 
 class Problem(GenericItem):
@@ -238,13 +242,19 @@ def addEntryToIndex(entry):
 	with VonIndex('w') as index:
 		index[entry.source] = entry
 
-def updateEntryByProblem(old, new):
+def updateEntryByProblem(old_entry, new_problem):
+	new_problem.i = old_entry.i
+	new_entry = new_problem.entry
+	
 	with VonIndex('w') as index:
-		if old.source != new.source:
+		if old_entry.source != new_entry.source:
 			del index[old.source]
-		index[new.source] = new.entry
-		index[new.source].i = old.i
-	return index[new.source]
+		index[new_entry.source] = new_entry
+	with VonCache('w') as cache:
+		for i, entry in enumerate(cache):
+			if entry.source == old_entry.source:
+				cache[i] = new_entry
+	return index[new_entry.source]
 
 def addProblemToIndex(problem):
 	with VonIndex('w') as index:
