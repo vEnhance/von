@@ -14,8 +14,9 @@ NSEPERATOR = '\n' + SEPERATOR + '\n'
 TAG_HINT_TEXT = """# Some hints for tags:
 #
 # *** Difficulty: @trivial @aleph @bet @gimel @dalet @zayin @yod @kurumi
-# *** Sources: @mine @obscure @rare @secret @exam @blind @aime
-# *** Problem Shape: @yesno @find @construct @bestpossible @hardanswer
+# *** Sources: @mine @obscure @rare @secret @exam @blind @well
+# *** Problem Shape: @yesno @find @construct @bestpossible @hardanswer @aime
+# (here @well means I spent a lot of time on the problem myself)
 #
 # Quality: @favorite > @nice > @good > @ugly @work
 # Philosophy: @instructive @reliable @justdoit @magic
