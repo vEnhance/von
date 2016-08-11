@@ -201,10 +201,9 @@ def viewDirectory(path):
 			pass # not TeX or directory
 	dirs.sort()
 	entries = [p.entry for p in problems]
-	if len(problems) > 0:
-		with VonCache('w') as cache:
-			setCache(entries)
 	entries.sort()
+	if len(entries) > 0:
+		setCache(entries)
 	return (entries, dirs)
 
 def runSearch(terms = [], tags = [], sources = [], path = VON_BASE_PATH, refine = False):
@@ -248,7 +247,7 @@ def updateEntryByProblem(old_entry, new_problem):
 	
 	with VonIndex('w') as index:
 		if old_entry.source != new_entry.source:
-			del index[old.source]
+			del index[old_entry.source]
 		index[new_entry.source] = new_entry
 	with VonCache('w') as cache:
 		for i, entry in enumerate(cache):

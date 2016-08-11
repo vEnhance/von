@@ -13,7 +13,7 @@ NSEPERATOR = '\n' + SEPERATOR + '\n'
 
 TAG_HINT_TEXT = """# Some hints for tags:
 #
-# *** Difficulty: @trivial @aleph @bet @gimel @dalet @zayin @yod @kurumi
+# *** Difficulty: @trivial @aleph @bet @dalet @gimel @zayin @yod @kurumi
 # *** Sources: @mine @obscure @rare @secret @exam @blind @well
 # *** Problem Shape: @yesno @find @construct @bestpossible @hardanswer @aime
 # (here @well means I spent a lot of time on the problem myself)
@@ -22,7 +22,7 @@ TAG_HINT_TEXT = """# Some hints for tags:
 # Philosophy: @instructive @reliable @justdoit @magic
 # Philosophy': @smallcases @equalitycase @scouting @meta @dumb
 # Philosophy'': @wishful @criticalclaim @stronger @thinkbig
-# Solution Method: @induct @manysolutions @magic @inefficient  @explicit @compute
+# Solution Method: @induct @manysolutions @magic @inefficient @explicit @compute
 # More tags: @pitfall @troll @intuitive @size @weak @maturity
 #
 # NT:    @primes @p-adic @QR @pell @smallestprime @mods
@@ -31,8 +31,9 @@ TAG_HINT_TEXT = """# Some hints for tags:
 #        @continuity @irreducible @exactsum @manip
 # Ineq:  @holder @CDN @schur @AMGM @Titu @homogenize
 #        @dehomogenize @SOS @jensen @isofudge
-# Combo: @greedy @optimization @additivecombo @extreme @invariant @free
-#        @pigeonhole @parity @graph @adhoc @EV @combogeo @hall @grid @rigid
+# Combo: @greedy @optimization @additivecombo @extreme @invariant
+#        @free @pigeonhole @parity @graph @adhoc @EV @combogeo
+#        @hall @grid @rigid @perturb @algorithm
 # Geometry tags
   # Part I and II: @anglechase @simtri @pop @homothety
   #                @cevalaus @trig @complex @bary @length
