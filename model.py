@@ -120,7 +120,7 @@ class IndexEntry(GenericItem):
 			if kwargs[key] is not None:
 				setattr(self, key, kwargs[key])
 	def hasTag(self, tag):
-		return tag in self.tags
+		return tag.lower() in [_.lower() for _ in self.tags]
 	def hasTerm(self, term):
 		return term.lower() in (self.source + ' ' + self.desc).lower() or term in self.tags
 	def hasSource(self, source):
