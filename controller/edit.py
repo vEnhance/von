@@ -9,6 +9,7 @@ parser.add_argument('keys', nargs='+', help="The key of the problem to open (eit
 
 def main(self, argv):
 	opts = parser.process(argv)
+	opts.verbose = True
 	for key in opts.keys:
 		entry = model.getEntryByKey(key)
 		if entry is None:

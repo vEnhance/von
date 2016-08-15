@@ -117,6 +117,7 @@ parser.add_argument('filename', default = None, nargs = '?',
 
 def main(self, argv):
 	opts = parser.process(argv)
+	opts.verbose = True
 	if opts.filename is not None:
 		if not os.path.isfile(opts.filename):
 			view.error("The file " + opts.filename +  " doesn't exist")
