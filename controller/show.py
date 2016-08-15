@@ -20,4 +20,7 @@ def main(self, argv):
 		if b is None:
 			view.printProblem(problem)
 		else:
-			view.out(problem.bodies[b])
+			try:
+				view.out(problem.bodies[b])
+			except IndexError:
+				view.error("Couldn't access {}-th body of {}".format(b, problem.source))
