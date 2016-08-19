@@ -1,7 +1,7 @@
 import view
 import model
 
-parser = view.Parser(prog='reindex',\
+parser = view.Parser(prog='index',\
 		description='Rebuilds the problem index. No arguments.')
 
 def main(self, argv):
