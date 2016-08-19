@@ -35,10 +35,10 @@ TAG_HINT_TEXT = """# Some hints for tags:
 #        @free @pigeonhole @parity @graph @adhoc @EV @combogeo
 #        @hall @grid @rigid @perturb @algorithm
 # Geometry tags
-  # Part I and II: @anglechase @simtri @pop @homothety
+  # Part I and II: @anglechase @simtri @pop @homothety @config
   #                @cevalaus @trig @complex @bary @length
   # Part III:      @inversion @polar @projective @harmonic
-  #                0@miquel @spiralsim @mixtilinear"""
+  #                @miquel @spiralsim @mixtilinear"""
 
 USE_COLOR = True
 KEY_CHAR = 'C~'
