@@ -34,7 +34,7 @@ PS_INSTRUCT = """% Input your problem and solution below.
 % Three dashes on a newline indicate the breaking points.
 % vim: tw=72"""
 
-def get_bodies(raw_text):
+def get_bodies(raw_text, opts):
 	initial = PS_INSTRUCT + NSEPERATOR + raw_text
 	while True:
 		# TODO maybe give user instructions
@@ -53,13 +53,12 @@ def get_bodies(raw_text):
 DEFAULT_PATH = model.getcwd()
 YAML_DATA_FILE = """# Input your problem metadata here
 
-source: <++>     # e.g. USAMO 2000/6. This must be unique
+source: {source}     # e.g. USAMO 2000/6. This must be unique
 desc:   <++>     # e.g. Fiendish inequality
 path:   {path}<++>
 tags:   [{now.year}-{now.month:02d}, <++>] # don't forget difficulty and shape!
 
-{hint}
-""".format(path = DEFAULT_PATH, now=datetime.datetime.now(), hint = TAG_HINT_TEXT)
+{hint}"""
 
 def file_escape(s):
 	s = s.replace("/", "-")
@@ -69,8 +68,11 @@ def file_escape(s):
 		s += 'emptyname'
 	return s
 
-def get_yaml_info():
-	initial = YAML_DATA_FILE
+def get_yaml_info(opts):
+	initial = YAML_DATA_FILE.format(\
+			path = DEFAULT_PATH, now=datetime.datetime.now(),\
+			source = "<++>" if opts.source is None else opts.source,
+			hint = TAG_HINT_TEXT)
 	while True:
 		raw_yaml = user_file_input(initial = initial, extension = ".yaml")
 		try:
@@ -93,17 +95,16 @@ def get_yaml_info():
 			del d['path']
 			return (target, yaml.dump(d).strip())
 
-
-def do_add_problem(raw_text):
+def do_add_problem(raw_text, opts):
 	"""Core procedure. Opens two instances of editors to solicit user input
 	on problem and produce a problem instance."""
 
 	# Get problem and solution
-	bodies = get_bodies(raw_text)
+	bodies = get_bodies(raw_text, opts)
 	if bodies is None:
 		view.warn("Aborting due to empty input...")
 		return
-	target, out_yaml = get_yaml_info()
+	target, out_yaml = get_yaml_info(opts)
 	if out_yaml is None:
 		view.warn("Aborting due to empty input...")
 		return
@@ -112,7 +113,9 @@ def do_add_problem(raw_text):
 	view.printEntry(p.entry)
 
 parser = view.Parser(prog='add', description='Adds a problem to VON.')
-parser.add_argument('filename', default = None, nargs = '?',
+parser.add_argument('source', default = None, nargs = '?',
+		help="If specified, sets the source for the new problem.")
+parser.add_argument('-f', '--file', dest = 'filename', default = None,
 		help="If specified, uses contents of file as body")
 
 def main(self, argv):
@@ -128,4 +131,4 @@ def main(self, argv):
 		initial_text = clipboard.paste()
 		if initial_text.strip() == '':
 			initial_text = '<++>'
-	do_add_problem(initial_text)
+	do_add_problem(initial_text, opts)
