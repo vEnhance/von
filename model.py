@@ -274,3 +274,33 @@ def rebuildIndex():
 			p.source = fake_source
 		d[p.source] = p.entry
 	setEntireIndex(d)
+
+
+# Demacro
+
+def demacro(text):
+	replacements = [
+	  (r"\ii",       r"\item") ,
+	  (r"\wh",       r"\widehat") ,
+	  (r"\ol",       r"\overline"),
+	  (r"\eps",      r"\epsilon"),
+	  (r"\dang",     r"\measuredangle"),
+	  (r"\dg",       r"^{\circ}"),
+	  (r"\inv",      r"^{-1}"),
+	  (r"\half",     r"\frac{1}{2}"),
+	  (r"\NN",       r"{\mathbb N}"),
+	  (r"\ZZ",       r"{\mathbb Z}"),
+	  (r"\CC",       r"{\mathbb C}"),
+	  (r"\RR",       r"{\mathbb R}"),
+	  (r"\QQ",       r"{\mathbb Q}"),
+	  (r"\FF",       r"{\mathbb F}"),
+	  (r"\opname",   r"\operatorname"),
+	  (r"\defeq",    r"\overset{\text{def}}{=}"),
+	  (r"\id",       r"\operatorname{id}"),
+	  (r"\injto",    r"\hookrightarrow"),
+	]
+	s = text
+	for short, full in replacements:
+		s = s.replace(short, full)
+	return s
+
