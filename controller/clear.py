@@ -1,5 +1,4 @@
-import model
-import view
+import model, view
 
 parser = view.Parser(prog='clear',\
 		description='Clears the Cache.')

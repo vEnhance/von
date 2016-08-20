@@ -1,6 +1,4 @@
-import view
-
-import model
+import model, view
 import os
 
 parser = view.Parser(prog='cd',\

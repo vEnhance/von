@@ -1,6 +1,4 @@
-import view
-import model
-import os
+import model, view
 
 parser = view.Parser(prog='search', \
 		description='Searches for problems by tags or text.')

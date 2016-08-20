@@ -1,8 +1,7 @@
+import model, view
 from rc import EDITOR
-import view
 
 import subprocess
-import model
 
 parser = view.Parser(prog='edit', description='Opens problem(s) by source name.')
 parser.add_argument('keys', nargs='+', help="The key of the problem to open (either source or cache index).")

@@ -1,6 +1,5 @@
-import view
-from rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, VON_BASE_PATH
-import model
+import model, view
+from rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT
 
 import clipboard
 import datetime

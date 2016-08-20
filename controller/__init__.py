@@ -1,7 +1,3 @@
-from rc import VON_BASE_PATH
-import argparse
-import model
-
 import controller.add
 import controller.clear
 import controller.edit
