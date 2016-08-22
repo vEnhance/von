@@ -7,6 +7,9 @@ parser.add_argument('key',
 parser.add_argument('-b', '--body', nargs = '?',
 		type = int, const = 0, default = None,
 		help = "Prints only the b-th body.")
+parser.add_argument('-a', '--aops', action='store_const',
+		const = True, default = False,
+		help = "Returns string in `AoPS mode'. Automatically causes -b.")
 parser.add_argument('-p', '--preserve', action='store_const',
 		const = True, default = False,
 		help = "With -b, suppress macro expansion from body.")
@@ -19,11 +22,15 @@ def main(self, argv):
 	else:
 		problem = entry.full
 		b = opts.body
+		if b is None and opts.aops:
+			b = 0
 		if b is None:
 			view.printProblem(problem)
 		else:
 			try:
-				if opts.preserve:
+				if opts.aops:
+					view.out(model.toAOPS(problem.bodies[b]))
+				elif opts.preserve:
 					view.out(problem.bodies[b])
 				else:
 					view.out(model.demacro(problem.bodies[b]))
