@@ -2,6 +2,7 @@ import re
 
 # Demacro
 def demacro(text):
+	# TODO this doesn't work, e.g. \epsilon -> \epsilonilon
 	replacements = [
 	  (r"\ii",       r"\item") ,
 	  (r"\wh",       r"\widehat") ,

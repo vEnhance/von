@@ -27,13 +27,13 @@ TAG_HINT_TEXT = """# Some hints for tags:
 #
 # NT:    @primes @p-adic @QR @pell @smallestprime @mods
 #        @fermat @zsig @cyclotomic @divis @order @christmas @CRT
-# Alg:   @polynomial @trig @roots @calculus
+# Alg:   @polynomial @trig @roots @calculus @genfunc
 #        @continuity @irreducible @exactsum @manip
 # Ineq:  @holder @CDN @schur @AMGM @Titu @homogenize
 #        @dehomogenize @SOS @jensen @isofudge
 # Combo: @greedy @optimization @additivecombo @extreme @invariant
 #        @free @pigeonhole @parity @graph @adhoc @EV @combogeo
-#        @hall @grid @rigid @perturb @algorithm
+#        @hall @grid @rigid @perturb @algorithm @linalg
 # Geometry tags
   # Part I and II: @anglechase @simtri @pop @homothety @config
   #                @cevalaus @trig @complex @bary @length
