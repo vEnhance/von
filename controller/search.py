@@ -20,8 +20,9 @@ def main(self, argv):
 		return
 
 	search_path = model.getcwd()
-	if search_path != VON_BASE_PATH:
-		view.out("Search restricted to " + view.APPLY_COLOR("BOLD_GREEN", search_path))
+	if search_path != '':
+		view.out("Search restricted to " +\
+				view.APPLY_COLOR("BOLD_GREEN", view.formatPath(search_path)))
 	result = model.runSearch(
 			terms = opts.s_terms, tags = opts.s_tags, sources = opts.s_sources,
 			refine = opts.refine, path = search_path)

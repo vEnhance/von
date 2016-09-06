@@ -14,7 +14,7 @@ def main(self, argv):
 		if entry is None:
 			view.error(key + " not found")
 		else:
-			subprocess.call([EDITOR, entry.path])
+			subprocess.call([EDITOR, model.completePath(entry.path)])
 			problem = model.makeProblemFromPath(entry.path)
 			new_entry = model.updateEntryByProblem(
 					old_entry = entry, new_problem = problem) # update cache after editing problem

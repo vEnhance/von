@@ -75,6 +75,8 @@ def getEntryString(entry):
 	if _OPTS.verbose:
 		s +=  "\n\t" + APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
 	return s
+def formatPath(path):
+	return '@/' + path
 def getDirString(path):
 	return "Directory " + APPLY_COLOR("BOLD_BLUE", path)
 

@@ -69,7 +69,8 @@ def file_escape(s):
 
 def get_yaml_info(opts):
 	initial = YAML_DATA_FILE.format(\
-			path = DEFAULT_PATH, now=datetime.datetime.now(),\
+			path = model.completePath(DEFAULT_PATH),
+			now = datetime.datetime.now(),\
 			source = "<++>" if opts.source is None else opts.source,
 			hint = TAG_HINT_TEXT)
 	while True:
