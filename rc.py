@@ -1,6 +1,6 @@
 import os
 
-VON_BASE_PATH = "/home/evan/Dropbox/OlyBase/" # TODO for public, use better
+VON_BASE_PATH  = os.path.join(os.environ.get("HOME", ""), "Dropbox/OlyBase/")
 VON_INDEX_NAME = "index"
 VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
 VON_CACHE_NAME = "cache"
