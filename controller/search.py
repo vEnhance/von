@@ -1,3 +1,4 @@
+from rc import VON_BASE_PATH
 import model, view
 
 parser = view.Parser(prog='search', \
@@ -18,9 +19,14 @@ def main(self, argv):
 		view.warn("Must supply at least one search keyword!")
 		return
 
+	search_path = model.getcwd()
+	if search_path != VON_BASE_PATH:
+		view.out("Search restricted to " + view.APPLY_COLOR("BOLD_GREEN", search_path))
 	result = model.runSearch(
 			terms = opts.s_terms, tags = opts.s_tags, sources = opts.s_sources,
-			refine = opts.refine, path = model.getcwd())
+			refine = opts.refine, path = search_path)
 
 	for i, entry in enumerate(result):
 		view.printEntry(entry)
+	if len(result) == 0:
+		view.warn("No matches found.")
