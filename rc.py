@@ -25,7 +25,7 @@ TAG_HINT_TEXT = """# Some hints for tags:
 # Solution Method: @induct @manysolutions @magic @inefficient @explicit @compute
 # More tags: @pitfall @troll @intuitive @size @weak @maturity
 #
-# NT:    @primes @p-adic @QR @pell @smallestprime @mods
+# NT:    @primes @p-adic @QR @pell @smallestprime @mods @euclid
 #        @fermat @zsig @cyclotomic @divis @order @christmas @CRT
 # Alg:   @polynomial @trig @roots @calculus @genfunc
 #        @continuity @irreducible @exactsum @manip
