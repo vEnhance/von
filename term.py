@@ -28,7 +28,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 
 	@property
 	def prompt(self):
-		return APPLY_COLOR("BOLD_CYAN", "VON") + \
+		return APPLY_COLOR("BOLD_CYAN", "VON/") + \
 				APPLY_COLOR("YELLOW", self.getcwd()) + \
 				"\n" + APPLY_COLOR("BOLD_GREEN", ":)") + " "
 
@@ -40,7 +40,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 
 	def run(self):
 		print WELCOME_STRING
-		os.chdir(model.getcwd())
+		os.chdir(model.getCompleteCwd())
 		while 1:
 			try:
 				self.cmdloop()

@@ -152,6 +152,8 @@ def getcwd():
 		return os.path.relpath(true_dir, VON_BASE_PATH)
 	else:
 		return ''
+def getCompleteCwd():
+	return completePath(getcwd())
 
 def makeProblemFromPath(path):
 	# Creates a problem instance from a source, without looking at Index
@@ -203,10 +205,11 @@ def addProblemByFileContents(path, text):
 def viewDirectory(path):
 	problems = []
 	dirs = []
-	for item_path in os.listdir(completePath(getcwd())):
-		if os.path.isfile(item_path) and item_path.endswith('.tex'):
-			problems.append(makeProblemFromPath(item_path))
-		elif os.path.isdir(item_path):
+	for item_path in os.listdir(getCompleteCwd()):
+		abs_item_path = os.path.join(getCompleteCwd(), item_path)
+		if os.path.isfile(abs_item_path) and abs_item_path.endswith('.tex'):
+			problems.append(makeProblemFromPath(abs_item_path))
+		elif os.path.isdir(abs_item_path):
 			dirs.append(item_path)
 		else:
 			pass # not TeX or directory
