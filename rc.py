@@ -32,8 +32,8 @@ TAG_HINT_TEXT = """# Some hints for tags:
 # Ineq:  @holder @CDN @schur @AMGM @Titu @homogenize
 #        @dehomogenize @SOS @jensen @isofudge
 # Combo: @greedy @optimization @additivecombo @extreme @invariant
-#        @free @pigeonhole @parity @graph @adhoc @EV @combogeo
-#        @hall @grid @rigid @perturb @algorithm @linalg
+#        @free @pigeonhole @parity @graph @adhoc @EV @doublecount
+#        @hall @grid @rigid @perturb @algorithm @linalg @combogeo
 # Geometry tags
   # Part I and II: @anglechase @simtri @pop @homothety @config
   #                @cevalaus @trig @complex @bary @length
