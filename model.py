@@ -171,7 +171,7 @@ def getAllProblems():
 	ret = []
 	for root, _, filenames in os.walk(VON_BASE_PATH):
 		for fname in filenames:
-			if not '.tex' in fname: continue
+			if not fname.endswith('.tex'): continue
 			path = shortenPath(os.path.join(root, fname))
 			p = makeProblemFromPath(path)
 			if p is not None:
