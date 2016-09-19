@@ -1,10 +1,11 @@
 import model, view
+import os
 
 parser = view.Parser(prog='po',\
 		description='Prepares a LaTeX file to send to Po-Shen!')
 parser.add_argument('keys', nargs = '+',
 		help="The keys of the problem to propose.")
-parser.add_argument('-t', '--title', default = 'Problem Proposals',
+parser.add_argument('-t', '--title', default = 'Problems',
 		help="Title of the LaTeX document.")
 parser.add_argument('-s', '--subtitle', default = None,
 		help="Subtitle of the LaTeX document.")
@@ -12,6 +13,9 @@ parser.add_argument('--author', default = 'Evan Chen',
 		help="Author of the LaTeX document.")
 parser.add_argument('--date', default = r'\today',
 		help="Date of the LaTeX document.")
+parser.add_argument('--tex', action='store_const',
+		const = True, default = False,
+		help="Supply only the TeX source, rather than compiling to PDF.")
 
 def main(self, argv):
 	opts = parser.process(argv)
@@ -40,4 +44,10 @@ def main(self, argv):
 			s += r"\end{proof}" + "\n"
 			s += r"\pagebreak" + "\n\n"
 	s += r"\end{document}"
-	view.out(s)
+	if opts.tex:
+		view.out(s)
+	else:
+		with open("/tmp/po.tex", "w") as f:
+			print >>f, s
+		os.chdir('/tmp')
+		os.system("latexmk -pv /tmp/po.tex;")
