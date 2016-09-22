@@ -7,7 +7,7 @@ def demacro(text):
 	  (r"\ii",       r"\item") ,
 	  (r"\wh",       r"\widehat") ,
 	  (r"\ol",       r"\overline"),
-	  (r"\eps",      r"\epsilon"),
+	  (r"\eps",      r"\varepsilon"),
 	  (r"\dang",     r"\measuredangle"),
 	  (r"\dg",       r"^{\circ}"),
 	  (r"\inv",      r"^{-1}"),
