@@ -29,6 +29,7 @@ TAG_HINT_TEXT = """# Some hints for tags:
 #        @fermat @zsig @cyclotomic @divis @order @christmas @CRT
 # Alg:   @polynomial @trig @roots @calculus @genfunc
 #        @continuity @irreducible @exactsum @manip
+# FE:    @cauchy @pointwise @cancel @symmetry @bump @isolated
 # Ineq:  @holder @CDN @schur @AMGM @Titu @homogenize
 #        @dehomogenize @SOS @jensen @isofudge
 # Combo: @greedy @optimization @additivecombo @extreme @invariant
