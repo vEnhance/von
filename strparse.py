@@ -2,7 +2,7 @@ import re
 
 # Demacro
 def demacro(text):
-	# TODO this doesn't work, e.g. \epsilon -> \epsilonilon
+	# TODO this doesn't quite work, e.g. \epsilon -> \epsilonilon
 	replacements = [
 	  (r"\ii",       r"\item") ,
 	  (r"\wh",       r"\widehat") ,
@@ -22,6 +22,7 @@ def demacro(text):
 	  (r"\defeq",    r"\overset{\text{def}}{=}"),
 	  (r"\id",       r"\operatorname{id}"),
 	  (r"\injto",    r"\hookrightarrow"),
+	  (r"\vdotswithin=", r"\vdots"),
 	]
 	s = text
 	for short, full in replacements:

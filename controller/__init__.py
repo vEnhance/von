@@ -7,6 +7,7 @@ import controller.search
 import controller.show
 import controller.status
 import controller.cd
+import controller.solve
 
 class VonController:
 	do_add = controller.add.main
@@ -27,3 +28,4 @@ class VonController:
 	do_cs = do_cd
 
 	do_po = controller.po.main
+	do_solve = controller.solve.main

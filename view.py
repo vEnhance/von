@@ -1,4 +1,5 @@
 from rc import USE_COLOR, KEY_CHAR
+import sys
 import argparse
 
 # Arguments hacking whee
@@ -88,7 +89,7 @@ def printDir(*args, **kwargs):
 	print getDirString(*args, **kwargs)
 
 def warn(message):
-	print WARN_PRE, message
+	print >>sys.stderr, WARN_PRE, message
 def error(message):
 	print ERROR_PRE, message
 def log(message):
