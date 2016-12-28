@@ -5,7 +5,7 @@ parser = view.Parser(prog='po',\
 		description='Prepares a LaTeX file to send to Po-Shen!')
 parser.add_argument('keys', nargs = '+',
 		help="The keys of the problem to propose.")
-parser.add_argument('-t', '--title', default = 'Problems',
+parser.add_argument('-t', '--title', default = None,
 		help="Title of the LaTeX document.")
 parser.add_argument('-s', '--subtitle', default = None,
 		help="Subtitle of the LaTeX document.")
@@ -90,10 +90,23 @@ settings.outformat="pdf";
 
 def main(self, argv):
 	opts = parser.process(argv)
+
+	# Better default title:
+	if opts.title is not None:
+		title = opts.title
+	elif len(opts.keys) == 1:
+		entry = model.getEntryByKey(opts.keys[0])
+		if entry is not None:
+			title = entry.source
+		else:
+			title = "Solution"
+	else:
+		title = "Solutions"
+
 	s = r"\documentclass[11pt]{scrartcl}" + "\n"
-	s += LATEX_PREAMBLE.replace("AUTHOR", opts.author).replace("TITLE", opts.title)
+	s += LATEX_PREAMBLE.replace("AUTHOR", opts.author).replace("TITLE", title)
 	s += r"\begin{document}" + "\n"
-	s += r"\title{" + opts.title + "}" + "\n"
+	s += r"\title{" + title + "}" + "\n"
 	if opts.subtitle is not None:
 		s += r"\subtitle{" + opts.subtitle + "}" + "\n"
 	s += r"\author{" + opts.author + "}" + "\n"
