@@ -120,7 +120,7 @@ def main(self, argv):
 		else:
 			problem = entry.full
 			if opts.sourced:
-				s += r"\begin{problem}[" + key + "]\n"
+				s += r"\begin{problem}[" + opts.source + "]\n"
 			else:
 				s += r"\begin{problem}" + "\n"
 			s += model.demacro(problem.bodies[0]) + "\n"
