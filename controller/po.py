@@ -86,6 +86,12 @@ settings.outformat="pdf";
 \rohead{\normalfont\footnotesize\textbf{TITLE}}
 \pagestyle{scrheadings}
 
+
+\newcommand{\hrulebar}{
+  \par\hspace{\fill}\rule{0.95\linewidth}{.7pt}\hspace{\fill}
+  \par\nointerlineskip \vspace{\baselineskip}
+}
+
 """
 
 def main(self, argv):
@@ -125,10 +131,8 @@ def main(self, argv):
 				s += r"\begin{problem}" + "\n"
 			s += model.demacro(problem.bodies[0]) + "\n"
 			s += r"\end{problem}" + "\n"
-			s += r"\vspace{2em}" + "\n\n"
-			s += r"\begin{proof}[Solution]" + "\n"
+			s += r"\hrulebar" + "\n\n"
 			s += model.demacro(problem.bodies[1]) + "\n"
-			s += r"\end{proof}" + "\n"
 			s += r"\pagebreak" + "\n\n"
 	s += r"\end{document}"
 	if opts.tex:
