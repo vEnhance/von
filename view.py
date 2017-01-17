@@ -11,6 +11,9 @@ _view_parser.add_argument('-q', '--quiet', action = "store_const",\
 _view_parser.add_argument('--nocolor', action = "store_const",\
 		dest = 'color', default = True, const = False,\
 		help = "Suppress output.")
+_view_parser.add_argument('--tabs', action = "store_const",\
+		dest = 'tabs', default = False, const = True,\
+		help = "Uses tabs as separator for data in list-type commands.")
 _view_parser.add_argument('-v', '--verbose', action = "store_const",\
 		default = False, const = True,\
 		help = "More verbose displays (e.g. include problem tags).")
@@ -64,6 +67,11 @@ def getProblemString(problem):
 	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
 def getEntryString(entry):
+	if _OPTS.tabs is True:
+		s = '\t'.join([entry.source, entry.desc, entry.diffstring])
+		if _OPTS.verbose:
+			s += '\t' + ' '.join(entry.tags)
+		return s
 	s = ""
 	if entry.i is not None:
 		s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(entry.n) + "]")
@@ -71,7 +79,7 @@ def getEntryString(entry):
 	s +=  APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
 	s += " "
 	s += entry.desc
-	s += " " 
+	s += " "
 	s += APPLY_COLOR("RED", "#"+ entry.diffstring)
 	if _OPTS.verbose:
 		s +=  "\n\t" + APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
