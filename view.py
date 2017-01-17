@@ -14,9 +14,14 @@ _view_parser.add_argument('--nocolor', action = "store_const",\
 _view_parser.add_argument('--tabs', action = "store_const",\
 		dest = 'tabs', default = False, const = True,\
 		help = "Uses tabs as separator for data in list-type commands.")
+_view_parser.add_argument('--brave', action = "store_const",\
+		dest = 'brave', default = False, const = True,\
+		help = "Show problems marked as SECRET.")
+		# TODO implement as tag, not in source
 _view_parser.add_argument('-v', '--verbose', action = "store_const",\
 		default = False, const = True,\
 		help = "More verbose displays (e.g. include problem tags).")
+
 _OPTS = _view_parser.parse_args([])
 class Parser(argparse.ArgumentParser):
 	def __init__(self, *args, **kwargs):
@@ -67,6 +72,8 @@ def getProblemString(problem):
 	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
 def getEntryString(entry):
+	if 'SECRET' in entry.source and not _OPTS.brave:
+		return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
 	if _OPTS.tabs is True:
 		s = '\t'.join([entry.source, entry.desc, entry.diffstring])
 		if _OPTS.verbose:
