@@ -19,6 +19,8 @@ parser.add_argument('-k', '--sourced', action = 'store_const',
 parser.add_argument('--tex', action='store_const',
 		const = True, default = False,
 		help="Supply only the TeX source, rather than compiling to PDF.")
+parser.add_argument('-f', '--filename', default = None,
+		help="Filename for the file to produce (defaults to po.tex).")
 
 LATEX_PREAMBLE = r"""
 \usepackage{amsmath,amssymb,amsthm}
@@ -138,7 +140,13 @@ def main(self, argv):
 	if opts.tex:
 		view.out(s)
 	else:
-		with open("/tmp/po.tex", "w") as f:
+		if opts.filename is not None:
+			fname = opts.filename
+		elif len(opts.keys) == 1:
+			fname = view.file_escape(title)
+		else:
+			fname = 'po'
+		with open("/tmp/%s.tex" %fname, "w") as f:
 			print >>f, s
 		os.chdir('/tmp')
-		os.system("latexmk -pv /tmp/po.tex;")
+		os.system("latexmk -pv /tmp/%s.tex;" %fname)
