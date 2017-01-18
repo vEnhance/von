@@ -1,6 +1,15 @@
 from rc import USE_COLOR, KEY_CHAR
 import sys
 import argparse
+import string
+
+def file_escape(s):
+	s = s.replace("/", "-")
+	s = s.replace(" ", "")
+	s = ''.join([_ for _ in s if _ in string.letters+string.digits+'-'])
+	if s == '':
+		s += 'emptyname'
+	return s
 
 # Arguments hacking whee
 # We have _OPTS here which will pick up any parse_args()

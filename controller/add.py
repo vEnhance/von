@@ -6,7 +6,6 @@ import datetime
 import tempfile
 import subprocess
 import yaml
-import string
 import os
 import traceback
 
@@ -59,14 +58,6 @@ tags:   [{now.year}-{now.month:02d}, <++>] # don't forget difficulty and shape!
 
 {hint}"""
 
-def file_escape(s):
-	s = s.replace("/", "-")
-	s = s.replace(" ", "")
-	s = ''.join([_ for _ in s if _ in string.letters+string.digits+'-'])
-	if s == '':
-		s += 'emptyname'
-	return s
-
 def get_yaml_info(opts):
 	initial = YAML_DATA_FILE.format(\
 			path = model.completePath(DEFAULT_PATH),
@@ -84,7 +75,7 @@ def get_yaml_info(opts):
 			if d['path'][-1] != '/':
 				d['path'] += '/'
 			assert os.path.isdir(d['path']), d['path'] + " directory non-existent"
-			target = d['path'] + file_escape(d['source']) + '.tex'
+			target = d['path'] + view.file_escape(d['source']) + '.tex'
 			assert not os.path.isfile(target), target + " already taken"
 		except AssertionError:
 			# TODO test this
