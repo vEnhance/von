@@ -36,7 +36,6 @@ LATEX_PREAMBLE = r"""
 \newtheorem*{corollary*}{Corollary}
 
 \theoremstyle{definition}
-\newtheorem{problem}{Problem}
 
 \newtheorem{claim}[theorem]{Claim}
 \newtheorem{conjecture}[theorem]{Conjecture}
@@ -46,6 +45,7 @@ LATEX_PREAMBLE = r"""
 \newtheorem{case}[theorem]{Case}
 \newtheorem{ques}[theorem]{Question}
 \newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}{Problem}
 \newtheorem*{answer*}{Answer}
 \newtheorem*{case*}{Case}
 \newtheorem*{claim*}{Claim}
@@ -127,13 +127,15 @@ def main(self, argv):
 			view.error(key + " not found")
 		else:
 			problem = entry.full
+			s += r"\begin{problem}" if len(opts.keys) > 1 \
+					else r"\begin{problem*}"
 			if opts.sourced:
-				s += r"\begin{problem}[" + opts.source + "]\n"
-			else:
-				s += r"\begin{problem}" + "\n"
+				s += "[" + opts.source + "]"
+			s += "\n"
 			s += model.demacro(problem.bodies[0]) + "\n"
-			s += r"\end{problem}" + "\n"
-			s += r"\hrulebar" + "\n\n"
+			s += r"\end{problem}" if len(opts.keys) > 1 \
+					else r"\end{problem*}"
+			s += "\n" + r"\hrulebar" + "\n\n"
 			s += model.demacro(problem.bodies[1]) + "\n"
 			s += r"\pagebreak" + "\n\n"
 	s += r"\end{document}"
