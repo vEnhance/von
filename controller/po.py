@@ -57,7 +57,8 @@ LATEX_PREAMBLE = r"""
 \newtheorem*{exercise*}{Exercise}
 \newtheorem*{problem*}{Problem}
 
-\usepackage{asymptote}
+\usepackage{epic} % diagrams
+\usepackage{asymptote} % more diagrams
 \begin{asydef}
 import olympiad;
 import cse5;
@@ -87,7 +88,6 @@ settings.outformat="pdf";
 \rehead{\normalfont\footnotesize\textbf{TITLE}}
 \rohead{\normalfont\footnotesize\textbf{TITLE}}
 \pagestyle{scrheadings}
-
 
 \newcommand{\hrulebar}{
   \par\hspace{\fill}\rule{0.95\linewidth}{.7pt}\hspace{\fill}

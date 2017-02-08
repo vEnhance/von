@@ -13,7 +13,7 @@ parser.add_argument('-k', '--sourced', action='store_const',
 		help="Always include the keyed source anyways.")
 
 
-r = re.compile(r'\\von(\*)?(\[([^\]]+)\])?\{([^\]]+)\}')
+r = re.compile(r'\\von(\*)?(\[([^\]]+)\])?\{([A-Za-z0-9 /\-?,.!]+)\}')
 def main(self, argv):
 	opts = parser.process(argv)
 	s = ''
@@ -33,7 +33,6 @@ def main(self, argv):
 					s += r'\begin{problem}' + source + '\n'
 				else:
 					s += r'\begin{problem}[' + key + ']' + '\n'
-
 				problem = model.getEntryByKey(key).full
 				s += model.demacro(problem.bodies[0]) + '\n'
 				s += r'\end{problem}' + '\n'
