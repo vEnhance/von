@@ -27,14 +27,14 @@ TAG_HINT_TEXT = """# Some hints for tags:
 #
 # NT:    primes p-adic QR pell smallestprime mods euclid
 #        fermat zsig cyclotomic divis order christmas CRT
-# Alg:   polynomial trig roots calculus genfunc
-#        continuity irreducible exactsum manip
+# Alg:   polynomial trig roots calculus genfunc analysis
+#        continuity irreducible exactsum manip swapsum
 # FE:    cauchy pointwise cancel symmetry bump isolated
 # Ineq:  holder CDN schur AMGM Titu homogenize
 #        dehomogenize SOS jensen isofudge nEV
 # Combo: greedy optimization additivecombo extreme invariant
-#        free pigeonhole parity graph adhoc EV global local
-#        hall grid rigid perturb algorithm linalg combogeo
+#        free pigeonhole parity graph adhoc EV global local hall
+#        grid rigid perturb algorithm linalg combogeo desire design
 # Geometry tags
   # Part I and II: anglechase simtri pop homothety config
   #                cevalaus trig complex bary length
