@@ -7,6 +7,7 @@ VON_CACHE_NAME = "cache"
 VON_CACHE_PATH = os.path.join(VON_BASE_PATH, VON_CACHE_NAME)
 
 EDITOR = os.environ.get('EDITOR','vim') # that easy!
+BACKUP_DIR = "~/.vim/tmp/"
 
 SEPERATOR = '\n---\n'
 NSEPERATOR = '\n' + SEPERATOR + '\n'
