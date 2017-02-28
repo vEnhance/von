@@ -1,5 +1,6 @@
 import model, view
 from rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR
+import preview
 
 import clipboard
 import datetime
@@ -43,13 +44,7 @@ def get_bodies(raw_text, opts):
 	initial = PS_INSTRUCT + NSEPERATOR + raw_text
 
 	def pre_hook(tempfile_name):
-		with open("/tmp/von_preview.tex", "w") as f:
-			print >>f, r"\documentclass[11pt]{scrartcl}"
-			print >>f, r"\usepackage{evan}"
-			print >>f, r"\title{VON Preview}"
-			print >>f, r"\begin{document}"
-			print >>f, r"\input{%s}" % tempfile_name
-			print >>f, r"\end{document}"
+		preview.make_preview(tempfile_name)
 	def post_hook(tempfile_name, contents):
 		os.system("cp %s %s" % (tempfile_name, BACKUP_DIR))
 
