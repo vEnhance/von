@@ -1,6 +1,6 @@
 import os
 
-def make_preview(target):
+def make_preview(full_path):
 	if not os.path.exists("/tmp/preview/"):
 		os.mkdir("/tmp/preview")
 	with open("/tmp/preview/von_preview.tex", "w") as f:
@@ -8,5 +8,5 @@ def make_preview(target):
 		print >>f, r"\usepackage{evan}"
 		print >>f, r"\title{VON Preview}"
 		print >>f, r"\begin{document}"
-		print >>f, r"\input{%s}" % target
+		print >>f, r"\input{%s}" % full_path
 		print >>f, r"\end{document}"

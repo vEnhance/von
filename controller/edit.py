@@ -1,5 +1,6 @@
 import model, view
 from rc import EDITOR
+import preview
 
 import subprocess
 
@@ -14,7 +15,10 @@ def main(self, argv):
 		if entry is None:
 			view.error(key + " not found")
 		else:
-			subprocess.call([EDITOR, model.completePath(entry.path)])
+			full_path = model.completePath(entry.path)
+			preview.make_preview(full_path)
+			subprocess.call([EDITOR, full_path]) # do editing
+
 			problem = model.makeProblemFromPath(entry.path)
 			new_entry = model.updateEntryByProblem(
 					old_entry = entry, new_problem = problem) # update cache after editing problem
