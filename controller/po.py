@@ -130,7 +130,7 @@ def main(self, argv):
 			s += r"\begin{problem}" if len(opts.keys) > 1 \
 					else r"\begin{problem*}"
 			if opts.sourced:
-				s += "[" + opts.source + "]"
+				s += "[" + entry.source + "]"
 			s += "\n"
 			s += model.demacro(problem.bodies[0]) + "\n"
 			s += r"\end{problem}" if len(opts.keys) > 1 \
