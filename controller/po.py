@@ -148,7 +148,9 @@ def main(self, argv):
 			fname = view.file_escape(title)
 		else:
 			fname = 'po'
-		with open("/tmp/%s.tex" %fname, "w") as f:
+		if not os.path.exists("/tmp/po/"):
+			os.mkdir("/tmp/po")
+		with open("/tmp/po/%s.tex" %fname, "w") as f:
 			print >>f, s
-		os.chdir('/tmp')
-		os.system("latexmk -pv /tmp/%s.tex;" %fname)
+		os.chdir('/tmp/po')
+		os.system("latexmk -pv /tmp/po/%s.tex;" %fname)

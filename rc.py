@@ -16,18 +16,18 @@ TAG_HINT_TEXT = """# Some hints for tags:
 #
 # *** Difficulty: trivial aleph bet dalet gimel zayin yod kurumi
 # *** Sources: mine obscure rare secret exam blind well
-# *** Problem Shape: yesno find construct bestpossible hardanswer aime
+# *** Problem Shape: yesno find construct bestpossible hardanswer aime joke
 # (here well means I spent a lot of time on the problem myself)
 #
 # Quality: favorite > nice > good > ugly work
 # Philosophy: instructive reliable justdoit magic contrived
 # Philosophy': smallcases equalitycase scouting meta dumb
-# Philosophy'': wishful criticalclaim stronger thinkbig
+# Philosophy'': wishful criticalclaim stronger thinkbig brave
 # Solution Method: induct manysolutions magic inefficient explicit compute
 # More tags: pitfall troll intuitive size weak maturity
 #
 # NT:    primes p-adic QR pell smallestprime mods euclid
-#        fermat zsig cyclotomic divis order christmas CRT
+#        fermat zsig cyclotomic divis order christmas CRT vietajump
 # Alg:   polynomial trig roots calculus genfunc analysis
 #        continuity irreducible exactsum manip swapsum
 # FE:    cauchy pointwise cancel symmetry bump isolated
@@ -35,7 +35,8 @@ TAG_HINT_TEXT = """# Some hints for tags:
 #        dehomogenize SOS jensen isofudge nEV
 # Combo: greedy optimization additivecombo extreme invariant
 #        free pigeonhole parity graph adhoc EV global local hall
-#        grid rigid perturb algorithm linalg combogeo desire design
+#        grid rigid perturb algorithm linalg combogeo
+#        desire design understand
 # Geometry tags
   # Part I and II: anglechase simtri pop homothety config
   #                cevalaus trig complex bary length
