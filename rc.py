@@ -19,10 +19,11 @@ TAG_HINT_TEXT = """# Some hints for tags:
 # *** Problem Shape: yesno find construct bestpossible hardanswer aime joke
 # (here well means I spent a lot of time on the problem myself)
 #
-# Quality: favorite > nice > good > ugly work
+# Quality: favorite > nice > good > ugly, work
 # Philosophy: instructive reliable justdoit magic contrived
 # Philosophy': smallcases equalitycase scouting meta dumb
-# Philosophy'': wishful criticalclaim stronger thinkbig brave
+# Philosophy'': wishful criticalclaim stronger thinkbig
+# Habits: cases brave neatness
 # Solution Method: induct manysolutions magic inefficient explicit compute
 # More tags: pitfall troll intuitive size weak maturity
 #

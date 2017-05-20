@@ -51,7 +51,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 				pass
 			except:
 				traceback.print_exc()
-		print "\n" + GOODBYE_STRING 
+		print "\n" + GOODBYE_STRING
 
 	def onecmd(self, line):
 		"""Interpret the argument as though it had been typed in response

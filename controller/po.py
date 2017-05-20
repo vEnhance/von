@@ -46,6 +46,7 @@ LATEX_PREAMBLE = r"""
 \newtheorem{ques}[theorem]{Question}
 \newtheorem{exercise}[theorem]{Exercise}
 \newtheorem{problem}{Problem}
+\newtheorem{remark}{Remark}
 \newtheorem*{answer*}{Answer}
 \newtheorem*{case*}{Case}
 \newtheorem*{claim*}{Claim}
@@ -56,6 +57,7 @@ LATEX_PREAMBLE = r"""
 \newtheorem*{ques*}{Question}
 \newtheorem*{exercise*}{Exercise}
 \newtheorem*{problem*}{Problem}
+\newtheorem*{remark*}{Remark}
 
 \usepackage{epic} % diagrams
 \usepackage{asymptote} % more diagrams
