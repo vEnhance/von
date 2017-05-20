@@ -26,11 +26,7 @@ class pickleObj(collections.MutableMapping):
 			self.store = self._initial()
 		else:
 			with vonOpen(path) as f:
-				try:
-					self.store = pickle.load(f)
-				except:
-					view.warn("Index corrupted, reading fresh...")
-					self.store = self._initial()
+				self.store = pickle.load(f)
 		self.path = path
 		self.mode = mode
 	def __enter__(self):
@@ -187,7 +183,7 @@ def getEntryBySource(source):
 		return index.get(source, None)
 
 def getEntryByKey(key):
-	# TODO this shouldn't actually be in mode, but blah
+	# TODO this shouldn't actually be in model, but blah
 	if key.startswith(KEY_CHAR):
 		return getEntryByCacheNum(n = int(key.lstrip(KEY_CHAR)))
 	else:
