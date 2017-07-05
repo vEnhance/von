@@ -27,7 +27,7 @@ TAG_HINT_TEXT = """# Some hints for tags:
 # Solution Method: induct manysolutions magic inefficient explicit compute
 # More tags: pitfall troll intuitive size weak maturity
 #
-# NT:    primes p-adic QR pell smallestprime mods euclid
+# NT:    primes p-adic QR pell smallestprime mods euclid rembound
 #        fermat zsig cyclotomic divis order christmas CRT vietajump
 # Alg:   polynomial trig roots calculus genfunc analysis
 #        continuity irreducible exactsum manip swapsum
@@ -38,7 +38,7 @@ TAG_HINT_TEXT = """# Some hints for tags:
 #        free pigeonhole parity graph adhoc EV global local hall
 #        grid rigid perturb algorithm linalg combogeo
 #        desire design understand
-# Geometry tags
+# Geometry tags: rich
   # Part I and II: anglechase simtri pop homothety config
   #                cevalaus trig complex bary length
   # Part III:      inversion polar projective harmonic
