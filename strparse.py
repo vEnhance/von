@@ -2,27 +2,28 @@ import re
 
 # Demacro
 def demacro(text):
-	# TODO this doesn't quite work, e.g. \epsilon -> \epsilonilon
+	# TODO this doesn't quite work, but oh well
 	replacements = [
-		(r"\ii",			 r"\item") ,
-		(r"\wh",			 r"\widehat") ,
-		(r"\ol",			 r"\overline"),
+		(r"\ii",			r"\item") ,
+		(r"\wh",			r"\widehat") ,
+		(r"\ol",			r"\overline"),
+		(r"\epsilon",		r"\eps"),
 		(r"\eps",			r"\varepsilon"),
-		(r"\dang",		 r"\measuredangle"),
-		(r"\dg",			 r"^{\circ}"),
+		(r"\dang",			r"\measuredangle"),
+		(r"\dg",			r"^{\circ}"),
 		(r"\inv",			r"^{-1}"),
-		(r"\half",		 r"\frac{1}{2}"),
-		(r"\NN",			 r"{\mathbb N}"),
-		(r"\ZZ",			 r"{\mathbb Z}"),
-		(r"\CC",			 r"{\mathbb C}"),
-		(r"\RR",			 r"{\mathbb R}"),
-		(r"\QQ",			 r"{\mathbb Q}"),
-		(r"\FF",			 r"{\mathbb F}"),
-		(r"\opname",	 r"\operatorname"),
-		(r"\defeq",		r"\overset{\text{def}}{=}"),
-		(r"\id",			 r"\operatorname{id}"),
-		(r"\injto",		r"\hookrightarrow"),
-		(r"\vdotswithin=", r"\vdots"),
+		(r"\half",			r"\frac{1}{2}"),
+		(r"\NN",			r"{\mathbb N}"),
+		(r"\ZZ",			r"{\mathbb Z}"),
+		(r"\CC",			r"{\mathbb C}"),
+		(r"\RR",			r"{\mathbb R}"),
+		(r"\QQ",			r"{\mathbb Q}"),
+		(r"\FF",			r"{\mathbb F}"),
+		(r"\opname",		r"\operatorname"),
+		(r"\defeq",			r"\overset{\text{def}}{=}"),
+		(r"\id",			r"\operatorname{id}"),
+		(r"\injto",			r"\hookrightarrow"),
+		(r"\vdotswithin=",	r"\vdots"),
 	]
 	s = text
 	for short, full in replacements:
