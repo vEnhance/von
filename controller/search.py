@@ -14,6 +14,9 @@ parser.add_argument('-w', '--authors', nargs='+', metavar='authors', \
 parser.add_argument('-r', '--refine', action = "store_const", \
 		default = False, const = True, \
 		help = "Prune through the Cache rather than the whole database.")
+parser.add_argument('-a', '--alph', action = "store_const", \
+		default = False, const = True, \
+		help = "Sort the results alphabetically, not by difficulty.")
 
 def main(self, argv):
 	opts = parser.process(argv)
@@ -27,7 +30,8 @@ def main(self, argv):
 				view.APPLY_COLOR("BOLD_GREEN", view.formatPath(search_path)))
 	result = model.runSearch(
 			terms = opts.s_terms, tags = opts.s_tags, sources = opts.s_sources,
-			authors = opts.s_authors, refine = opts.refine, path = search_path)
+			authors = opts.s_authors, refine = opts.refine, path = search_path,
+			alph_sort = opts.alph)
 
 	for i, entry in enumerate(result):
 		view.printEntry(entry)

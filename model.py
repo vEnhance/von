@@ -223,7 +223,7 @@ def viewDirectory(path):
 		setCache(entries)
 	return (entries, dirs)
 
-def runSearch(terms = [], tags = [], sources = [], authors = [], path = '', refine = False):
+def runSearch(terms = [], tags = [], sources = [], authors = [], path = '', refine = False, alph_sort = False):
 	def _matches(entry):
 		return all([entry.hasTag(_) for _ in tags]) \
 				and all([entry.hasTerm(_) for _ in terms]) \
@@ -236,7 +236,10 @@ def runSearch(terms = [], tags = [], sources = [], authors = [], path = '', refi
 	else:
 		with VonCache() as cache:
 			result = [entry for entry in cache if _matches(entry)]
-	result.sort()
+	if alph_sort:
+		result.sort(key = lambda e: e.source)
+	else:
+		result.sort()
 	if len(result) > 0: setCache(result)
 	return result
 
