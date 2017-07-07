@@ -50,6 +50,10 @@ def toAOPS(text):
 	text = text.replace(r"\begin{proof}", "\n[i]Proof.[/i] ")
 	text = text.replace(r"\end{proof}", r"$\blacksquare$" + "\n")
 	text = text.replace(r"\#", "#")
+	# Remove Asy opacities, doesn't work on AoPS
+	text = text.replace(r"filldraw(", r"draw(")
+	text = re.sub(r"opacity\(0.[0-9]+\)+([^,]+), ", "", text)
+	# Replace \emph, \textit, et al
 	text = re.sub(r"\\emph{([^}]*)}", r"[i]\1[/i]", text)
 	text = re.sub(r"\\textit{([^}]*)}", r"[i]\1[/i]", text)
 	text = re.sub(r"\\textbf{([^}]*)}", r"[b]\1[/b]", text)
