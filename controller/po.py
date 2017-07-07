@@ -25,6 +25,7 @@ parser.add_argument('-f', '--filename', default = None,
 LATEX_PREAMBLE = r"""
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{hyperref}
+\usepackage[shortlabels]{enumitem}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
