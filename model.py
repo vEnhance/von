@@ -1,4 +1,4 @@
-from rc import SEPERATOR, KEY_CHAR, DIFFS
+from rc import SEPERATOR, DIFFS
 from rc import VON_BASE_PATH, VON_INDEX_PATH, VON_CACHE_PATH
 import view
 import random
@@ -191,8 +191,8 @@ def getEntryBySource(source):
 
 def getEntryByKey(key):
 	# TODO this shouldn't actually be in model, but blah
-	if key.startswith(KEY_CHAR):
-		return getEntryByCacheNum(n = int(key.lstrip(KEY_CHAR)))
+	if key.isdigit():
+		return getEntryByCacheNum(n = int(key))
 	else:
 		return getEntryBySource(source = key)
 

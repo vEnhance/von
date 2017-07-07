@@ -1,4 +1,4 @@
-from rc import USE_COLOR, KEY_CHAR
+from rc import USE_COLOR
 import sys
 import argparse
 import string
@@ -90,7 +90,7 @@ def getEntryString(entry):
 		return s
 	s = ""
 	if entry.i is not None:
-		s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(entry.n) + "]")
+		s += APPLY_COLOR("BOLD_RED", "[" + "#" + str(entry.n) + "]")
 		s += " \t"
 	s += APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
 	s += " "

@@ -45,7 +45,5 @@ TAG_HINT_TEXT = """# Some hints for tags:
   #                miquel spiralsim mixtilinear"""
 
 USE_COLOR = True
-KEY_CHAR = 'C~'
-
 DIFFS= ['trivial', 'aleph', 'bet', 'dalet', 'gimel',
 		'zayin', 'yod', 'kurumi']
