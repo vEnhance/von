@@ -92,13 +92,16 @@ def getEntryString(entry):
 	if entry.i is not None:
 		s += APPLY_COLOR("BOLD_RED", "[" + KEY_CHAR + str(entry.n) + "]")
 		s += " \t"
-	s +=  APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
+	s += APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
 	s += " "
 	s += entry.desc
+	if hasattr(entry, 'author'):
+		s += ", " + APPLY_COLOR("CYAN", entry.author)
 	s += " "
 	s += APPLY_COLOR("RED", "#"+ entry.diffstring)
 	if _OPTS.verbose:
-		s +=  "\n\t" + APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
+		s += "\n\t"
+		s += APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
 	return s
 def formatPath(path):
 	return 'VON/' + path
