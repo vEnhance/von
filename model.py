@@ -131,6 +131,10 @@ class IndexEntry(GenericItem):
 		blob = self.source + ' ' + self.desc
 		if hasattr(self, 'author'): blob += ' ' + self.author
 		return term.lower() in blob.lower() or term in self.tags
+	def hasAuthor(self, name):
+		if not hasattr(self, 'author'): return False
+		haystacks = self.author.lower().strip().split(' ')
+		return name.lower() in haystacks
 	def hasSource(self, source):
 		return source.lower() in self.source.lower()
 	def __repr__(self):
@@ -219,11 +223,12 @@ def viewDirectory(path):
 		setCache(entries)
 	return (entries, dirs)
 
-def runSearch(terms = [], tags = [], sources = [], path = '', refine = False):
+def runSearch(terms = [], tags = [], sources = [], authors = [], path = '', refine = False):
 	def _matches(entry):
 		return all([entry.hasTag(_) for _ in tags]) \
 				and all([entry.hasTerm(_) for _ in terms]) \
 				and all([entry.hasSource(_) for _ in sources]) \
+				and all([entry.hasAuthor(_) for _ in authors]) \
 				and entry.path.startswith(path)
 	if refine is False:
 		with VonIndex() as index:
