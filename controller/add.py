@@ -116,7 +116,9 @@ def do_add_problem(raw_text, opts):
 		return
 	out_text = NSEPERATOR.join([out_yaml]+bodies)
 	p = model.addProblemByFileContents(target, out_text)
-	view.printEntry(p.entry)
+	e = p.entry
+	model.augmentCache(e)
+	view.printEntry(e)
 
 parser = view.Parser(prog='add', description='Adds a problem to VON.')
 parser.add_argument('source', default = None, nargs = '?',

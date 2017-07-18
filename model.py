@@ -243,9 +243,9 @@ def runSearch(terms = [], tags = [], sources = [], authors = [], path = '', refi
 	if len(result) > 0: setCache(result)
 	return result
 
-def augmentCache(entries):
+def augmentCache(*entries):
 	with VonCache('w') as cache:
-		cache.set(cache.store + entries)
+		cache.set(cache.store + list(entries))
 def setCache(entries):
 	with VonCache('w') as cache:
 		cache.set(entries)
