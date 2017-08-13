@@ -1,13 +1,13 @@
-from rc import VON_BASE_PATH
-from view import APPLY_COLOR
-import view
-import model
+from .rc import VON_BASE_PATH
+from .view import APPLY_COLOR
+from . import view
+from . import model
 
 import os
 import cmd
 import traceback
 import shlex
-import controller
+from . import controller
 import glob
 
 import readline
@@ -39,19 +39,19 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 		return _complete_path(text)
 
 	def run(self):
-		print WELCOME_STRING
+		print(WELCOME_STRING)
 		os.chdir(model.getCompleteCwd())
 		while 1:
 			try:
 				self.cmdloop()
 				break
 			except KeyboardInterrupt:
-				print "^C"
+				print("^C")
 			except SystemExit:
 				pass
 			except:
 				traceback.print_exc()
-		print "\n" + GOODBYE_STRING
+		print("\n" + GOODBYE_STRING)
 
 	def onecmd(self, line):
 		"""Interpret the argument as though it had been typed in response
@@ -91,12 +91,12 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 			except AttributeError:
 				views.error('Command {} not found'.format(arg))
 			else:
-				print APPLY_COLOR("MAGENTA", "Getting `{} --help`...".format(arg))
+				print(APPLY_COLOR("MAGENTA", "Getting `{} --help`...".format(arg)))
 				func(['--help'])
 		else:
-			print "Here is a list of available commands:"
+			print("Here is a list of available commands:")
 			for name in sorted(self.get_names()):
 				if name[:3] == 'do_' and name != 'do_help' and name != 'do_EOF':
-					print "*", name[3:]
+					print("*", name[3:])
 	
 # vim: fdm=marker

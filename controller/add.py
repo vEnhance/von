@@ -1,6 +1,6 @@
 import model, view
 from rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR
-import preview
+from . import preview
 
 import clipboard
 import datetime
@@ -34,7 +34,7 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook
 
 def alert_error_tryagain(message = ''):
 	"""Prints an error message and waits for user to confirm."""
-	return raw_input(message + ' ')
+	return input(message + ' ')
 
 PS_INSTRUCT = """% Input your problem and solution below.
 % Three dashes on a newline indicate the breaking points.

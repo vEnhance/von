@@ -1,15 +1,15 @@
-from rc import SEPERATOR, DIFFS
-from rc import VON_BASE_PATH, VON_INDEX_PATH, VON_CACHE_PATH
-import view
+from .rc import SEPERATOR, DIFFS
+from .rc import VON_BASE_PATH, VON_INDEX_PATH, VON_CACHE_PATH
+from . import view
 import random
 import functools
 
 import os
 import collections
 import yaml
-import cPickle as pickle
+import pickle as pickle
 
-from strparse import demacro, toAOPS
+from .strparse import demacro, toAOPS
 
 def shortenPath(path):
 	return os.path.relpath(path, VON_BASE_PATH)
@@ -55,7 +55,7 @@ class pickleList(pickleObj):
 	def _initial(self):
 		return []
 	def set(self, store):
-		for i in xrange(len(store)):
+		for i in range(len(store)):
 			store[i].i = i
 		self.store = store
 
@@ -198,7 +198,7 @@ def getEntryByKey(key):
 
 def addProblemByFileContents(path, text):
 	with vonOpen(path, 'w') as f:
-		print >>f, text
+		print(text, file=f)
 	view.log("Wrote to " + path)
 	# Now update cache
 	p = makeProblemFromPath(path)
@@ -232,7 +232,7 @@ def runSearch(terms = [], tags = [], sources = [], authors = [], path = '', refi
 				and entry.path.startswith(path)
 	if refine is False:
 		with VonIndex() as index:
-			result = [entry for source, entry in index.iteritems() if _matches(entry)]
+			result = [entry for source, entry in index.items() if _matches(entry)]
 	else:
 		with VonCache() as cache:
 			result = [entry for entry in cache if _matches(entry)]

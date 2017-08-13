@@ -154,6 +154,6 @@ def main(self, argv):
 		if not os.path.exists("/tmp/po/"):
 			os.mkdir("/tmp/po")
 		with open("/tmp/po/%s.tex" %fname, "w") as f:
-			print >>f, s
+			print(s, file=f)
 		os.chdir('/tmp/po')
 		os.system("latexmk -pv /tmp/po/%s.tex;" %fname)

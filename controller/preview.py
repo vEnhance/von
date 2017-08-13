@@ -4,9 +4,9 @@ def make_preview(full_path):
 	if not os.path.exists("/tmp/preview/"):
 		os.mkdir("/tmp/preview")
 	with open("/tmp/preview/von_preview.tex", "w") as f:
-		print >>f, r"\documentclass[11pt]{scrartcl}"
-		print >>f, r"\usepackage{evan}"
-		print >>f, r"\title{VON Preview}"
-		print >>f, r"\begin{document}"
-		print >>f, r"\input{%s}" % full_path
-		print >>f, r"\end{document}"
+		print(r"\documentclass[11pt]{scrartcl}", file=f)
+		print(r"\usepackage{evan}", file=f)
+		print(r"\title{VON Preview}", file=f)
+		print(r"\begin{document}", file=f)
+		print(r"\input{%s}" % full_path, file=f)
+		print(r"\end{document}", file=f)

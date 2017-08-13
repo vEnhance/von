@@ -1,5 +1,5 @@
 # For importing von externally
-import model
+from . import model
 
 # For Pickle...
 import sys

@@ -1,6 +1,6 @@
 import model, view
 from rc import EDITOR
-import preview
+from . import preview
 
 import subprocess
 

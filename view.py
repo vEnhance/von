@@ -1,4 +1,4 @@
-from rc import USE_COLOR
+from .rc import USE_COLOR
 import sys
 import argparse
 import string
@@ -63,7 +63,7 @@ _TERM_COLOR["BG_BLUE"]         = "\033[44m"
 _TERM_COLOR["BG_MAGENTA"]      = "\033[45m"
 _TERM_COLOR["BG_CYAN"]         = "\033[46m"
 if USE_COLOR is False:
-	for key in _TERM_COLOR.keys():
+	for key in list(_TERM_COLOR.keys()):
 		_TERM_COLOR[key] = ""
 # }}}
 
@@ -115,17 +115,17 @@ def getDirString(path):
 	return "Directory " + APPLY_COLOR("BOLD_BLUE", path)
 
 def printProblem(*args, **kwargs):
-	print getProblemString(*args, **kwargs)
+	print(getProblemString(*args, **kwargs))
 def printEntry(*args, **kwargs):
-	print getEntryString(*args, **kwargs)
+	print(getEntryString(*args, **kwargs))
 def printDir(*args, **kwargs):
-	print getDirString(*args, **kwargs)
+	print(getDirString(*args, **kwargs))
 
 def warn(message):
-	print >>sys.stderr, WARN_PRE, message
+	print(WARN_PRE, message, file=sys.stderr)
 def error(message):
-	print ERROR_PRE, message
+	print(ERROR_PRE, message)
 def log(message):
-	print message
+	print(message)
 def out(message):
-	print message
+	print(message)
