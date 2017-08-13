@@ -90,9 +90,15 @@ def getEntryString(entry):
 		return s
 	s = ""
 	if entry.i is not None:
-		s += APPLY_COLOR("BOLD_RED", "[" + "#" + str(entry.n) + "]")
+		if 'final' in entry.tags:
+			s += APPLY_COLOR("BOLD_YELLOW", "[" + "#" + str(entry.n) + "]")
+		else:
+			s += APPLY_COLOR("BOLD_RED", "[" + "#" + str(entry.n) + "]")
 		s += " \t"
-	s += APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
+	if 'favorite' in entry.tags or 'nice' in entry.tags:
+		s += APPLY_COLOR("BOLD_CYAN", "(" + entry.source + ")")
+	else:
+		s += APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
 	s += " "
 	s += entry.desc
 	if hasattr(entry, 'author'):
