@@ -1,4 +1,4 @@
-import model, view
+from .. import model, view
 
 parser = view.Parser(prog='ss',\
 		description='Prints the Cache.')

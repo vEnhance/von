@@ -1,31 +1,31 @@
-import controller.add
-import controller.clear
-import controller.edit
-import controller.index
-import controller.po
-import controller.search
-import controller.show
-import controller.status
-import controller.cd
-import controller.solve
+from . import add
+from . import clear
+from . import edit
+from . import index
+from . import po
+from . import search
+from . import show
+from . import status
+from . import cd
+from . import solve
 
 class VonController:
-	do_add = controller.add.main
-	do_clear = controller.clear.main
-	do_edit = controller.edit.main
-	do_index = controller.index.main
-	do_show = controller.show.main
+	do_add = add.main
+	do_clear = clear.main
+	do_edit = edit.main
+	do_index = index.main
+	do_show = show.main
 
-	do_search = controller.search.main
-	do_s = controller.search.main
+	do_search = search.main
+	do_s = search.main
 
-	do_status = controller.status.main
-	do_ss = controller.status.main
+	do_status = status.main
+	do_ss = status.main
 
-	do_cd = controller.cd.main
+	do_cd = cd.main
 	def do_ls(self, argv):
 		self.do_cd(['.'] + argv)
 	do_cs = do_cd
 
-	do_po = controller.po.main
-	do_solve = controller.solve.main
+	do_po = po.main
+	do_solve = solve.main

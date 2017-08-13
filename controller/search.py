@@ -1,5 +1,5 @@
-from rc import VON_BASE_PATH
-import model, view
+from ..rc import VON_BASE_PATH
+from .. import model, view
 
 parser = view.Parser(prog='search', \
 		description='Searches for problems by tags or text.')

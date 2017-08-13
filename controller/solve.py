@@ -1,4 +1,4 @@
-import model, view
+from .. import model, view
 import re
 
 parser = view.Parser(prog='solve',\

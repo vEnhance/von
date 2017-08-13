@@ -1,5 +1,5 @@
-import model, view
-from rc import EDITOR
+from .. import model, view
+from ..rc import EDITOR
 from . import preview
 
 import subprocess

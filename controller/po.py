@@ -1,4 +1,4 @@
-import model, view
+from .. import model, view
 import os
 
 parser = view.Parser(prog='po',\

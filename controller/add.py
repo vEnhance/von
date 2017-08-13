@@ -1,5 +1,5 @@
-import model, view
-from rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR
+from .. import model, view
+from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR
 from . import preview
 
 import clipboard
