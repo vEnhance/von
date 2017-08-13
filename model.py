@@ -21,19 +21,19 @@ def vonOpen(path, *args, **kwargs):
 class pickleObj(collections.MutableMapping):
 	def _initial(self):
 		return None
-	def __init__(self, path, mode='r'):
-		if not os.path.isfile(path):
+	def __init__(self, path, mode='rb'):
+		if not os.path.isfile(path) or os.path.getsize(path) == 0:
 			self.store = self._initial()
 		else:
-			with vonOpen(path) as f:
+			with vonOpen(path, 'rb') as f:
 				self.store = pickle.load(f)
 		self.path = path
 		self.mode = mode
 	def __enter__(self):
 		return self
 	def __exit__(self, type, value, traceback):
-		if self.mode == 'w':
-			with vonOpen(self.path, 'w') as f:
+		if self.mode == 'wb':
+			with vonOpen(self.path, 'wb') as f:
 				pickle.dump(self.store, f)
 	def __getitem__(self, key):
 		return self.store[key]
@@ -59,9 +59,9 @@ class pickleList(pickleObj):
 			store[i].i = i
 		self.store = store
 
-def VonIndex(mode = 'r'):
+def VonIndex(mode = 'rb'):
 	return pickleDict(VON_INDEX_PATH, mode)
-def VonCache(mode = 'r'):
+def VonCache(mode = 'rb'):
 	return pickleList(VON_CACHE_PATH, mode)
 
 @functools.total_ordering
@@ -197,7 +197,7 @@ def getEntryByKey(key):
 		return getEntryBySource(source = key)
 
 def addProblemByFileContents(path, text):
-	with vonOpen(path, 'w') as f:
+	with vonOpen(path, 'wb') as f:
 		print(text, file=f)
 	view.log("Wrote to " + path)
 	# Now update cache
@@ -244,13 +244,13 @@ def runSearch(terms = [], tags = [], sources = [], authors = [], path = '', refi
 	return result
 
 def augmentCache(*entries):
-	with VonCache('w') as cache:
+	with VonCache('wb') as cache:
 		cache.set(cache.store + list(entries))
 def setCache(entries):
-	with VonCache('w') as cache:
+	with VonCache('wb') as cache:
 		cache.set(entries)
 def clearCache():
-	with VonCache('w') as cache:
+	with VonCache('wb') as cache:
 		cache.set([])
 def readCache():
 	with VonCache() as cache:
@@ -259,31 +259,31 @@ def readCache():
 # A certain magical Index~ <3
 
 def addEntryToIndex(entry):
-	with VonIndex('w') as index:
+	with VonIndex('wb') as index:
 		index[entry.source] = entry
 
 def updateEntryByProblem(old_entry, new_problem):
 	new_problem.i = old_entry.i
 	new_entry = new_problem.entry
 	
-	with VonIndex('w') as index:
+	with VonIndex('wb') as index:
 		if old_entry.source != new_entry.source:
 			del index[old_entry.source]
 		index[new_entry.source] = new_entry
-	with VonCache('w') as cache:
+	with VonCache('wb') as cache:
 		for i, entry in enumerate(cache):
 			if entry.source == old_entry.source:
 				cache[i] = new_entry
 	return index[new_entry.source]
 
 def addProblemToIndex(problem):
-	with VonIndex('w') as index:
+	with VonIndex('wb') as index:
 		p = problem
 		index[p.source] = p.entry
 		return index[p.source]
 
 def setEntireIndex(d):
-	with VonIndex('w') as index:
+	with VonIndex('wb') as index:
 		index.set(d)
 
 def rebuildIndex():
