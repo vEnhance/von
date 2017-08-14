@@ -6,7 +6,7 @@ import string
 def file_escape(s):
 	s = s.replace("/", "-")
 	s = s.replace(" ", "")
-	s = ''.join([_ for _ in s if _ in string.letters+string.digits+'-'])
+	s = ''.join([_ for _ in s if _ in string.ascii_letters+string.digits+'-'])
 	if s == '':
 		s += 'emptyname'
 	return s
