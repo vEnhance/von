@@ -160,7 +160,7 @@ def getCompleteCwd():
 
 def makeProblemFromPath(path):
 	# Creates a problem instance from a source, without looking at Index
-	with vonOpen(path) as f:
+	with vonOpen(path, 'r') as f:
 		text = ''.join(f.readlines())
 	x = text.split(SEPERATOR)
 	data = yaml.load(x[0])
@@ -197,7 +197,7 @@ def getEntryByKey(key):
 		return getEntryBySource(source = key)
 
 def addProblemByFileContents(path, text):
-	with vonOpen(path, 'wb') as f:
+	with vonOpen(path, 'w') as f:
 		print(text, file=f)
 	view.log("Wrote to " + path)
 	# Now update cache

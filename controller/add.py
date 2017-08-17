@@ -18,7 +18,7 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook
 	"""
 
 	with tempfile.NamedTemporaryFile(suffix=extension) as tf:
-		tf.write(initial)
+		tf.write(initial.encode())
 		tf.flush()
 		if pre_hook is not None:
 			pre_hook(tf.name)
@@ -27,7 +27,7 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook
 		# do the parsing with `tf` using regular File operations.
 		# for instance:
 		tf.seek(0)
-		edited_message = ''.join(tf.readlines())
+		edited_message = ''.join(_.decode('utf-8') for _ in tf.readlines())
 		if post_hook is not None:
 			post_hook(tf.name, edited_message)
 	return edited_message
