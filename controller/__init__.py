@@ -1,4 +1,5 @@
 from . import add
+from . import asy
 from . import clear
 from . import edit
 from . import index
@@ -10,6 +11,7 @@ from . import cd
 from . import solve
 
 class VonController:
+	do_asy = asy.main
 	do_add = add.main
 	do_clear = clear.main
 	do_edit = edit.main
