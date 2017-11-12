@@ -81,7 +81,7 @@ def getProblemString(problem):
 	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
 def getEntryString(entry):
-	if ('SECRET' in entry.source or 'secret' in entry.tags) and not _OPTS.brave:
+	if entry.secret and not _OPTS.brave:
 		return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
 	if _OPTS.tabs is True:
 		s = '\t'.join([entry.source, entry.desc, entry.diffstring])

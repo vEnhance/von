@@ -140,6 +140,9 @@ class IndexEntry(GenericItem):
 	def __repr__(self):
 		return self.source
 	@property
+	def secret(self):
+		return 'SECRET' in self.source or 'secret' in self.tags
+	@property
 	def entry(self):
 		view.warn("sketchy af")
 		return self
