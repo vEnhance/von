@@ -128,6 +128,8 @@ def main(self, argv):
 		entry = model.getEntryByKey(key)
 		if entry is None:
 			view.error(key + " not found")
+		elif entry.secret and not opts.brave:
+			view.warn(key + " not shown without --brave")
 		else:
 			problem = entry.full
 			s += r"\begin{problem}" if len(opts.keys) > 1 \

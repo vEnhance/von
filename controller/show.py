@@ -19,6 +19,8 @@ def main(self, argv):
 	entry = model.getEntryByKey(opts.key)
 	if entry is None:
 		view.error(opts.key + " not found")
+	elif entry.secret and not opts.brave:
+		view.error("Problem can't be shown without --brave option")
 	else:
 		problem = entry.full
 		b = opts.body
