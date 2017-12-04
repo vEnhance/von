@@ -19,6 +19,7 @@ def demacro(text):
 		(r"\RR",			r"{\mathbb R}"),
 		(r"\QQ",			r"{\mathbb Q}"),
 		(r"\FF",			r"{\mathbb F}"),
+		(r"\ts",			r"\textsuperscript"),
 		(r"\opname",		r"\operatorname"),
 		(r"\defeq",			r"\overset{\text{def}}{=}"),
 		(r"\id",			r"\operatorname{id}"),
