@@ -18,7 +18,7 @@ def has_solution(source):
 	return len(entry.full.bodies) > 1
 
 def get(source):
-	"""Returns the full data fora given source"""
+	"""Returns the full data for a given source"""
 	entry = index[source]
 	return entry.full
 
