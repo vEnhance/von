@@ -21,6 +21,7 @@ def main(self, argv):
 		view.error(opts.key + " not found")
 	elif entry.secret and not opts.brave:
 		view.error("Problem can't be shown without --brave option")
+		return
 	else:
 		problem = entry.full
 		b = opts.body

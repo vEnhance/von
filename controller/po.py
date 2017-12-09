@@ -129,7 +129,8 @@ def main(self, argv):
 		if entry is None:
 			view.error(key + " not found")
 		elif entry.secret and not opts.brave:
-			view.warn(key + " not shown without --brave")
+			view.error("Problem `%s` not shown without --brave" %entry.source)
+			return
 		else:
 			problem = entry.full
 			s += r"\begin{problem}" if len(opts.keys) > 1 \
