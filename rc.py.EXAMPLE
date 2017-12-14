@@ -13,6 +13,7 @@ BACKUP_DIR = "~/.vim/tmp/" # a directory for storing backups
 
 SEPERATOR = '\n---\n'
 NSEPERATOR = '\n' + SEPERATOR + '\n'
+GLOW_TAG = 'special' # problems with this tag are emphasized
 
 TAG_HINT_TEXT = """# Any text you want to display on the YAML editor.
 For example, a list of tags to use."""

@@ -1,4 +1,4 @@
-from .rc import USE_COLOR
+from .rc import USE_COLOR, GLOW_TAG
 import sys
 import argparse
 import string
@@ -90,7 +90,7 @@ def getEntryString(entry):
 		return s
 	s = ""
 	if entry.i is not None:
-		if 'final' in entry.tags:
+		if GLOW_TAG in entry.tags:
 			s += APPLY_COLOR("BOLD_YELLOW", "[" + "#" + str(entry.n) + "]")
 		else:
 			s += APPLY_COLOR("BOLD_RED", "[" + "#" + str(entry.n) + "]")
