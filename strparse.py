@@ -59,6 +59,7 @@ def toAOPS(text):
 	text = re.sub(r"\\emph{([^}]*)}", r"[i]\1[/i]", text)
 	text = re.sub(r"\\textit{([^}]*)}", r"[i]\1[/i]", text)
 	text = re.sub(r"\\textbf{([^}]*)}", r"[b]\1[/b]", text)
+	text = re.sub(r"\\paragraph{([^}]*)}", r"[color=blue][b]\1[/b][/color]", text)
 	text = re.sub(r"\\url{([^}]*)}", r"[url]\1[/url]", text)
 	text = re.sub(r"\\href{([^}]*)}{([^}]*)}", r"[url=\1]\2[/url]", text)
 
