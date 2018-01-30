@@ -1,4 +1,4 @@
-from .rc import USE_COLOR, GLOW_TAG
+from .rc import USE_COLOR
 import sys
 import argparse
 import string
@@ -81,20 +81,27 @@ def getProblemString(problem):
 	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
 def getEntryString(entry):
+	# SPECIAL hide brave
 	if entry.secret and not _OPTS.brave:
 		return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
+
 	if _OPTS.tabs is True:
 		s = '\t'.join([entry.source, entry.desc, entry.diffstring])
 		if _OPTS.verbose:
 			s += '\t' + ' '.join(entry.tags)
 		return s
 	s = ""
+
+	# SPECIAL GLOW
 	if entry.i is not None:
-		if GLOW_TAG in entry.tags:
+		if "final" in entry.tags:
 			s += APPLY_COLOR("BOLD_YELLOW", "[" + "#" + str(entry.n) + "]")
+		elif "waltz" in entry.tags:
+			s += APPLY_COLOR("BOLD_GREEN", "[" + "#" + str(entry.n) + "]")
 		else:
 			s += APPLY_COLOR("BOLD_RED", "[" + "#" + str(entry.n) + "]")
 		s += " \t"
+	# "nice" / "favorite" glow
 	if 'favorite' in entry.tags or 'nice' in entry.tags:
 		s += APPLY_COLOR("BOLD_CYAN", "(" + entry.source + ")")
 	else:
