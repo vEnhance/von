@@ -19,7 +19,7 @@ _view_parser.add_argument('-q', '--quiet', action = "store_const",\
 		help = "Suppress some output (only with ls now).") # TODO generalize
 _view_parser.add_argument('--nocolor', action = "store_const",\
 		dest = 'color', default = True, const = False,\
-		help = "Suppress output.")
+		help = "Suppress color output.")
 _view_parser.add_argument('--tabs', action = "store_const",\
 		dest = 'tabs', default = False, const = True,\
 		help = "Uses tabs as separator for data in list-type commands.")
