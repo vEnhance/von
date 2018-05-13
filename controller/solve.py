@@ -33,7 +33,9 @@ def main(self, argv):
 					s += r'\begin{problem}' + source + '\n'
 				else:
 					s += r'\begin{problem}[' + key + ']' + '\n'
-				problem = model.getEntryByKey(key).full
+				entry = model.getEntryByKey(key)
+				assert entry is not None, key
+				problem = entry.full
 				s += model.demacro(problem.bodies[0]) + '\n'
 				s += r'\end{problem}' + '\n'
 				if not opts.lazy:
