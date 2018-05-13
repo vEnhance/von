@@ -6,6 +6,7 @@ def demacro(text):
 	replacements = [
 		(r"\ii",			r"\item") ,
 		(r"\wh",			r"\widehat") ,
+		(r"\wt",			r"\widetilde") ,
 		(r"\ol",			r"\overline"),
 		(r"\epsilon",		r"\eps"),
 		(r"\eps",			r"\varepsilon"),
