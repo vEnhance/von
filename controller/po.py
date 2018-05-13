@@ -61,6 +61,7 @@ LATEX_PREAMBLE = r"""
 \newtheorem*{remark*}{Remark}
 
 \usepackage{epic} % diagrams
+\usepackage{tikz-cd} % diagrams
 \usepackage{asymptote} % more diagrams
 \begin{asydef}
 import olympiad;
