@@ -14,6 +14,8 @@ def demacro(text):
 		(r"\dg",			r"^{\circ}"),
 		(r"\inv",			r"^{-1}"),
 		(r"\half",			r"\frac{1}{2}"),
+		(r"\GL",			r"\operatorname{GL}"),
+		(r"\SL",			r"\operatorname{SL}"),
 		(r"\NN",			r"{\mathbb N}"),
 		(r"\ZZ",			r"{\mathbb Z}"),
 		(r"\CC",			r"{\mathbb C}"),
@@ -45,9 +47,9 @@ def toAOPS(text):
 	text = text.replace(r"\begin{itemize}", "[list]")
 	text = text.replace(r"\end{itemize}", "[/list]")
 	for env in ['theorem', 'claim', 'lemma', 'proposition', 'corollary', 'definition', 'remark']:
-		text = text.replace(r"\begin{" + env + "*}", "\n[b]" + env.title() + "[/b]: ")
+		text = text.replace(r"\begin{" + env + "*}", "\n[b][color=red]" + env.title() + ":[/color][/b] ")
 		text = text.replace(r"\end{" + env + "*}", "")
-		text = text.replace(r"\begin{" + env + "}", "\n[b]" + env.title() + "[/b]: ")
+		text = text.replace(r"\begin{" + env + "}", "\n[b][color=red]" + env.title() + ":[/color][/b] ")
 		text = text.replace(r"\end{" + env + "}", "")
 	text = text.replace(r"\begin{proof}", "\n[i]Proof.[/i] ")
 	text = text.replace(r"\end{proof}", r"$\blacksquare$" + "\n")
