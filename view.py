@@ -26,7 +26,6 @@ _view_parser.add_argument('--tabs', action = "store_const",\
 _view_parser.add_argument('--brave', action = "store_const",\
 		dest = 'brave', default = False, const = True,\
 		help = "Show problems marked as SECRET.")
-		# TODO implement as tag, not in source
 _view_parser.add_argument('-v', '--verbose', action = "store_const",\
 		default = False, const = True,\
 		help = "More verbose displays (e.g. include problem tags).")
