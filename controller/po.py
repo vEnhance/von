@@ -24,6 +24,7 @@ parser.add_argument('-f', '--filename', default = None,
 
 LATEX_PREAMBLE = r"""
 \usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
 \usepackage{hyperref}
 \usepackage[shortlabels]{enumitem}
 
