@@ -40,9 +40,9 @@ def main(self, argv):
 				s += r'\end{problem}' + '\n'
 				if not opts.lazy:
 					if len(problem.bodies) > 1:
-						s += r'\begin{proof}[Solution]' + '\n'
+						s += r'\subsubsection*{\ul{Solution}}' + '\n'
 						s += model.demacro(problem.bodies[1]) + '\n'
-						s += r'\end{proof}' + '\n'
+						s += r'\hrulebar' + '\n'
 					else:
 						view.warn("No solution to " + key)
 		view.out(s)
