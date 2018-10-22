@@ -77,8 +77,6 @@ defaultpen(fontsize(10pt));
 size(8cm); // set a reasonable default
 usepackage("amsmath");
 usepackage("amssymb");
-settings.tex="latex";
-settings.outformat="pdf";
 \end{asydef}
 
 % The below really should be scrlayer-scrpage
