@@ -34,7 +34,8 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook
 
 def alert_error_tryagain(message = ''):
 	"""Prints an error message and waits for user to confirm."""
-	return input(message + ' ')
+	view.error(message)
+	return input("** Press enter to continue: ")
 
 PS_INSTRUCT = """% Input your problem and solution below.
 % Three dashes on a newline indicate the breaking points.
@@ -92,10 +93,11 @@ def get_yaml_info(opts):
 			assert os.path.isdir(d['path']), d['path'] + " directory non-existent"
 			target = d['path'] + view.file_escape(d['source']) + '.tex'
 			assert not os.path.isfile(target), target + " already taken"
+			assert model.getEntryByKey(d['source']) is None, \
+				d['source'] + " is already an existing problem source"
 		except AssertionError:
-			# TODO test this
 			traceback.print_exc()
-			alert_error_tryagain("Okie dokie?")
+			alert_error_tryagain("Assertions failed, please try again.")
 			initial = raw_yaml
 		else:
 			del d['path']

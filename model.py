@@ -226,7 +226,8 @@ def viewDirectory(path):
 		setCache(entries)
 	return (entries, dirs)
 
-def runSearch(terms = [], tags = [], sources = [], authors = [], path = '', refine = False, alph_sort = False):
+def runSearch(terms = [], tags = [], sources = [], authors = [], \
+		path = '', refine = False, alph_sort = False):
 	def _matches(entry):
 		return all([entry.hasTag(_) for _ in tags]) \
 				and all([entry.hasTerm(_) for _ in terms]) \
