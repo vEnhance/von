@@ -27,6 +27,7 @@ LATEX_PREAMBLE = r"""
 \usepackage{mathtools}
 \usepackage{hyperref}
 \usepackage[shortlabels]{enumitem}
+\usepackage{multirow}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
