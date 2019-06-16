@@ -1,0 +1,75 @@
+# VON: Problem Database
+
+VON is a Python script I wrote in order to help me manage
+the problems and solutions to olympiad databases.
+I haven't gotten around to properly documenting this,
+but posting it by popular request.
+
+Here are a few hints:
+
+## Setup
+
+1. You need to create a copy of `rc.py` based on `rc.py.EXAMPLE`.
+	This is the "settings" file for the script.
+2. This directory should be included under PYTHONPATH,
+	and invoked by `python -m von` (to get an interactive terminal).
+	If you only want to issue one command, you can also type it directly,
+	e.g. `python -m von help` will list the help and exit.
+3. You may need to `pip install -r requirements.txt`.
+4. The `help` command lists possible commands.
+5. LaTeX integration uses [von.sty][vonsty]. The previewer requires [evan.sty][evansty].
+
+## Storing problems and solutions
+
+* `add "Shortlist 2016 G2"`: add problem to database
+
+1. Problems are stored in TeX files in `VON_BASE_PATH`. You can
+	keep sub-directories in here, as well, to organize those files.
+2. Problems and solutions are separated using `SEPARATOR` in `rc.py`,
+	which by default is three dashes padded by newlines.
+	So when entering new problems, write the statement, the separator,
+	and then the solution.
+3. Actually more generally, each problem and solution is separated into
+	several "bodies", delimited by the seperator.
+	It's basically assumed that 0'th body is the problem statement
+	and the 1'st body is the solution,
+	but you can have further bodies for other purposes too.
+
+## Meta-data
+
+* `edit "Shortlist 2016 G2"`: edit entry for problem in database
+
+1. Meta-data is stored at the top of each file after being added.
+2. Problems must have a *source* like "Shortlist 2016 G2".
+3. Problems should also have a description, and a set of tags.
+	If a tag is specified as a difficulty tag in `rc.py`,
+	it will be displayed differently, but otherwise functionally equivalently.
+4. Problems can also have an "author" attribute, which is displayed.
+
+## Searching
+
+The `search` command searches everything.
+Use `search --help` for a lot of options.
+
+* `search "Shortlist 2016"`: search for problems with "Shortlist 2016"
+* `search -t anglechase`: searches for problems tagged `anglechase`
+
+The `s` command is a shorthand for `search`.
+
+## Displaying problems
+
+When using various commands,
+every problem can be identified in two ways.
+One is by the source, such as "Shortlist 2016 G2".
+Alternatively, when one uses the search command,
+the results are indexed by positive integers,
+and those indices can be used instead of the source.
+For example, `show 3` will display the 3rd problem in search results.
+
+* `show 3`: Print the 3rd problem
+* `po 3`: Produces a TeX/PDF of the problem and solution.
+
+Use `show --help` and `po --help` for more details
+
+[vonsty]: https://github.com/vEnhance/dotfiles/blob/master/texmf/tex/latex/von/von.sty
+[evansty]: https://github.com/vEnhance/dotfiles/blob/master/texmf/tex/latex/evan/evan.sty
