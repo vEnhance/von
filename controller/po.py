@@ -24,43 +24,120 @@ parser.add_argument('-f', '--filename', default = None,
 
 LATEX_PREAMBLE = r"""
 \usepackage{amsmath,amssymb,amsthm}
+\PassOptionsToPackage{usenames,svgnames,dvipsnames}{xcolor}
+\usepackage{thmtools}
+\usepackage[framemethod=TikZ]{mdframed}
+
+\mdfdefinestyle{mdbluebox}{%
+	roundcorner = 10pt,
+	linewidth=1pt,
+	skipabove=12pt,
+	innerbottommargin=9pt,
+	skipbelow=2pt,
+	linecolor=blue,
+	nobreak=true,
+	backgroundcolor=TealBlue!5,
+}
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{MidnightBlue},
+	mdframed={style=mdbluebox},
+	headpunct={\\[3pt]},
+	postheadspace={0pt}
+]{thmbluebox}
+
+\mdfdefinestyle{mdredbox}{%
+	linewidth=0.5pt,
+	skipabove=12pt,
+	frametitleaboveskip=5pt,
+	frametitlebelowskip=0pt,
+	skipbelow=2pt,
+	frametitlefont=\bfseries,
+	innertopmargin=4pt,
+	innerbottommargin=8pt,
+	nobreak=true,
+	backgroundcolor=Salmon!5,
+	linecolor=RawSienna,
+}
+\declaretheoremstyle[
+	headfont=\bfseries\color{RawSienna},
+	mdframed={style=mdredbox},
+	headpunct={\\[3pt]},
+	postheadspace={0pt},
+]{thmredbox}
+
+\mdfdefinestyle{mdgreenbox}{%
+	skipabove=8pt,
+	linewidth=2pt,
+	rightline=false,
+	leftline=true,
+	topline=false,
+	bottomline=false,
+	linecolor=ForestGreen,
+	backgroundcolor=ForestGreen!5,
+}
+\declaretheoremstyle[
+	headfont=\bfseries\sffamily\color{ForestGreen!70!black},
+	bodyfont=\normalfont,
+	spaceabove=2pt,
+	spacebelow=1pt,
+	mdframed={style=mdgreenbox},
+	headpunct={ --- },
+]{thmgreenbox}
+
+\mdfdefinestyle{mdblackbox}{%
+	skipabove=8pt,
+	linewidth=3pt,
+	rightline=false,
+	leftline=true,
+	topline=false,
+	bottomline=false,
+	linecolor=black,
+	backgroundcolor=RedViolet!5!gray!5,
+}
+\declaretheoremstyle[
+	headfont=\bfseries,
+	bodyfont=\normalfont\small,
+	spaceabove=0pt,
+	spacebelow=0pt,
+	mdframed={style=mdblackbox}
+]{thmblackbox}
+
+
+\declaretheorem[style=thmbluebox,name=Theorem]{theorem}
+\declaretheorem[style=thmbluebox,name=Lemma,sibling=theorem]{lemma}
+\declaretheorem[style=thmbluebox,name=Proposition,sibling=theorem]{proposition}
+\declaretheorem[style=thmbluebox,name=Corollary,sibling=theorem]{corollary}
+\declaretheorem[style=thmbluebox,name=Theorem,numbered=no]{theorem*}
+\declaretheorem[style=thmbluebox,name=Lemma,numbered=no]{lemma*}
+\declaretheorem[style=thmbluebox,name=Proposition,numbered=no]{proposition*}
+\declaretheorem[style=thmbluebox,name=Corollary,numbered=no]{corollary*}
+
+\declaretheorem[style=thmgreenbox,name=Claim,sibling=theorem]{claim}
+\declaretheorem[style=thmgreenbox,name=Claim,numbered=no]{claim*}
+\declaretheorem[style=thmredbox,name=Example,sibling=theorem]{example}
+\declaretheorem[style=thmredbox,name=Example,numbered=no]{example*}
+\declaretheorem[style=thmblackbox,name=Remark,sibling=theorem]{remark}
+\declaretheorem[style=thmblackbox,name=Remark,numbered=no]{remark*}
+
+\theoremstyle{definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{ques}[theorem]{Question}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem*{conjecture*}{Conjecture}
+\newtheorem*{definition*}{Definition}
+\newtheorem*{fact*}{Fact}
+\newtheorem*{ques*}{Question}
+\newtheorem*{exercise*}{Exercise}
+\newtheorem*{problem*}{Problem}
+
 \usepackage{mathtools}
 \usepackage{hyperref}
 \usepackage[shortlabels]{enumitem}
 \usepackage{multirow}
-
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem*{theorem*}{Theorem}
-\newtheorem*{lemma*}{Lemma}
-\newtheorem*{proposition*}{Proposition}
-\newtheorem*{corollary*}{Corollary}
-
-\theoremstyle{definition}
-
-\newtheorem{claim}[theorem]{Claim}
-\newtheorem{conjecture}[theorem]{Conjecture}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{fact}[theorem]{Fact}
-\newtheorem{answer}[theorem]{Answer}
-\newtheorem{case}[theorem]{Case}
-\newtheorem{ques}[theorem]{Question}
-\newtheorem{exercise}[theorem]{Exercise}
-\newtheorem{problem}{Problem}
-\newtheorem{remark}{Remark}
-\newtheorem*{answer*}{Answer}
-\newtheorem*{case*}{Case}
-\newtheorem*{claim*}{Claim}
-\newtheorem*{conjecture*}{Conjecture}
-\newtheorem*{definition*}{Definition}
-\newtheorem*{fact*}{Fact}
-\newtheorem*{joke*}{Joke}
-\newtheorem*{ques*}{Question}
-\newtheorem*{exercise*}{Exercise}
-\newtheorem*{problem*}{Problem}
-\newtheorem*{remark*}{Remark}
 
 \usepackage{epic} % diagrams
 \usepackage{tikz-cd} % diagrams
@@ -97,7 +174,6 @@ usepackage("amssymb");
   \par\hspace{\fill}\rule{0.95\linewidth}{.7pt}\hspace{\fill}
   \par\nointerlineskip \vspace{\baselineskip}
 }
-
 """
 
 def main(self, argv):
