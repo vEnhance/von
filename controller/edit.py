@@ -29,5 +29,6 @@ def main(self, argv):
 
 			problem = model.makeProblemFromPath(entry.path)
 			new_entry = model.updateEntryByProblem(
-					old_entry = entry, new_problem = problem) # update cache after editing problem
+					old_entry = entry, new_problem = problem)
+					# update cache after editing problem
 			view.printEntry(new_entry)
