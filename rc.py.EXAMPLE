@@ -22,3 +22,5 @@ USE_COLOR = True
 # These particular tags are used for difficulty, and are highlighted differently
 # Also used in sorting. Should be in increasing order.
 DIFFS= ['trivial', 'easy', 'medium', 'tricky', 'hard', 'brutal']
+
+# vim: ft=python
