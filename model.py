@@ -36,7 +36,10 @@ class pickleObj(collections.MutableMapping):
 			with vonOpen(self.path, 'wb') as f:
 				pickle.dump(self.store, f)
 	def __getitem__(self, key):
-		return self.store[key]
+		try:
+			return self.store[key]
+		except IndexError:
+			raise IndexError("%s not a valid key" %key)
 	def __setitem__(self, key, value):
 		self.store[key] = value
 	def __delitem__(self, key):
@@ -277,7 +280,11 @@ def updateEntryByProblem(old_entry, new_problem):
 	with VonCache('wb') as cache:
 		for i, entry in enumerate(cache):
 			if entry.source == old_entry.source:
+				new_entry.i = i
 				cache[i] = new_entry
+				break
+		else:
+			cache.set(cache.store + [new_entry])
 	return index[new_entry.source]
 
 def addProblemToIndex(problem):
