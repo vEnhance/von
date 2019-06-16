@@ -1,2 +1,3 @@
 *.pyc
 rc.py
+art/**.py
