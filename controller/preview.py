@@ -5,7 +5,7 @@ def make_preview(full_path):
 		os.mkdir("/tmp/preview")
 	with open("/tmp/preview/von_preview.tex", "w") as f:
 		print(r"\documentclass[11pt]{scrartcl}", file=f)
-		print(r"\usepackage[diagrams]{evan}", file=f)
+		print(r"\usepackage[sexy,diagrams]{evan}", file=f)
 		print(r"\title{VON Preview}", file=f)
 		print(r"\begin{document}", file=f)
 		print(r"\input{%s}" % full_path, file=f)
