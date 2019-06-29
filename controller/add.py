@@ -83,7 +83,7 @@ def get_yaml_info(opts):
 	while True:
 		raw_yaml = user_file_input(initial = initial, extension = ".yaml")
 		try:
-			d = yaml.load(raw_yaml)
+			d = yaml.safe_load(raw_yaml)
 			if d is None:
 				return (None, None)
 			assert 'path' in d, "Path is mandatory"

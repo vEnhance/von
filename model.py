@@ -169,7 +169,7 @@ def makeProblemFromPath(path):
 	with vonOpen(path, 'r') as f:
 		text = ''.join(f.readlines())
 	x = text.split(SEPERATOR)
-	data = yaml.load(x[0])
+	data = yaml.safe_load(x[0])
 	if data is None:
 		view.warn(path + " gave None for data")
 		return None
