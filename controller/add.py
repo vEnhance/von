@@ -101,7 +101,12 @@ def get_yaml_info(opts):
 			initial = raw_yaml
 		else:
 			del d['path']
-			return (target, yaml.dump(d).strip())
+			# darn PyYAML used to do this fine -_-
+			tags = d.pop('tags')
+			output = yaml.dump(d, default_flow_style = False).strip() \
+					+ "\n" \
+					+ "tags: [" + ', '.join(tags) + ']'
+			return (target, output)
 
 def do_add_problem(raw_text, opts):
 	"""Core procedure. Opens two instances of editors to solicit user input
