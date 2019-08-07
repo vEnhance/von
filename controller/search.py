@@ -26,7 +26,7 @@ def main(self, argv):
 
 	search_path = model.getcwd()
 	if search_path != '':
-		view.out("Search restricted to " +\
+		view.warn("Search restricted to " +\
 				view.APPLY_COLOR("BOLD_GREEN", view.formatPath(search_path)))
 	result = model.runSearch(
 			terms = opts.s_terms, tags = opts.s_tags, sources = opts.s_sources,
