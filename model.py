@@ -101,7 +101,8 @@ class GenericItem: # subclass to Problem, IndexEntry
 
 class Problem(GenericItem):
 	bodies = []         # statement, sol, comments, ...
-	author = None       # default
+	author = None         # default
+	hardness = None       # default
 	def __init__(self, path, **kwargs):
 		self.path = path
 		for key in kwargs:
@@ -116,7 +117,8 @@ class Problem(GenericItem):
 	@property
 	def entry(self):
 		"""Returns an IndexEntry for storage in pickle"""
-		return IndexEntry(source=self.source, desc=self.desc, author=self.author,
+		return IndexEntry(source=self.source, desc=self.desc,
+				author=self.author, hardness=self.hardness,
 				tags=self.tags, path=self.path, i = self.i)
 	@property
 	def full(self):
@@ -128,6 +130,7 @@ class IndexEntry(GenericItem):
 		for key in kwargs:
 			if kwargs[key] is not None:
 				setattr(self, key, kwargs[key])
+	# search things
 	def hasTag(self, tag):
 		return tag.lower() in [_.lower() for _ in self.tags]
 	def hasTerm(self, term):
