@@ -75,46 +75,71 @@ ERROR_PRE = APPLY_COLOR("BOLD_RED", "Error:")
 WARN_PRE  = APPLY_COLOR("BOLD_YELLOW", "Warn:")
 
 def getProblemString(problem):
-	s = getEntryString(problem.entry)
+	s = getEntryString(problem.entry, verbose=True)
 	s += "\n"
 	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
-def getEntryString(entry):
+def getEntryString(entry, verbose = _OPTS.verbose):
 	# SPECIAL hide brave
 	if entry.secret and not _OPTS.brave:
 		return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
 
 	if _OPTS.tabs is True:
 		s = '\t'.join([entry.source, entry.desc, entry.diffstring])
-		if _OPTS.verbose:
+		if verbose:
 			s += '\t' + ' '.join(entry.tags)
 		return s
 	s = ""
 
-	# SPECIAL GLOW
+	# SPECIAL GLOW for index number
 	if entry.i is not None:
+		index_string = "%3d " %(entry.i+1)
 		if "final" in entry.tags:
-			s += APPLY_COLOR("BOLD_YELLOW", "[" + "#" + str(entry.n) + "]")
+			s += APPLY_COLOR("BOLD_YELLOW", index_string)
 		elif "waltz" in entry.tags:
-			s += APPLY_COLOR("BOLD_GREEN", "[" + "#" + str(entry.n) + "]")
+			s += APPLY_COLOR("BOLD_GREEN", index_string)
 		else:
-			s += APPLY_COLOR("BOLD_RED", "[" + "#" + str(entry.n) + "]")
-		s += " \t"
-	# "nice" / "favorite" glow
-	if 'favorite' in entry.tags or 'nice' in entry.tags:
-		s += APPLY_COLOR("BOLD_CYAN", "(" + entry.source + ")")
+			s += APPLY_COLOR("BOLD_RED", index_string)
+
+	# source (glows for favorite or nice)
+	if verbose or len(entry.source) <= 17:
+		source_string = entry.source
 	else:
-		s += APPLY_COLOR("BOLD_BLUE", "(" + entry.source + ")")
+		words_in_source = entry.source.split(' ')
+		source_string = ''
+		for word in words_in_source:
+			if any(_ in string.ascii_lowercase for _ in word):
+				source_string += word[:1] + '.'
+			else:
+				source_string += word + ' '
+		source_string = source_string.strip()
+	if 'favorite' in entry.tags or 'nice' in entry.tags:
+		s += APPLY_COLOR("BOLD_CYAN", source_string)
+	else:
+		s += APPLY_COLOR("BOLD_BLUE", source_string)
+	s += " " * max(1, 18-len(source_string))
+
+	# hardness
+	if hasattr(entry, 'hardness'):
+		s += APPLY_COLOR("BOLD_YELLOW", str(entry.hardness) + "% ")
+
+	# the description
+	s += entry.desc if verbose else entry.desc[:40]
+
+	# author
+	if verbose and hasattr(entry, 'author'):
+		s += " " + APPLY_COLOR("CYAN", entry.author)
 	s += " "
-	s += entry.desc
-	if hasattr(entry, 'author'):
-		s += ", " + APPLY_COLOR("CYAN", entry.author)
-	s += " "
+
+	# difficulty hashtag
 	s += APPLY_COLOR("RED", "#"+ entry.diffstring)
-	if _OPTS.verbose:
-		s += "\n\t"
+
+	# tags
+	if verbose:
+		s += "\n    "
 		s += APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
 	return s
+
 def formatPath(path):
 	return 'VON/' + path
 def getDirString(path):
