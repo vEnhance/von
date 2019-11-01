@@ -70,7 +70,7 @@ YAML_DATA_FILE = """# Input your problem metadata here
 source: {source}     # e.g. USAMO 2000/6. This must be unique
 desc:   <++>     # e.g. Fiendish inequality
 path:   {path}<++>
-tags:   [{now.year}-{now.month:02d}, <++>] # don't forget difficulty and shape!
+tags:   [{now.year}-{now.month:02d}, <++>]
 
 {hint}"""
 

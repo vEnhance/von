@@ -85,7 +85,7 @@ def getEntryString(entry, verbose = _OPTS.verbose):
 		return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
 
 	if _OPTS.tabs is True:
-		s = '\t'.join([entry.source, entry.desc, entry.diffstring])
+		s = '\t'.join([entry.source, entry.desc, entry.sortstring])
 		if verbose:
 			s += '\t' + ' '.join(entry.tags)
 		return s
@@ -131,8 +131,8 @@ def getEntryString(entry, verbose = _OPTS.verbose):
 		s += " " + APPLY_COLOR("CYAN", entry.author)
 	s += " "
 
-	# difficulty hashtag
-	s += APPLY_COLOR("RED", "#"+ entry.diffstring)
+	# sorting hashtag
+	s += APPLY_COLOR("RED", "#"+ entry.sortstring)
 
 	# tags
 	if verbose:

@@ -1,4 +1,4 @@
-from .rc import SEPERATOR, DIFFS
+from .rc import SEPERATOR, SORT_TAGS
 from .rc import VON_BASE_PATH, VON_INDEX_PATH, VON_CACHE_PATH
 from . import view
 import random
@@ -79,19 +79,19 @@ class GenericItem: # subclass to Problem, IndexEntry
 	def n(self):
 		return self.i + 1 if self.i is not None else None
 	@property
-	def diffvalue(self):
-		for i, d in enumerate(DIFFS):
+	def sortvalue(self):
+		for i, d in enumerate(SORT_TAGS):
 			if d in self.tags: return i
 		return -1
 	@property
-	def diffstring(self):
-		for i, d in enumerate(DIFFS):
+	def sortstring(self):
+		for i, d in enumerate(SORT_TAGS):
 			if d in self.tags: return d
 		return "NONE"
 
 	@property
 	def sortkey(self):
-		return (self.diffvalue, self.source)
+		return (self.sortvalue, self.source)
 
 	def __eq__(self, other):
 		return self.sortkey == other.sortkey

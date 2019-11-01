@@ -16,7 +16,7 @@ parser.add_argument('-r', '--refine', action = "store_const", \
 		help = "Prune through the Cache rather than the whole database.")
 parser.add_argument('-a', '--alph', action = "store_const", \
 		default = False, const = True, \
-		help = "Sort the results alphabetically, not by difficulty.")
+		help = "Sort the results alphabetically, not by sort tag.")
 
 def main(self, argv):
 	opts = parser.process(argv)

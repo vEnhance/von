@@ -42,8 +42,9 @@ Here are a few hints:
 1. Meta-data is stored at the top of each file after being added.
 2. Problems must have a *source* like "Shortlist 2016 G2".
 3. Problems should also have a description, and a set of tags.
-	If a tag is specified as a difficulty tag in `rc.py`,
-	it will be displayed differently, but otherwise functionally equivalently.
+	If a tag is specified as a sorting tag in `rc.py`,
+	it will be displayed differently,
+	but otherwise functionally equivalently.
 4. Problems can also have an "author" attribute, which is displayed.
 
 ## Searching

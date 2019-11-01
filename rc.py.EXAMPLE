@@ -19,8 +19,9 @@ For example, a list of tags to use."""
 
 USE_COLOR = True
 
-# These particular tags are used for difficulty, and are highlighted differently
-# Also used in sorting. Should be in increasing order.
-DIFFS= ['trivial', 'easy', 'medium', 'tricky', 'hard', 'brutal']
+# These particular tags are used for sorting
+# and are highlighted differently.
+# Should be in increasing order.
+SORT_TAGS = ['trivial', 'easy', 'medium', 'tricky', 'hard', 'brutal']
 
 # vim: ft=python
