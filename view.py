@@ -97,9 +97,9 @@ def getEntryString(entry, verbose = False):
 	if entry.i is not None:
 		index_string = "%3d " %(entry.i+1)
 		if "final" in entry.tags:
-			s += APPLY_COLOR("BOLD_YELLOW", index_string)
+			s += APPLY_COLOR("YELLOW", index_string)
 		elif "waltz" in entry.tags:
-			s += APPLY_COLOR("BOLD_GREEN", index_string)
+			s += APPLY_COLOR("GREEN", index_string)
 		else:
 			s += APPLY_COLOR("BOLD_RED", index_string)
 
@@ -117,30 +117,33 @@ def getEntryString(entry, verbose = False):
 			else:
 				source_string += word + ' '
 		source_string = source_string.strip()
-	if 'favorite' in entry.tags or 'nice' in entry.tags:
+	if 'favorite' in entry.tags:
+		s += APPLY_COLOR("BOLD_YELLOW", source_string)
+	elif 'nice' in entry.tags:
 		s += APPLY_COLOR("BOLD_CYAN", source_string)
+	elif 'good' in entry.tags:
+		s += APPLY_COLOR("BOLD_MAGENTA", source_string)
 	else:
 		s += APPLY_COLOR("BOLD_BLUE", source_string)
 	s += " " * max(1, 16-len(source_string))
 
 	# hardness
 	if entry.hardness is not None:
-		s += APPLY_COLOR("BOLD_YELLOW", str(entry.hardness) + "% ")
+		s += APPLY_COLOR("BOLD_YELLOW", str(entry.hardness) + "M ")
 
 	# the description
 	s += entry.desc if verbose else entry.desc[:40]
 
+	# sorting hashtag
+	s += " " + APPLY_COLOR("RED", "#"+ entry.sortstring)
+
 	# author
 	if verbose and entry.author is not None:
-		s += " " + APPLY_COLOR("CYAN", entry.author)
-	s += " "
-
-	# sorting hashtag
-	s += APPLY_COLOR("RED", "#"+ entry.sortstring)
+		s += "\n" + " " * 4 + APPLY_COLOR("CYAN", entry.author)
 
 	# tags
 	if verbose:
-		s += "\n    "
+		s += "\n" + " " * 4
 		s += APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
 	return s
 
