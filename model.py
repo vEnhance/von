@@ -68,12 +68,14 @@ def VonCache(mode = 'rb'):
 	return pickleList(VON_CACHE_PATH, mode)
 
 @functools.total_ordering
-class GenericItem: # subclass to Problem, IndexEntry
+class GenericItem: # superclass to Problem, IndexEntry
 	desc = ""           # e.g. "Fiendish inequality"
 	source = ""         # used as problem ID, e.g. "USAMO 2000/6"
 	tags = []           # tags for the problem
 	path = ""           # path to problem TeX file
 	i = None            # position in Cache, if any
+	author = None         # default
+	hardness = None       # default
 
 	@property
 	def n(self):
@@ -91,7 +93,7 @@ class GenericItem: # subclass to Problem, IndexEntry
 
 	@property
 	def sortkey(self):
-		return (self.sortvalue, self.source)
+		return (self.sortvalue, self.hardness or -1, self.source)
 
 	def __eq__(self, other):
 		return self.sortkey == other.sortkey
@@ -101,8 +103,6 @@ class GenericItem: # subclass to Problem, IndexEntry
 
 class Problem(GenericItem):
 	bodies = []         # statement, sol, comments, ...
-	author = None         # default
-	hardness = None       # default
 	def __init__(self, path, **kwargs):
 		self.path = path
 		for key in kwargs:
@@ -135,10 +135,10 @@ class IndexEntry(GenericItem):
 		return tag.lower() in [_.lower() for _ in self.tags]
 	def hasTerm(self, term):
 		blob = self.source + ' ' + self.desc
-		if hasattr(self, 'author'): blob += ' ' + self.author
+		if self.author is not None: blob += ' ' + self.author
 		return term.lower() in blob.lower() or term in self.tags
 	def hasAuthor(self, name):
-		if not hasattr(self, 'author'): return False
+		if self.author is not None: return False
 		haystacks = self.author.lower().strip().split(' ')
 		return name.lower() in haystacks
 	def hasSource(self, source):

@@ -124,14 +124,14 @@ def getEntryString(entry, verbose = False):
 	s += " " * max(1, 16-len(source_string))
 
 	# hardness
-	if hasattr(entry, 'hardness'):
+	if entry.hardness is not None:
 		s += APPLY_COLOR("BOLD_YELLOW", str(entry.hardness) + "% ")
 
 	# the description
 	s += entry.desc if verbose else entry.desc[:40]
 
 	# author
-	if verbose and hasattr(entry, 'author'):
+	if verbose and entry.author is not None:
 		s += " " + APPLY_COLOR("CYAN", entry.author)
 	s += " "
 
