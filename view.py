@@ -79,8 +79,10 @@ def getProblemString(problem):
 	s += "\n"
 	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
-def getEntryString(entry, verbose = _OPTS.verbose):
+def getEntryString(entry, verbose = False):
 	# SPECIAL hide brave
+	if _OPTS.verbose is True:
+		verbose = True
 	if entry.secret and not _OPTS.brave:
 		return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
 
@@ -102,13 +104,15 @@ def getEntryString(entry, verbose = _OPTS.verbose):
 			s += APPLY_COLOR("BOLD_RED", index_string)
 
 	# source (glows for favorite or nice)
-	if verbose or len(entry.source) <= 17:
+	if verbose or len(entry.source) <= 15:
 		source_string = entry.source
 	else:
 		words_in_source = entry.source.split(' ')
 		source_string = ''
 		for word in words_in_source:
-			if any(_ in string.ascii_lowercase for _ in word):
+			if word == "Shortlist":
+				source_string += "Shrt. "
+			elif any(_ in string.ascii_lowercase for _ in word):
 				source_string += word[:1] + '.'
 			else:
 				source_string += word + ' '
@@ -117,7 +121,7 @@ def getEntryString(entry, verbose = _OPTS.verbose):
 		s += APPLY_COLOR("BOLD_CYAN", source_string)
 	else:
 		s += APPLY_COLOR("BOLD_BLUE", source_string)
-	s += " " * max(1, 18-len(source_string))
+	s += " " * max(1, 16-len(source_string))
 
 	# hardness
 	if hasattr(entry, 'hardness'):
