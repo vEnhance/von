@@ -27,6 +27,7 @@ LATEX_PREAMBLE = r"""
 \PassOptionsToPackage{usenames,svgnames,dvipsnames}{xcolor}
 \usepackage{thmtools}
 \usepackage[framemethod=TikZ]{mdframed}
+\usepackage{listings}
 
 \mdfdefinestyle{mdbluebox}{%
 	roundcorner = 10pt,
@@ -147,7 +148,7 @@ defaultpen(fontsize(10pt));
 size(8cm); // set a reasonable default
 usepackage("amsmath");
 usepackage("amssymb");
-settings.tex="latex";
+settings.tex="pdflatex";
 settings.outformat="pdf";
 // Replacement for olympiad+cse5 which is not standard
 import geometry;
