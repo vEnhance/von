@@ -2,7 +2,7 @@ from .. import model, view
 from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR
 from . import preview
 
-import clipboard
+import pyperclip
 import datetime
 import tempfile
 import subprocess
@@ -71,6 +71,7 @@ source: {source}     # e.g. USAMO 2000/6. This must be unique
 desc:   <++>     # e.g. Fiendish inequality
 path:   {path}<++>
 tags:   [{now.year}-{now.month:02d}, <++>]
+hardness: <++>
 
 {hint}"""
 
@@ -143,7 +144,7 @@ def main(self, argv):
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())
 	else:
-		initial_text = clipboard.paste()
+		initial_text = pyperclip.paste()
 		if initial_text.strip() == '':
 			initial_text = '<++>'
 	do_add_problem(initial_text, opts)
