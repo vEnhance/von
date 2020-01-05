@@ -104,7 +104,7 @@ def getEntryString(entry, verbose = False):
 			s += APPLY_COLOR("BOLD_RED", index_string)
 
 	# source (glows for favorite or nice)
-	if verbose or len(entry.source) <= 15:
+	if verbose or len(entry.source) <= 16:
 		source_string = entry.source
 	else:
 		words_in_source = entry.source.split(' ')
@@ -125,11 +125,11 @@ def getEntryString(entry, verbose = False):
 		s += APPLY_COLOR("BOLD_MAGENTA", source_string)
 	else:
 		s += APPLY_COLOR("BOLD_BLUE", source_string)
-	s += " " * max(1, 16-len(source_string))
+	s += " " * max(1, 17-len(source_string))
 
 	# hardness
 	if entry.hardness is not None:
-		s += APPLY_COLOR("BOLD_YELLOW", str(entry.hardness) + "M ")
+		s += APPLY_COLOR("BOLD_RED", str(entry.hardness) + "M ")
 
 	# the description
 	s += entry.desc if verbose else entry.desc[:40]
