@@ -129,7 +129,7 @@ def getEntryString(entry, verbose = False):
 
 	# hardness
 	if entry.hardness is not None:
-		s += APPLY_COLOR("BOLD_RED", str(entry.hardness) + "M ")
+		s += APPLY_COLOR("BOLD_RED", "%2dM " %entry.hardness)
 
 	# the description
 	s += entry.desc if verbose else entry.desc[:40]
