@@ -38,20 +38,20 @@ def toAOPS(text):
 	text = demacro(text)
 	text = text.replace(r"\begin{asy}", "[asy]")
 	text = text.replace(r"\end{asy}", "[/asy]")
-	text = text.replace(r"\begin{center}", "\n")
-	text = text.replace(r"\end{center}", "\n")
-	text = text.replace(r"\par ", "\n\n")
+	text = text.replace(r"\begin{center}", "")
+	text = text.replace(r"\end{center}", "")
+	text = text.replace(r"\par ", "\n")
 	text = text.replace(r"\item ", "[*]")
 	text = text.replace(r"\begin{enumerate}", "[list=1]")
 	text = text.replace(r"\end{enumerate}", "[/list]")
 	text = text.replace(r"\begin{itemize}", "[list]")
 	text = text.replace(r"\end{itemize}", "[/list]")
 	for env in ['theorem', 'claim', 'lemma', 'proposition', 'corollary', 'definition', 'remark']:
-		text = text.replace(r"\begin{" + env + "*}", "\n[b][color=red]" + env.title() + ":[/color][/b] ")
+		text = text.replace(r"\begin{" + env + "*}", "\n\n" + "[b][color=red]" + env.title() + ":[/color][/b] ")
 		text = text.replace(r"\end{" + env + "*}", "")
-		text = text.replace(r"\begin{" + env + "}", "\n[b][color=red]" + env.title() + ":[/color][/b] ")
+		text = text.replace(r"\begin{" + env + "}", "\n\n" + "[b][color=red]" + env.title() + ":[/color][/b] ")
 		text = text.replace(r"\end{" + env + "}", "")
-	text = text.replace(r"\begin{proof}", "\n[i]Proof.[/i] ")
+	text = text.replace(r"\begin{proof}", "[i]Proof.[/i] ")
 	text = text.replace(r"\end{proof}", r"$\blacksquare$" + "\n")
 	text = text.replace(r"\#", "#")
 	text = text.replace("%\n", "\n") # strip trailing percent signs
@@ -67,4 +67,4 @@ def toAOPS(text):
 
 	# Join together newlines
 	paragraphs = [_.strip().replace("\n", " ") for _ in text.split('\n\n')]
-	return '\n\n'.join(paragraphs)
+	return '\n'.join(paragraphs)
