@@ -17,7 +17,7 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook
 	If post_hook is not None, runs post_hook(tf.name, contents) after calling EDITOR.
 	"""
 
-	with tempfile.NamedTemporaryFile(suffix=extension) as tf:
+	with tempfile.NamedTemporaryFile(suffix=extension,dir='/tmp') as tf:
 		tf.write(initial.encode())
 		tf.flush()
 		if pre_hook is not None:
