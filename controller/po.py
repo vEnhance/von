@@ -189,10 +189,7 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 }
 \end{asydef}
 
-% The below really should be scrlayer-scrpage
-% but a lot of old distros don't have this yet
-
-\usepackage[headsepline]{scrpage2}
+\usepackage[headsepline]{scrlayer-scrpage}
 \addtolength{\textheight}{3.14cm}
 \setlength{\footskip}{0.5in}
 \setlength{\headsep}{10pt}
