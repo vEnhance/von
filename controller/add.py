@@ -17,22 +17,19 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook
 	If post_hook is not None, runs post_hook(tf.name, contents) after calling EDITOR.
 	"""
 
-	with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as tf:
+	with tempfile.NamedTemporaryFile(suffix=extension,dir='/tmp') as tf:
 		tf.write(initial.encode())
-		tf.close()
+		tf.flush()
 		if pre_hook is not None:
 			pre_hook(tf.name)
-		subprocess.run([EDITOR, tf.name])
+		subprocess.call([EDITOR, tf.name])
 
 		# do the parsing with `tf` using regular File operations.
 		# for instance:
-		tf = open(tf.name, 'r')
 		tf.seek(0)
-		# edited_message = ''.join(_.decode('utf-8') for _ in tf.readlines())
-		edited_message = ''.join(_ for _ in tf.readlines())
+		edited_message = ''.join(_.decode('utf-8') for _ in tf.readlines())
 		if post_hook is not None:
 			post_hook(tf.name, edited_message)
-		os.unlink(tf.name)
 	return edited_message
 
 def alert_error_tryagain(message = ''):
