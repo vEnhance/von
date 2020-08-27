@@ -35,7 +35,8 @@ class Parser(argparse.ArgumentParser):
 	def __init__(self, *args, **kwargs):
 		super(Parser, self).__init__(parents=[_view_parser], *args, **kwargs)
 	def process(self, *args, **kwargs):
-		opts = self.parse_args(*args, namespace = _OPTS, **kwargs)
+		global _OPTS
+		_OPTS = self.parse_args(*args, **kwargs)
 		return _OPTS
 
 # Color names {{{
