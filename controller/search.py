@@ -17,11 +17,23 @@ parser.add_argument('-r', '--refine', action = "store_const", \
 parser.add_argument('-a', '--alph', action = "store_const", \
 		default = False, const = True, \
 		help = "Sort the results alphabetically, not by sort tag.")
+parser.add_argument('-e', '--everything', action = "store_const", \
+		default = False, const = True, \
+		help = "Allow searching everything.")
+
 
 def main(self, argv):
 	opts = parser.process(argv)
-	if len(opts.s_terms + opts.s_tags + opts.s_sources + opts.s_authors) == 0:
-		view.warn("Must supply at least one search keyword!")
+
+	query_is_empty = len(opts.s_terms + opts.s_tags \
+			+ opts.s_sources + opts.s_authors) == 0
+
+	if opts.everything is False and query_is_empty is True:
+		view.warn("Must supply at least one search keyword " \
+			"or pass --everything option.")
+		return
+	if opts.everything is True and query_is_empty is False:
+		view.warn("Passing --everything with parameters makes no sense.")
 		return
 
 	search_path = model.getcwd()
