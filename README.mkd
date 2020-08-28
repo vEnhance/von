@@ -2,9 +2,11 @@
 
 VON is a Python script I wrote in order to help me manage
 the problems and solutions to olympiad databases.
+There is no graphical user interface and it is based on the command line.
+It is designed to run on Linux systems.
+
 I haven't gotten around to properly documenting this,
 but posting it by popular request.
-
 Here are a few hints:
 
 ## Setup
@@ -17,7 +19,9 @@ Here are a few hints:
 	e.g. `python -m von help` will list the help and exit.
 3. You may need to `pip install -r requirements.txt`.
 4. The `help` command lists possible commands.
-5. LaTeX integration uses [von.sty][vonsty]. The previewer requires [evan.sty][evansty].
+5. LaTeX integration uses [von.sty][vonsty].
+	The previewer requires [evan.sty][evansty].
+	(See below for details.)
 
 ## Storing problems and solutions
 
@@ -47,7 +51,8 @@ Here are a few hints:
 	but otherwise functionally equivalently.
 4. Problems can also have an "author" attribute, which is displayed.
 5. Problems can also have a "hardness" attribute, an integer,
-	which is displayed differently by the website.
+	which is displayed differently by the user interface.
+	You can pick any scale you want; [here is mine][mohs].
 
 An example of an entry:
 
@@ -114,7 +119,30 @@ you can run `latexmk -pvc` on this in order to render what you are typing.
 This makes it possible to work simultaneously with the input
 and output that you are adding in to `von`.
 
+## LaTeX integration
+
+If you have [von.sty][vonsty] and [latexmk][latexmk],
+then by using a similar mechanic to Asymptote,
+you can also directly query the database for problems.
+You should add `latex/latexmk` to your `.latexmkrc` for this to work.
+
+The basic syntax is that `\voninclude{source}` will
+include the problem statement (0th body),
+while `\voninclude[1]{source}` will include the 1st body (the solution), etc.
+
+Of course, this would most commonly be used with theorem environments,
+so you can use some shortcuts to this effect.
+The three possible shortcuts are:
+
+* `\von{X}` is shorthand for `\begin{problem}[X] \voninclude{X} \end{problem}`
+* `\von[text]{X}` is shorthand for `\begin{problem}[text] \voninclude{X} \end{problem}`
+* `\von*{X}` is shorthand for `\begin{problem} \voninclude{X} \end{problem}`
+
+Of course, the string `problem` might want to be changed,
+if you are using a differently named theorem environment.
+You can change this by running `\renewcommand{\vonenvname}{name}` can be used.
 
 [vonsty]: https://github.com/vEnhance/dotfiles/blob/master/texmf/tex/latex/von/von.sty
 [evansty]: https://github.com/vEnhance/dotfiles/blob/master/texmf/tex/latex/evan/evan.sty
 [latexmk]: http://personal.psu.edu/~jcc8/software/latexmk/
+[mohs]: https://web.evanchen.cc/upload/MOHS-hardness.pdf
