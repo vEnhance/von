@@ -15,7 +15,7 @@ SEPERATOR = '\n---\n'
 NSEPERATOR = '\n' + SEPERATOR + '\n'
 
 TAG_HINT_TEXT = """# Any text you want to display on the YAML editor.
-For example, a list of tags to use."""
+# For example, a list of tags to use."""
 
 USE_COLOR = True
 

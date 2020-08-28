@@ -46,6 +46,30 @@ Here are a few hints:
 	it will be displayed differently,
 	but otherwise functionally equivalently.
 4. Problems can also have an "author" attribute, which is displayed.
+5. Problems can also have a "hardness" attribute, an integer,
+	which is displayed differently by the website.
+
+An example of an entry:
+
+```
+desc:  $5^n$ has six consecutive zeros
+author: Evan Chen
+source:  JMO 2016/2
+tags:  [wishful, favorite, mods, construct, mine, 2016-04, free, brave]
+hardness: 25
+
+---
+
+Prove that there exists a positive integer $n < 10^6$
+such that $5^n$ has six consecutive zeros in its decimal representation.
+
+---
+
+We will prove that $\boxed{n = 20 + 2^{19} = 524308}$ fits the bill.
+
+... (rest of solution) ...
+
+```
 
 ## Searching
 
@@ -56,6 +80,8 @@ Use `search --help` for a lot of options.
 * `search -t anglechase`: searches for problems tagged `anglechase`
 
 The `s` command is a shorthand for `search`.
+
+You can use `search --everything` to list all problems.
 
 ## Displaying problems
 
@@ -72,5 +98,23 @@ For example, `show 3` will display the 3rd problem in search results.
 
 Use `show --help` and `po --help` for more details
 
+## Recompiling the index
+
+Sometimes the list of problems and file paths might become
+messed up in some way (for example, if you move a file).
+To fix this run `von index` to recompile the entire index.
+
+## Preview
+
+When running `von add` or `von edit` on Linux,
+the program creates the file `/tmp/preview/von_preview.tex`
+which is a wrapper file that inputs the currently edited problem.
+If you use [latexmk][latexmk] (which I recommend!),
+you can run `latexmk -pvc` on this in order to render what you are typing.
+This makes it possible to work simultaneously with the input
+and output that you are adding in to `von`.
+
+
 [vonsty]: https://github.com/vEnhance/dotfiles/blob/master/texmf/tex/latex/von/von.sty
 [evansty]: https://github.com/vEnhance/dotfiles/blob/master/texmf/tex/latex/evan/evan.sty
+[latexmk]: http://personal.psu.edu/~jcc8/software/latexmk/
