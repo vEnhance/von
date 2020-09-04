@@ -28,8 +28,10 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook
 		# for instance:
 		tf = open(tf.name, 'r')
 		tf.seek(0)
-		# edited_message = ''.join(_.decode('utf-8') for _ in tf.readlines())
-		edited_message = ''.join(_ for _ in tf.readlines())
+		if USER_OS == 'linux':
+			edited_message = ''.join(_.decode('utf-8') for _ in tf.readlines())
+		else:
+			edited_message = ''.join(_ for _ in tf.readlines())
 		if post_hook is not None:
 			post_hook(tf.name, edited_message)
 		os.unlink(tf.name)
