@@ -1,4 +1,5 @@
 from .. import model, view
+from ..rc import VON_POST_OUTPUT_DIR
 import os
 
 parser = view.Parser(prog='po',\

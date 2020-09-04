@@ -11,6 +11,8 @@ VON_CACHE_PATH = os.path.join(VON_BASE_PATH, VON_CACHE_NAME)
 
 EDITOR = os.environ.get('EDITOR','vim') # that easy!
 BACKUP_DIR = "~/.vim/tmp/" # a directory for storing backups
+VON_PREVIEW_PATH    = "/tmp/preview/von_preview.tex" # path to put preview in
+VON_POST_OUTPUT_DIR = "/tmp/po" # path to put compiled outputs in
 
 SEPERATOR = '\n---\n'
 NSEPERATOR = '\n' + SEPERATOR + '\n'

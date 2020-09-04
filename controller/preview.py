@@ -1,9 +1,10 @@
 import os
+from ..rc import VON_PREVIEW_PATH
 
 def make_preview(full_path):
-	if not os.path.exists("/tmp/preview/"):
-		os.mkdir("/tmp/preview")
-	with open("/tmp/preview/von_preview.tex", "w") as f:
+	if not os.path.exists(os.path.dirname(VON_PREVIEW_PATH)):
+		os.mkdir(os.path.dirname(VON_PREVIEW_PATH))
+	with open(VON_PREVIEW_PATH, "w") as f:
 		print(r"\documentclass[11pt]{scrartcl}", file=f)
 		print(r"\usepackage[sexy,diagrams]{evan}", file=f)
 		print(r"\title{VON Preview}", file=f)
