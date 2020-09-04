@@ -12,12 +12,15 @@ VON_CACHE_PATH = os.path.join(VON_BASE_PATH, VON_CACHE_NAME)
 
 # Choose an editor
 EDITOR = os.environ.get('EDITOR','vim')
+# On Windows, the following line may work better:
+# EDITOR = r'C:\Windows\vim.bat'
 
-# More directories that you MUST configure
-# (these paths may not exist on non-Linux systems)
-BACKUP_DIR = "~/.vim/tmp/" # a directory for storing backups
-VON_PREVIEW_PATH    = "/tmp/preview/von_preview.tex" # path to put preview in
-VON_POST_OUTPUT_DIR = "/tmp/po" # path to put compiled outputs in
+# Directories for backups and temporary files.
+# You MUST reconfigure these on non-Linux systems
+# as the /tmp directory doesn't exist on Win/OSX afaik.
+BACKUP_DIR = r"~/.vim/tmp/" # a directory for storing backups
+VON_PREVIEW_PATH    = r"/tmp/preview/von_preview.tex" # path to put preview in
+VON_POST_OUTPUT_DIR = r"/tmp/po" # path to put compiled outputs in
 
 # In von, problem statement is separated from metadata
 # and solution using three dashes surrounded on its own line.
