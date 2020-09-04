@@ -19,15 +19,11 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, delete = 
 
 	with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as tf:
 		tf.write(initial.encode())
-		tf.close()
-		if pre_hook is not None:
-			pre_hook(tf.name)
-		subprocess.run([EDITOR, tf.name])
+	if pre_hook is not None:
+		pre_hook(tf.name)
+	subprocess.run([EDITOR, tf.name])
 
-		# do the parsing with `tf` using regular File operations.
-		# for instance:
-		tf = open(tf.name, 'r')
-		tf.seek(0)
+	with open(tf.name, 'r') as tf:
 		edited_message = ''.join(_ for _ in tf.readlines())
 	if delete:
 		os.unlink(tf.name)
