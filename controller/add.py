@@ -19,14 +19,15 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, delete = 
 
 	with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as tf:
 		tf.write(initial.encode())
+		filename = tf.name
 	if pre_hook is not None:
-		pre_hook(tf.name)
-	subprocess.run([EDITOR, tf.name])
+		pre_hook(filename)
+	subprocess.run([EDITOR, filename])
 
-	with open(tf.name, 'r') as tf:
+	with open(filename, 'r') as tf:
 		edited_message = ''.join(_ for _ in tf.readlines())
 	if delete:
-		os.unlink(tf.name)
+		os.unlink(filename)
 	return edited_message
 
 def alert_error_tryagain(message = ''):
