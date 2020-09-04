@@ -1,5 +1,5 @@
 from .. import model, view
-from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR
+from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR, USER_OS
 from . import preview
 
 import pyperclip
