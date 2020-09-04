@@ -21,8 +21,6 @@ EDITOR = os.environ.get('EDITOR','vim')
 # as the tmp directory may not work properly otherwise
 # (or if you prefer to put these in a more visible folder).
 
-# a directory for storing backups in case `von add` crashes
-BACKUP_DIR = r"~/.vim/tmp/"
 # path to put previewer TeX file
 VON_PREVIEW_PATH = os.path.join(tempfile.gettempdir(), "preview/von_preview.tex")
 # path to put posted output files

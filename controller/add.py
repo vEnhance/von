@@ -1,5 +1,5 @@
 from .. import model, view
-from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR, USER_OS
+from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, USER_OS
 from . import preview
 
 import pyperclip
@@ -10,11 +10,10 @@ import yaml
 import os
 import traceback
 
-def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook = None):
+def user_file_input(initial = "", extension = ".tmp", pre_hook = None):
 	"""Opens in $EDITOR a file with content 'initial'
 	and 'extension', and returns edited file.
 	If pre_hook is not None, runs pre_hook(tf.name) before opening EDITOR.
-	If post_hook is not None, runs post_hook(tf.name, contents) after calling EDITOR.
 	"""
 
 	with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as tf:
@@ -32,9 +31,6 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook
 			edited_message = ''.join(_.decode('utf-8') for _ in tf.readlines())
 		else:
 			edited_message = ''.join(_ for _ in tf.readlines())
-		if post_hook is not None:
-			post_hook(tf.name, edited_message)
-		os.unlink(tf.name)
 	return edited_message
 
 def alert_error_tryagain(message = ''):
@@ -51,13 +47,11 @@ def get_bodies(raw_text, opts):
 
 	def pre_hook(tempfile_name):
 		preview.make_preview(tempfile_name)
-	def post_hook(tempfile_name, contents):
-		os.system("cp %s %s" % (tempfile_name, BACKUP_DIR))
 
 	while True:
 		# TODO maybe give user instructions
-		raw_ps = user_file_input(initial = initial, extension = ".tex",
-				pre_hook = pre_hook, post_hook = post_hook)
+		raw_ps = user_file_input(initial = initial,
+				extension = ".tex", pre_hook = pre_hook)
 		if raw_ps.count(SEPERATOR) >= 1:
 			bodies = [_.strip() for _ in raw_ps.split(SEPERATOR)[1:]]
 			if bodies[0] == '': return None
