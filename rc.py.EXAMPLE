@@ -1,3 +1,4 @@
+import sys
 import os
 
 # Pick a path to store the problems in
@@ -21,7 +22,19 @@ USE_COLOR = True
 
 # These particular tags are used for sorting
 # and are highlighted differently.
+# Specify them however you want.
 # Should be in increasing order.
 SORT_TAGS = ['trivial', 'easy', 'medium', 'tricky', 'hard', 'brutal']
+
+
+# The following lines should autodetect your operating system,
+# so you only need to change them if you have issues.
+import sys
+if sys.platform.startswith("win32"):
+	USER_OS = "windows"
+elif sys.platform.startswith("darwin"):
+	USER_OS = "mac"
+else:
+	USER_OS = "linux" # including cygwin
 
 # vim: ft=python
