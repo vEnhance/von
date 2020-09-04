@@ -10,10 +10,11 @@ import yaml
 import os
 import traceback
 
-def user_file_input(initial = "", extension = ".tmp", pre_hook = None):
+def user_file_input(initial = "", extension = ".tmp", pre_hook = None, delete = False):
 	"""Opens in $EDITOR a file with content 'initial'
 	and 'extension', and returns edited file.
 	If pre_hook is not None, runs pre_hook(tf.name) before opening EDITOR.
+	If delete is True, delete the file afterwards.
 	"""
 
 	with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as tf:
@@ -27,10 +28,9 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None):
 		# for instance:
 		tf = open(tf.name, 'r')
 		tf.seek(0)
-		if USER_OS == 'linux':
-			edited_message = ''.join(_.decode('utf-8') for _ in tf.readlines())
-		else:
-			edited_message = ''.join(_ for _ in tf.readlines())
+		edited_message = ''.join(_ for _ in tf.readlines())
+	if delete:
+		os.unlink(tf.name)
 	return edited_message
 
 def alert_error_tryagain(message = ''):
@@ -81,7 +81,8 @@ def get_yaml_info(opts):
 			source = "<++>" if opts.source is None else opts.source,
 			hint = TAG_HINT_TEXT)
 	while True:
-		raw_yaml = user_file_input(initial = initial, extension = ".yaml")
+		raw_yaml = user_file_input(initial = initial,
+				extension = ".yaml", delete = True)
 		try:
 			d = yaml.safe_load(raw_yaml)
 			if d is None:
