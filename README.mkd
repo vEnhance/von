@@ -24,6 +24,7 @@ This program assumes you have:
 	If you only want to issue one command, you can also type it directly,
 	e.g. `python -m von help` will list the help and exit.
 3. You may need to `pip install -r requirements.txt`.
+	On Windows, you want to `pip install -r requirements-windows.txt`.
 4. LaTeX integration uses [von.sty][vonsty].
 	The previewer requires [evan.sty][evansty].
 	(See below for details.)

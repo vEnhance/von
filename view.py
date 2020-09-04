@@ -1,7 +1,11 @@
-from .rc import USE_COLOR
+from .rc import USE_COLOR, USER_OS
 import sys
 import argparse
 import string
+
+if USER_OS == "windows":
+	from colorama import init
+	init()
 
 def file_escape(s):
 	s = s.replace("/", "-")
