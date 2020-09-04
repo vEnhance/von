@@ -140,7 +140,7 @@ The three possible shortcuts are:
 
 Of course, the string `problem` might want to be changed,
 if you are using a differently named theorem environment.
-You can change this by running `\renewcommand{\vonenvname}{name}` can be used.
+You can change this by running `\renewcommand{\vonenvname}{name}`.
 
 [vonsty]: https://github.com/vEnhance/dotfiles/blob/master/texmf/tex/latex/von/von.sty
 [evansty]: https://github.com/vEnhance/dotfiles/blob/master/texmf/tex/latex/evan/evan.sty
