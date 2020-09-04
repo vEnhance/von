@@ -1,5 +1,6 @@
 import sys
 import os
+import tempfile
 
 # Pick a path to store the problems in
 VON_BASE_PATH  = os.path.join(os.environ.get("HOME", ""), "Documents/VON/")
@@ -16,11 +17,16 @@ EDITOR = os.environ.get('EDITOR','vim')
 # EDITOR = r'C:\Windows\vim.bat'
 
 # Directories for backups and temporary files.
-# You MUST reconfigure these on non-Linux systems
-# as the /tmp directory doesn't exist on Win/OSX afaik.
-BACKUP_DIR = r"~/.vim/tmp/" # a directory for storing backups
-VON_PREVIEW_PATH    = r"/tmp/preview/von_preview.tex" # path to put preview in
-VON_POST_OUTPUT_DIR = r"/tmp/po" # path to put compiled outputs in
+# You may want to reconfigure these on non-Linux systems
+# as the tmp directory may not work properly otherwise
+# (or if you prefer to put these in a more visible folder).
+
+# a directory for storing backups in case `von add` crashes
+BACKUP_DIR = r"~/.vim/tmp/"
+# path to put previewer TeX file
+VON_PREVIEW_PATH = os.path.join(tempfile.gettempdir(), "preview/von_preview.tex")
+# path to put posted output files
+VON_POST_OUTPUT_DIR = os.path.join(tempfile.gettempdir(), "po/")
 
 # In von, problem statement is separated from metadata
 # and solution using three dashes surrounded on its own line.
