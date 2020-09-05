@@ -261,9 +261,10 @@ def main(self, argv):
 			fname = view.file_escape(title)
 		else:
 			fname = 'po'
-		if not os.path.exists("/tmp/po/"):
-			os.mkdir("/tmp/po")
-		with open("/tmp/po/%s.tex" %fname, "w") as f:
+		if not os.path.exists(VON_POST_OUTPUT_DIR):
+			os.mkdir(VON_POST_OUTPUT_DIR)
+		filepath = os.path.join(VON_POST_OUTPUT_DIR, "%s.tex" %fname)
+		with open(filepath, "w") as f:
 			print(s, file=f)
-		os.chdir('/tmp/po')
-		os.system("latexmk -pv /tmp/po/%s.tex;" %fname)
+		os.chdir(VON_POST_OUTPUT_DIR)
+		os.system("latexmk -pv %s" %filepath)
