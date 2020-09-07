@@ -1,5 +1,5 @@
 from .. import model, view
-from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, BACKUP_DIR
+from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, USER_OS
 from . import preview
 
 import pyperclip
@@ -10,26 +10,24 @@ import yaml
 import os
 import traceback
 
-def user_file_input(initial = "", extension = ".tmp", pre_hook = None, post_hook = None):
+def user_file_input(initial = "", extension = ".tmp", pre_hook = None, delete = False):
 	"""Opens in $EDITOR a file with content 'initial'
 	and 'extension', and returns edited file.
 	If pre_hook is not None, runs pre_hook(tf.name) before opening EDITOR.
-	If post_hook is not None, runs post_hook(tf.name, contents) after calling EDITOR.
+	If delete is True, delete the file afterwards.
 	"""
 
-	with tempfile.NamedTemporaryFile(suffix=extension,dir='/tmp') as tf:
+	with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as tf:
 		tf.write(initial.encode())
-		tf.flush()
-		if pre_hook is not None:
-			pre_hook(tf.name)
-		subprocess.call([EDITOR, tf.name])
+		filename = tf.name
+	if pre_hook is not None:
+		pre_hook(filename)
+	subprocess.run([EDITOR, filename])
 
-		# do the parsing with `tf` using regular File operations.
-		# for instance:
-		tf.seek(0)
-		edited_message = ''.join(_.decode('utf-8') for _ in tf.readlines())
-		if post_hook is not None:
-			post_hook(tf.name, edited_message)
+	with open(filename, 'r') as tf:
+		edited_message = ''.join(_ for _ in tf.readlines())
+	if delete:
+		os.unlink(filename)
 	return edited_message
 
 def alert_error_tryagain(message = ''):
@@ -46,13 +44,11 @@ def get_bodies(raw_text, opts):
 
 	def pre_hook(tempfile_name):
 		preview.make_preview(tempfile_name)
-	def post_hook(tempfile_name, contents):
-		os.system("cp %s %s" % (tempfile_name, BACKUP_DIR))
 
 	while True:
 		# TODO maybe give user instructions
-		raw_ps = user_file_input(initial = initial, extension = ".tex",
-				pre_hook = pre_hook, post_hook = post_hook)
+		raw_ps = user_file_input(initial = initial,
+				extension = ".tex", pre_hook = pre_hook)
 		if raw_ps.count(SEPERATOR) >= 1:
 			bodies = [_.strip() for _ in raw_ps.split(SEPERATOR)[1:]]
 			if bodies[0] == '': return None
@@ -82,7 +78,8 @@ def get_yaml_info(opts):
 			source = "<++>" if opts.source is None else opts.source,
 			hint = TAG_HINT_TEXT)
 	while True:
-		raw_yaml = user_file_input(initial = initial, extension = ".yaml")
+		raw_yaml = user_file_input(initial = initial,
+				extension = ".yaml", delete = True)
 		try:
 			d = yaml.safe_load(raw_yaml)
 			if d is None:

@@ -1,4 +1,4 @@
-from .rc import VON_BASE_PATH
+from .rc import VON_BASE_PATH, USER_OS
 from .view import APPLY_COLOR
 from . import view
 from . import model
@@ -10,8 +10,14 @@ import shlex
 from . import controller
 import glob
 
-import readline
-readline.set_completer_delims(' \t\n')
+if USER_OS == "windows":
+	from pyreadline import Readline
+	readline = Readline()
+	from colorama import init
+	init()
+else:
+	import readline
+	readline.set_completer_delims(' \t\n')
 
 WELCOME_STRING = APPLY_COLOR("BOLD_YELLOW", "Welcome to VON!")
 GOODBYE_STRING = APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D")
