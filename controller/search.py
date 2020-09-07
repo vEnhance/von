@@ -42,7 +42,7 @@ def main(self, argv):
 				view.APPLY_COLOR("BOLD_GREEN", view.formatPath(search_path)))
 	result = model.runSearch(
 			terms = opts.s_terms, tags = opts.s_tags, sources = opts.s_sources,
-			authors = opts.s_authors, refine = opts.refine, path = search_path,
+			authors = opts.s_authors, refine = opts.refine, path = model.completePath(search_path),
 			alph_sort = opts.alph)
 
 	for i, entry in enumerate(result):
