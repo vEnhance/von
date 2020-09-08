@@ -210,7 +210,7 @@ def addProblemByFileContents(path, text):
 		print(text, file=f)
 	view.log("Wrote to " + path)
 	# Now update cache
-	p = makeProblemFromPath(path)
+	p = makeProblemFromPath(shortenPath(path))
 	addProblemToIndex(p)
 	return p
 
