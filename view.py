@@ -133,7 +133,7 @@ def getEntryString(entry, verbose = False):
 	s += " " * max(1, 17-len(source_string))
 
 	# hardness
-	if entry.hardness is not None:
+	if type(entry.hardness) == int:
 		s += APPLY_COLOR("BOLD_RED", "%2dM " %entry.hardness)
 
 	# the description

@@ -93,7 +93,10 @@ class GenericItem: # superclass to Problem, IndexEntry
 
 	@property
 	def sortkey(self):
-		return (self.sortvalue, self.hardness or -1, self.source)
+		if type(self.hardness) == int:
+			return (self.sortvalue, self.hardness, self.source)
+		else:
+			return (self.sortvalue, -1, self.source)
 
 	def __eq__(self, other):
 		return self.sortkey == other.sortkey
