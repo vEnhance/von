@@ -53,6 +53,8 @@ def toAOPS(text):
 		text = text.replace(r"\end{" + env + "}", "")
 	text = text.replace(r"\begin{proof}", "[i]Proof.[/i] ")
 	text = text.replace(r"\end{proof}", r"$\blacksquare$" + "\n")
+	text = text.replace(r"\bigskip", "\n" + r"-------------------" + "\n")
+	text = text.replace(r"\medskip", "\n" + r"-------------------" + "\n")
 	text = text.replace(r"\#", "#")
 	text = text.replace("%\n", "\n") # strip trailing percent signs
 	# Remove Asy opacities, doesn't work on AoPS
