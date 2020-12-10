@@ -24,9 +24,11 @@ EDITOR = os.environ.get('EDITOR','vim')
 # (or if you prefer to put these in a more visible folder).
 
 # path to put previewer TeX file
-VON_PREVIEW_PATH = os.path.join(tempfile.gettempdir(), "preview/von_preview.tex")
+VON_PREVIEW_PATH = os.path.join(tempfile.gettempdir(), \
+		"preview_" + os.getlogin(), "von_preview.tex")
 # path to put posted output files
-VON_POST_OUTPUT_DIR = os.path.join(tempfile.gettempdir(), "po/")
+VON_POST_OUTPUT_DIR = os.path.join(tempfile.gettempdir(), \
+		"po_" + os.getlogin())
 
 # In von, problem statement is separated from metadata
 # and solution using three dashes surrounded on its own line.
