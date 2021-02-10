@@ -100,7 +100,7 @@ def getEntryString(entry, verbose = False):
 
 	# SPECIAL GLOW for index number
 	if entry.i is not None:
-		index_string = "%3d " %(entry.i+1)
+		index_string = f"{entry.i+1:3} "
 		if "final" in entry.tags:
 			s += APPLY_COLOR("YELLOW", index_string)
 		elif "waltz" in entry.tags:
@@ -134,7 +134,7 @@ def getEntryString(entry, verbose = False):
 
 	# hardness
 	if type(entry.hardness) == int:
-		s += APPLY_COLOR("BOLD_RED", "%2dM " %entry.hardness)
+		s += APPLY_COLOR("BOLD_RED", f"{entry.hardness:2}M ")
 
 	# the description
 	s += entry.desc if verbose else entry.desc[:40]

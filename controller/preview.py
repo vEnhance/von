@@ -12,5 +12,5 @@ def make_preview(full_path):
 		print(r"\usepackage[sexy,diagrams]{evan}", file=f)
 		print(r"\title{VON Preview}", file=f)
 		print(r"\begin{document}", file=f)
-		print(r"\input{%s}" % full_path, file=f)
+		print(r"\input{" + full_path + "}", file=f)
 		print(r"\end{document}", file=f)

@@ -236,7 +236,7 @@ def main(self, argv):
 		if entry is None:
 			view.error(key + " not found")
 		elif entry.secret and not opts.brave:
-			view.error("Problem `%s` not shown without --brave" %entry.source)
+			view.error(f"Problem `{entry.source}` not shown without --brave")
 			return
 		else:
 			problem = entry.full
@@ -263,7 +263,7 @@ def main(self, argv):
 			fname = 'po'
 		if not os.path.exists(VON_POST_OUTPUT_DIR):
 			os.mkdir(VON_POST_OUTPUT_DIR)
-		filepath = os.path.join(VON_POST_OUTPUT_DIR, "%s.tex" %fname)
+		filepath = os.path.join(VON_POST_OUTPUT_DIR, f"{fname}.tex")
 		with open(filepath, "w") as f:
 			print(s, file=f)
 		os.chdir(VON_POST_OUTPUT_DIR)

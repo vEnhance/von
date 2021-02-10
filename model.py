@@ -39,7 +39,7 @@ class pickleObj(collections.MutableMapping):
 		try:
 			return self.store[key]
 		except IndexError:
-			raise IndexError("%s not a valid key" %key)
+			raise IndexError(f"{key} not a valid key")
 	def __setitem__(self, key, value):
 		self.store[key] = value
 	def __delitem__(self, key):

@@ -34,5 +34,5 @@ def get_statement(source):
 def get_solution(source):
 	"""Returns just the solution for a given source (asserts existence)"""
 	bodies = get(source).bodies
-	assert len(bodies) > 1, "%s has no solution" % source
+	assert len(bodies) > 1, f"{source} has no solution"
 	return bodies[1]
