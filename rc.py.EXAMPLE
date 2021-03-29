@@ -1,6 +1,7 @@
 import sys
 import os
 import tempfile
+import getpass
 
 # Pick a path to store the problems in
 # On Windows, the HOME variable doesn't exist
@@ -25,10 +26,10 @@ EDITOR = os.environ.get('EDITOR','vim')
 
 # path to put previewer TeX file
 VON_PREVIEW_PATH = os.path.join(tempfile.gettempdir(), \
-		"preview_" + os.getlogin(), "von_preview.tex")
+		"preview_" + getpass.getuser(), "von_preview.tex")
 # path to put posted output files
 VON_POST_OUTPUT_DIR = os.path.join(tempfile.gettempdir(), \
-		"po_" + os.getlogin())
+		"po_" + getpass.getuser())
 
 # In von, problem statement is separated from metadata
 # and solution using three dashes surrounded on its own line.
