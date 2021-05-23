@@ -17,22 +17,23 @@ def has_solution(source):
 	entry = index[source]
 	return len(entry.full.bodies) > 1
 
-def get_index(source):
+def get_index(source, brave = False):
 	"""Returns the index entry for a given source"""
 	entry = index[source]
+	assert brave or not entry.secret
 	return entry
 
-def get(source):
+def get(source, brave = False):
 	"""Returns the full data for a given source"""
-	entry = get_index(source)
+	entry = get_index(source, brave)
 	return entry.full
 
-def get_statement(source):
+def get_statement(source, brave = False):
 	"""Returns just the problem statement for a given source"""
-	return get(source).bodies[0]
+	return get(source, brave).bodies[0]
 
-def get_solution(source):
+def get_solution(source, brave = False):
 	"""Returns just the solution for a given source (asserts existence)"""
-	bodies = get(source).bodies
+	bodies = get(source, brave).bodies
 	assert len(bodies) > 1, f"{source} has no solution"
 	return bodies[1]
