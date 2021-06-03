@@ -1,8 +1,14 @@
 from .. import model, view
-from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT, USER_OS
+from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT
 from . import preview
 
-import pyperclip
+try:
+	import pyperclip
+	PYPERCLIP_AVAILABLE = True
+except ModuleNotFoundError:
+	PYPERCLIP_AVAILABLE = False
+	pass
+
 import datetime
 import tempfile
 import subprocess
@@ -58,7 +64,6 @@ def get_bodies(raw_text, opts):
 		else:
 			alert_error_tryagain("Bad format: can't find separator. Try again.")
 			initial = raw_ps
-	return bodies
 
 DEFAULT_PATH = model.getcwd()
 YAML_DATA_FILE = """# Input your problem metadata here
@@ -141,7 +146,8 @@ def main(self, argv):
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())
 	else:
-		initial_text = pyperclip.paste()
+		initial_text = pyperclip.paste() if PYPERCLIP_AVAILABLE else ''
+		assert isinstance(initial_text, str)
 		if initial_text.strip() == '':
 			initial_text = '<++>'
 	do_add_problem(initial_text, opts)

@@ -9,8 +9,6 @@ import collections
 import yaml
 import pickle as pickle
 
-from .strparse import demacro, toAOPS
-
 def shortenPath(path):
 	return os.path.relpath(path, VON_BASE_PATH)
 def completePath(path):
