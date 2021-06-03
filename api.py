@@ -1,5 +1,6 @@
 # For importing von externally
 from . import model
+from . import puid
 
 # For Pickle...
 import sys
@@ -37,3 +38,6 @@ def get_solution(source, brave = False):
 	bodies = get(source, brave).bodies
 	assert len(bodies) > 1, f"{source} has no solution"
 	return bodies[1]
+
+def get_puid(source):
+	return puid.inferPUID(source)

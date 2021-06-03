@@ -1,4 +1,5 @@
 from .rc import USE_COLOR, USER_OS
+from .puid import inferPUID
 import sys
 import argparse
 import string
@@ -143,8 +144,10 @@ def getEntryString(entry, verbose = False):
 	s += " " + APPLY_COLOR("RED", "#"+ entry.sortstring)
 
 	# author
-	if verbose and entry.author is not None:
-		s += "\n" + " " * 4 + APPLY_COLOR("CYAN", entry.author)
+	if verbose:
+		s += "\n" + " " * 4 + "PUID:" + APPLY_COLOR("CYAN", inferPUID(entry.source))
+		if entry.author is not None:
+			s += APPLY_COLOR("CYAN", " | " + entry.author)
 
 	# tags
 	if verbose:
