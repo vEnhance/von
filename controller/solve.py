@@ -1,4 +1,5 @@
 from .. import model, view
+from .. import strparse
 import re
 
 parser = view.Parser(prog='solve',\
@@ -39,7 +40,7 @@ def main(self, argv):
 				entry = model.getEntryByKey(key)
 				assert entry is not None, key
 				problem = entry.full
-				s += model.demacro(problem.bodies[0]) + '\n'
+				s += strparse.demacro(problem.bodies[0]) + '\n'
 				s += r'\end{problem}' + '\n'
 				if not opts.lazy:
 					if len(problem.bodies) > 1:

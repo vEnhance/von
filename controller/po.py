@@ -1,5 +1,6 @@
 from .. import model, view
 from ..rc import VON_POST_OUTPUT_DIR
+from .. import strparse
 import os
 
 parser = view.Parser(prog='po',\
@@ -245,11 +246,11 @@ def main(self, argv):
 			if opts.sourced:
 				s += "[" + entry.source + "]"
 			s += "\n"
-			s += model.demacro(problem.bodies[0]) + "\n"
+			s += strparse.demacro(problem.bodies[0]) + "\n"
 			s += r"\end{problem}" if len(opts.keys) > 1 \
 					else r"\end{problem*}"
 			s += "\n" + r"\hrulebar" + "\n\n"
-			s += model.demacro(problem.bodies[1]) + "\n"
+			s += strparse.demacro(problem.bodies[1]) + "\n"
 			s += r"\pagebreak" + "\n\n"
 	s += r"\end{document}"
 	if opts.tex:

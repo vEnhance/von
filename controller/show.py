@@ -1,4 +1,5 @@
 from .. import model, view
+from .. import strparse
 
 parser = view.Parser(prog='show',
 		description='Displays a problem by source name.')
@@ -32,10 +33,10 @@ def main(self, argv):
 		else:
 			try:
 				if opts.aops:
-					view.out(model.toAOPS(problem.bodies[b]))
+					view.out(strparse.toAOPS(problem.bodies[b]))
 				elif opts.preserve:
 					view.out(problem.bodies[b])
 				else:
-					view.out(model.demacro(problem.bodies[b]))
+					view.out(strparse.demacro(problem.bodies[b]))
 			except IndexError:
 				view.error("Couldn't access {}-th body of {}".format(b, problem.source))
