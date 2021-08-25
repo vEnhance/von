@@ -45,7 +45,7 @@ def main(self, argv):
 				if not opts.lazy:
 					if len(problem.bodies) > 1:
 						s += r'\subsubsection*{\ul{Solution}}' + '\n'
-						s += model.demacro(problem.bodies[1]) + '\n'
+						s += strparse.demacro(problem.bodies[1]) + '\n'
 						if opts.pagebreaks:
 							s += r'\newpage' + '\n'
 						else:
