@@ -1,19 +1,28 @@
 from .. import model, view
 from .. import strparse
 
-parser = view.Parser(prog='show',
-		description='Displays a problem by source name.')
-parser.add_argument('key',
-		help="The key of the problem to open.")
-parser.add_argument('-b', '--body', nargs = '?',
-		type = int, const = 0, default = None,
-		help = "Prints only the b-th body.")
-parser.add_argument('-a', '--aops', action='store_const',
-		const = True, default = False,
-		help = "Returns string in `AoPS mode'. Automatically causes -b.")
-parser.add_argument('-p', '--preserve', action='store_const',
-		const = True, default = False,
-		help = "With -b, suppress macro expansion from body.")
+parser = view.Parser(prog='show', description='Displays a problem by source name.')
+parser.add_argument('key', help="The key of the problem to open.")
+parser.add_argument(
+	'-b', '--body', nargs='?', type=int, const=0, default=None, help="Prints only the b-th body."
+)
+parser.add_argument(
+	'-a',
+	'--aops',
+	action='store_const',
+	const=True,
+	default=False,
+	help="Returns string in `AoPS mode'. Automatically causes -b."
+)
+parser.add_argument(
+	'-p',
+	'--preserve',
+	action='store_const',
+	const=True,
+	default=False,
+	help="With -b, suppress macro expansion from body."
+)
+
 
 def main(self, argv):
 	opts = parser.process(argv)

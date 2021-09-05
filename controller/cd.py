@@ -1,9 +1,10 @@
-from .. import model, view
 import os
 
-parser = view.Parser(prog='cd',\
-		description='Changes the working directory.')
+from .. import model, view
+
+parser = view.Parser(prog='cd', description='Changes the working directory.')
 parser.add_argument('path', help='The path to change to')
+
 
 def main(self, argv):
 	opts = parser.process(argv)

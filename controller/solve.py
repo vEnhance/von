@@ -1,23 +1,40 @@
-from .. import model, view
-from .. import strparse
 import re
 
-parser = view.Parser(prog='solve',\
-		description=r'Taking as input a TeX file, expands \von instances.')
+from .. import model, strparse, view
+
+parser = view.Parser(
+	prog='solve', description=r'Taking as input a TeX file, expands \von instances.'
+)
 
 parser.add_argument('filename', help="The filename to translate.")
-parser.add_argument('-p', '--pagebreaks', action='store_const',
-		const = True, default = False,
-		help="Include page break after every solution (default is a bar).")
-parser.add_argument('-l', '--lazy', action='store_const',
-		const = True, default = False,
-		help="Don't include solutions to the problems.")
-parser.add_argument('-k', '--sourced', action='store_const',
-		const = True, default = False,
-		help="Always include the keyed source anyways.")
-
+parser.add_argument(
+	'-p',
+	'--pagebreaks',
+	action='store_const',
+	const=True,
+	default=False,
+	help="Include page break after every solution (default is a bar)."
+)
+parser.add_argument(
+	'-l',
+	'--lazy',
+	action='store_const',
+	const=True,
+	default=False,
+	help="Don't include solutions to the problems."
+)
+parser.add_argument(
+	'-k',
+	'--sourced',
+	action='store_const',
+	const=True,
+	default=False,
+	help="Always include the keyed source anyways."
+)
 
 r = re.compile(r'\\von(\*)?(\[([^\]]+)\])?\{([A-Za-z0-9 /\-?,.!]+)\}')
+
+
 def main(self, argv):
 	opts = parser.process(argv)
 	s = ''
