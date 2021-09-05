@@ -7,6 +7,7 @@ import random
 import yaml
 
 from . import view
+from .puid import inferPUID
 from .rc import SEPERATOR, SORT_TAGS, VON_BASE_PATH, VON_CACHE_PATH, VON_INDEX_PATH  # NOQA
 
 
@@ -178,7 +179,10 @@ class IndexEntry(GenericItem):
 		blob = self.source + ' ' + self.desc
 		if self.author is not None:
 			blob += ' ' + self.author
-		return term.lower() in blob.lower() or term in self.tags
+		return (
+			term.lower() in blob.lower() or term in self.tags or
+			term.upper() in inferPUID(self.source)
+		)
 
 	def hasAuthor(self, name):
 		if self.author is not None:
