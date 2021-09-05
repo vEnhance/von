@@ -65,7 +65,7 @@ The following information is mostly a subset of it.
 	which is displayed differently by the user interface.
 	You can pick any scale you want; [here is mine][mohs].
 6. Problems can be marked as *SECRET*.
-	Problems marked as SECRET will appear in searches;
+	Problems marked as SECRET will appear in searches,
 	but will be replaced by placeholders (unless `--brave` is passed).
 	
 	There are two ways to mark a problem as SECRET:
