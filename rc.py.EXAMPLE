@@ -6,7 +6,7 @@ import getpass
 # Pick a path to store the problems in
 # On Windows, the HOME variable doesn't exist
 # and you should use HOMEPATH instead
-VON_BASE_PATH  = os.path.join(os.environ.get("HOME", ""), "Documents/VON/")
+VON_BASE_PATH = os.path.join(os.environ.get("HOME", ""), "Documents/VON/")
 
 # Pick a place to store von metadata (index and cache)
 VON_INDEX_NAME = "index"
@@ -17,7 +17,7 @@ VON_CACHE_PATH = os.path.join(VON_BASE_PATH, VON_CACHE_NAME)
 # Choose an editor
 # On Windows, the following line may work better:
 # EDITOR = r'C:\Windows\vim.bat'
-EDITOR = os.environ.get('EDITOR','vim')
+EDITOR = os.environ.get('EDITOR', 'vim')
 
 # Directories for backups and temporary files.
 # You may want to reconfigure these on non-Linux systems
@@ -26,10 +26,10 @@ EDITOR = os.environ.get('EDITOR','vim')
 
 # path to put previewer TeX file
 VON_PREVIEW_PATH = os.path.join(tempfile.gettempdir(), \
-		"preview_" + getpass.getuser(), "von_preview.tex")
+  "preview_" + getpass.getuser(), "von_preview.tex")
 # path to put posted output files
 VON_POST_OUTPUT_DIR = os.path.join(tempfile.gettempdir(), \
-		"po_" + getpass.getuser())
+  "po_" + getpass.getuser())
 
 # Choose the default author for generated TeX files.
 VON_DEFAULT_AUTHOR = "Evan Chen"
@@ -68,6 +68,6 @@ if sys.platform.startswith("win32"):
 elif sys.platform.startswith("darwin"):
 	USER_OS = "mac"
 else:
-	USER_OS = "linux" # including cygwin
+	USER_OS = "linux"  # including cygwin
 
 # vim: ft=python
