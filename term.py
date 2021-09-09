@@ -105,6 +105,8 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 			for name in sorted(self.get_names()):
 				if name[:3] == 'do_' and name != 'do_help' and name != 'do_EOF':
 					print("*", name[3:])
+			print("To exit VON, type an EOF character")
+			print("(usually possible via Ctrl+D).")
 
 
 # vim: fdm=marker
