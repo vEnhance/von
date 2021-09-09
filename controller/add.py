@@ -1,5 +1,5 @@
 from .. import model, view
-from ..rc import EDITOR, SEPERATOR, NSEPERATOR, TAG_HINT_TEXT
+from ..rc import EDITOR, NSEPERATOR, SEPERATOR, TAG_HINT_TEXT
 from . import preview
 
 try:
@@ -10,13 +10,15 @@ except ModuleNotFoundError:
 	pass
 
 import datetime
-import tempfile
-import subprocess
-import yaml
 import os
+import subprocess
+import tempfile
 import traceback
 
-def user_file_input(initial = "", extension = ".tmp", pre_hook = None, delete = False):
+import yaml
+
+
+def user_file_input(initial="", extension=".tmp", pre_hook=None, delete=False):
 	"""Opens in $EDITOR a file with content 'initial'
 	and 'extension', and returns edited file.
 	If pre_hook is not None, runs pre_hook(tf.name) before opening EDITOR.
@@ -36,14 +38,17 @@ def user_file_input(initial = "", extension = ".tmp", pre_hook = None, delete = 
 		os.unlink(filename)
 	return edited_message
 
-def alert_error_tryagain(message = ''):
+
+def alert_error_tryagain(message=''):
 	"""Prints an error message and waits for user to confirm."""
 	view.error(message)
 	return input("** Press enter to continue: ")
 
+
 PS_INSTRUCT = """% Input your problem and solution below.
 % Three dashes on a newline indicate the breaking points.
 % vim: tw=72"""
+
 
 def get_bodies(raw_text, opts):
 	initial = PS_INSTRUCT + NSEPERATOR + raw_text
@@ -53,17 +58,18 @@ def get_bodies(raw_text, opts):
 
 	while True:
 		# TODO maybe give user instructions
-		raw_ps = user_file_input(initial = initial,
-				extension = ".tex", pre_hook = pre_hook)
+		raw_ps = user_file_input(initial=initial, extension=".tex", pre_hook=pre_hook)
 		if raw_ps.count(SEPERATOR) >= 1:
 			bodies = [_.strip() for _ in raw_ps.split(SEPERATOR)[1:]]
-			if bodies[0] == '': return None
+			if bodies[0] == '':
+				return None
 			return bodies
 		elif raw_ps.strip() == "":
 			return None
 		else:
 			alert_error_tryagain("Bad format: can't find separator. Try again.")
 			initial = raw_ps
+
 
 DEFAULT_PATH = model.getcwd()
 YAML_DATA_FILE = """# Input your problem metadata here
@@ -76,15 +82,16 @@ hardness: <++>
 
 {hint}"""
 
+
 def get_yaml_info(opts):
-	initial = YAML_DATA_FILE.format(\
-			path = model.completePath(DEFAULT_PATH),
-			now = datetime.datetime.now(),\
-			source = "<++>" if opts.source is None else opts.source,
-			hint = TAG_HINT_TEXT)
+	initial = YAML_DATA_FILE.format(
+		path=model.completePath(DEFAULT_PATH),
+		now=datetime.datetime.now(),
+		source="<++>" if opts.source is None else opts.source,
+		hint=TAG_HINT_TEXT
+	)
 	while True:
-		raw_yaml = user_file_input(initial = initial,
-				extension = ".yaml", delete = True)
+		raw_yaml = user_file_input(initial=initial, extension=".yaml", delete=True)
 		try:
 			d = yaml.safe_load(raw_yaml)
 			if d is None:
@@ -96,8 +103,9 @@ def get_yaml_info(opts):
 			assert os.path.isdir(d['path']), d['path'] + " directory non-existent"
 			target = d['path'] + view.file_escape(d['source']) + '.tex'
 			assert not os.path.isfile(target), target + " already taken"
-			assert model.getEntryByKey(d['source']) is None, \
-				d['source'] + " is already an existing problem source"
+			assert model.getEntryByKey(
+				d['source']
+			) is None, d['source'] + " is already an existing problem source"
 		except AssertionError:
 			traceback.print_exc()
 			alert_error_tryagain("Assertions failed, please try again.")
@@ -106,10 +114,11 @@ def get_yaml_info(opts):
 			del d['path']
 			# darn PyYAML used to do this fine -_-
 			tags = d.pop('tags')
-			output = yaml.dump(d, default_flow_style = False).strip() \
-					+ "\n" \
-					+ "tags: [" + ', '.join(tags) + ']'
+			output = yaml.dump(
+				d, default_flow_style=False
+			).strip() + "\n" + "tags: [" + ', '.join(tags) + ']'
 			return (target, output)
+
 
 def do_add_problem(raw_text, opts):
 	"""Core procedure. Opens two instances of editors to solicit user input
@@ -124,24 +133,32 @@ def do_add_problem(raw_text, opts):
 	if out_yaml is None:
 		view.warn("Aborting due to empty input...")
 		return
-	out_text = NSEPERATOR.join([out_yaml]+bodies)
+	out_text = NSEPERATOR.join([out_yaml] + bodies)
 	p = model.addProblemByFileContents(target, out_text)
 	e = p.entry
 	model.augmentCache(e)
 	view.printEntry(e)
 
+
 parser = view.Parser(prog='add', description='Adds a problem to VON.')
-parser.add_argument('source', default = None, nargs = '?',
-		help="If specified, sets the source for the new problem.")
-parser.add_argument('-f', '--file', dest = 'filename', default = None,
-		help="If specified, uses contents of file as body")
+parser.add_argument(
+	'source', default=None, nargs='?', help="If specified, sets the source for the new problem."
+)
+parser.add_argument(
+	'-f',
+	'--file',
+	dest='filename',
+	default=None,
+	help="If specified, uses contents of file as body"
+)
+
 
 def main(self, argv):
 	opts = parser.process(argv)
 	opts.verbose = True
 	if opts.filename is not None:
 		if not os.path.isfile(opts.filename):
-			view.error("The file " + opts.filename +  " doesn't exist")
+			view.error("The file " + opts.filename + " doesn't exist")
 			return
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())

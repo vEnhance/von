@@ -1,28 +1,35 @@
-from .. import model, view
-from ..rc import VON_POST_OUTPUT_DIR
-from .. import strparse
 import os
 
-parser = view.Parser(prog='po',\
-		description='Prepares a LaTeX file to send to Po-Shen!')
-parser.add_argument('keys', nargs = '+',
-		help="The keys of the problem to propose.")
-parser.add_argument('-t', '--title', default = None,
-		help="Title of the LaTeX document.")
-parser.add_argument('-s', '--subtitle', default = None,
-		help="Subtitle of the LaTeX document.")
-parser.add_argument('--author', default = 'Evan Chen',
-		help="Author of the LaTeX document.")
-parser.add_argument('--date', default = r'\today',
-		help="Date of the LaTeX document.")
-parser.add_argument('-k', '--sourced', action = 'store_const',
-		const = True, default = False,
-		help="Include the source.")
-parser.add_argument('--tex', action='store_const',
-		const = True, default = False,
-		help="Supply only the TeX source, rather than compiling to PDF.")
-parser.add_argument('-f', '--filename', default = None,
-		help="Filename for the file to produce (defaults to po.tex).")
+from .. import model, strparse, view
+from ..rc import VON_POST_OUTPUT_DIR
+
+parser = view.Parser(prog='po', description='Prepares a LaTeX file to send to Po-Shen!')
+parser.add_argument('keys', nargs='+', help="The keys of the problem to propose.")
+parser.add_argument('-t', '--title', default=None, help="Title of the LaTeX document.")
+parser.add_argument('-s', '--subtitle', default=None, help="Subtitle of the LaTeX document.")
+parser.add_argument('--author', default='Evan Chen', help="Author of the LaTeX document.")
+parser.add_argument('--date', default=r'\today', help="Date of the LaTeX document.")
+parser.add_argument(
+	'-k',
+	'--sourced',
+	action='store_const',
+	const=True,
+	default=False,
+	help="Include the source."
+)
+parser.add_argument(
+	'--tex',
+	action='store_const',
+	const=True,
+	default=False,
+	help="Supply only the TeX source, rather than compiling to PDF."
+)
+parser.add_argument(
+	'-f',
+	'--filename',
+	default=None,
+	help="Filename for the file to produce (defaults to po.tex)."
+)
 
 LATEX_PREAMBLE = r"""
 \usepackage{amsmath,amssymb,amsthm}
@@ -207,6 +214,7 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 }
 """
 
+
 def main(self, argv):
 	opts = parser.process(argv)
 
@@ -241,14 +249,12 @@ def main(self, argv):
 			return
 		else:
 			problem = entry.full
-			s += r"\begin{problem}" if len(opts.keys) > 1 \
-					else r"\begin{problem*}"
+			s += r"\begin{problem}" if len(opts.keys) > 1 else r"\begin{problem*}"
 			if opts.sourced:
 				s += "[" + entry.source + "]"
 			s += "\n"
 			s += strparse.demacro(problem.bodies[0]) + "\n"
-			s += r"\end{problem}" if len(opts.keys) > 1 \
-					else r"\end{problem*}"
+			s += r"\end{problem}" if len(opts.keys) > 1 else r"\end{problem*}"
 			s += "\n" + r"\hrulebar" + "\n\n"
 			s += strparse.demacro(problem.bodies[1]) + "\n"
 			s += r"\pagebreak" + "\n\n"
@@ -268,4 +274,4 @@ def main(self, argv):
 		with open(filepath, "w") as f:
 			print(s, file=f)
 		os.chdir(VON_POST_OUTPUT_DIR)
-		os.system("latexmk -pv %s" %filepath)
+		os.system("latexmk -pv %s" % filepath)
