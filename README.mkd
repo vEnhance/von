@@ -34,6 +34,8 @@ This program assumes you have:
 Use `von help` to display full help.
 The following information is mostly a subset of it.
 
+To exit VON, type an EOF character.
+
 ## Storing problems and solutions
 
 * `add "Shortlist 2016 G2"`: add problem to database

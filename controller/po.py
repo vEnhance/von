@@ -1,13 +1,13 @@
 import os
 
 from .. import model, strparse, view
-from ..rc import VON_POST_OUTPUT_DIR
+from ..rc import VON_POST_OUTPUT_DIR, VON_DEFAULT_AUTHOR
 
 parser = view.Parser(prog='po', description='Prepares a LaTeX file to send to Po-Shen!')
 parser.add_argument('keys', nargs='+', help="The keys of the problem to propose.")
 parser.add_argument('-t', '--title', default=None, help="Title of the LaTeX document.")
 parser.add_argument('-s', '--subtitle', default=None, help="Subtitle of the LaTeX document.")
-parser.add_argument('--author', default='Evan Chen', help="Author of the LaTeX document.")
+parser.add_argument('--author', default=VON_DEFAULT_AUTHOR, help="Author of the LaTeX document.")
 parser.add_argument('--date', default=r'\today', help="Date of the LaTeX document.")
 parser.add_argument(
 	'-k',
