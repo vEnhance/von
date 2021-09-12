@@ -385,7 +385,7 @@ def rebuildIndex():
 	d = {}
 	for p in getAllProblems():
 		if p.source in d:
-			fake_source = "DUPLICATE " + str(random.randrange(1e6, 1e7))
+			fake_source = f"DUPLICATE {random.randrange(10**6, 10**7)}"
 			view.error(p.source + " is being repeated, replacing with " + fake_source)
 			p.source = fake_source
 		d[p.source] = p.entry
