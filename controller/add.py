@@ -1,4 +1,5 @@
 from .. import model, view
+from ..puid import inferPUID
 from ..rc import EDITOR, NSEPERATOR, SEPERATOR, TAG_HINT_TEXT
 from . import preview
 
@@ -101,7 +102,7 @@ def get_yaml_info(opts):
 			if d['path'][-1] != '/':
 				d['path'] += '/'
 			assert os.path.isdir(d['path']), d['path'] + " directory non-existent"
-			target = d['path'] + view.file_escape(d['source']) + '.tex'
+			target = d['path'] + inferPUID(d['source']) + '.tex'
 			assert not os.path.isfile(target), target + " already taken"
 			assert model.getEntryByKey(
 				d['source']
@@ -135,6 +136,7 @@ def do_add_problem(raw_text, opts):
 		return
 	out_text = NSEPERATOR.join([out_yaml] + bodies)
 	p = model.addProblemByFileContents(target, out_text)
+	assert p is not None
 	e = p.entry
 	model.augmentCache(e)
 	view.printEntry(e)
