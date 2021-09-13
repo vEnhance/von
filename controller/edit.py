@@ -1,8 +1,9 @@
+import subprocess
+
 from .. import model, view
+from ..fzf import fzf_choose
 from ..rc import EDITOR
 from . import preview
-
-import subprocess
 
 parser = view.Parser(prog='edit', description='Opens problem(s) by source name.')
 parser.add_argument(
@@ -25,6 +26,8 @@ def main(self, argv):
 
 	if opts.all is True:
 		entries = model.readCache()
+	elif len(opts.keys) == 0:
+		entries = [model.getEntryByKey(fzf_choose())]
 	else:
 		entries = [model.getEntryByKey(key) for key in opts.keys]
 	for entry in entries:
