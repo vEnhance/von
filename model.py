@@ -309,7 +309,7 @@ def runSearch(
 
 	if refine is False:
 		with VonIndex() as index:
-			result = [entry for source, entry in index.items() if _matches(entry)]
+			result = [entry for entry in index.values() if _matches(entry)]
 	else:
 		with VonCache() as cache:
 			result = [entry for entry in cache if _matches(entry)]
