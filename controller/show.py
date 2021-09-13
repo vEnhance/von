@@ -1,8 +1,8 @@
-from .. import model, view
-from .. import strparse
+from .. import model, strparse, view
+from ..fzf import fzf_choose
 
 parser = view.Parser(prog='show', description='Displays a problem by source name.')
-parser.add_argument('key', help="The key of the problem to open.")
+parser.add_argument('key', nargs='?', help="The key of the problem to open.", default=None)
 parser.add_argument(
 	'-b', '--body', nargs='?', type=int, const=0, default=None, help="Prints only the b-th body."
 )
@@ -26,7 +26,10 @@ parser.add_argument(
 
 def main(self, argv):
 	opts = parser.process(argv)
-	entry = model.getEntryByKey(opts.key)
+	if opts.key is not None:
+		entry = model.getEntryByKey(opts.key)
+	else:
+		entry = model.getEntryByKey(fzf_choose())
 	if entry is None:
 		view.error(opts.key + " not found")
 	elif entry.secret and not opts.brave:
