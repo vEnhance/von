@@ -1,10 +1,11 @@
 import os
 
 from .. import model, strparse, view
-from ..rc import VON_POST_OUTPUT_DIR, VON_DEFAULT_AUTHOR
+from ..fzf import fzf_choose
+from ..rc import VON_DEFAULT_AUTHOR, VON_POST_OUTPUT_DIR
 
 parser = view.Parser(prog='po', description='Prepares a LaTeX file to send to Po-Shen!')
-parser.add_argument('keys', nargs='+', help="The keys of the problem to propose.")
+parser.add_argument('keys', nargs='*', help="The keys of the problem to propose.")
 parser.add_argument('-t', '--title', default=None, help="Title of the LaTeX document.")
 parser.add_argument('-s', '--subtitle', default=None, help="Subtitle of the LaTeX document.")
 parser.add_argument(
@@ -220,11 +221,15 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 def main(self, argv):
 	opts = parser.process(argv)
 
+	keys = opts.keys
+	if len(keys) == 0:
+		keys = [fzf_choose()]
+
 	# Better default title:
 	if opts.title is not None:
 		title = opts.title
-	elif len(opts.keys) == 1:
-		entry = model.getEntryByKey(opts.keys[0])
+	elif len(keys) == 1:
+		entry = model.getEntryByKey(keys[0])
 		if entry is not None:
 			title = entry.source
 		else:
@@ -242,7 +247,7 @@ def main(self, argv):
 	s += r"\date{" + opts.date + "}" + "\n"
 	s += r"\maketitle" + "\n"
 	s += "\n"
-	for key in opts.keys:
+	for key in keys:
 		entry = model.getEntryByKey(key)
 		if entry is None:
 			view.error(key + " not found")
@@ -251,12 +256,12 @@ def main(self, argv):
 			return
 		else:
 			problem = entry.full
-			s += r"\begin{problem}" if len(opts.keys) > 1 else r"\begin{problem*}"
+			s += r"\begin{problem}" if len(keys) > 1 else r"\begin{problem*}"
 			if opts.sourced:
 				s += "[" + entry.source + "]"
 			s += "\n"
 			s += strparse.demacro(problem.bodies[0]) + "\n"
-			s += r"\end{problem}" if len(opts.keys) > 1 else r"\end{problem*}"
+			s += r"\end{problem}" if len(keys) > 1 else r"\end{problem*}"
 			s += "\n" + r"\hrulebar" + "\n\n"
 			s += strparse.demacro(problem.bodies[1]) + "\n"
 			s += r"\pagebreak" + "\n\n"
@@ -266,7 +271,7 @@ def main(self, argv):
 	else:
 		if opts.filename is not None:
 			fname = opts.filename
-		elif len(opts.keys) == 1:
+		elif len(keys) == 1:
 			fname = view.file_escape(title)
 		else:
 			fname = 'po'
