@@ -10,5 +10,7 @@ def main(self, argv):
 	for p in model.getAllProblems():
 		puid = inferPUID(p.source)
 		src = Path(p.path)
-		src.rename(src.parent / f'{puid}.tex')
+		target = src.parent / f'{puid}.tex'
+		if not target.exists():
+			src.rename(target)
 	model.rebuildIndex()
