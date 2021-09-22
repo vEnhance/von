@@ -11,6 +11,7 @@ class VonController:
 	do_clear = clear.main
 	do_cs = do_cd
 	do_edit = edit.main
+	do_f = show.main  # alias find
 	do_index = index.main
 	do_nuke = nuke.main
 	do_paths = paths.main
