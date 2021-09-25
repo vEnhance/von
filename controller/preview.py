@@ -1,5 +1,6 @@
 import os
-from ..rc import VON_PREVIEW_PATH, USER_OS
+
+from ..rc import USER_OS, VON_PREVIEW_PATH
 
 
 def make_preview(full_path):
@@ -11,6 +12,7 @@ def make_preview(full_path):
 	with open(VON_PREVIEW_PATH, "w") as f:
 		print(r"\documentclass[11pt]{scrartcl}", file=f)
 		print(r"\usepackage[sexy,diagrams]{evan}", file=f)
+
 		print(r"\title{VON Preview}", file=f)
 		print(r"\begin{document}", file=f)
 		print(r"\input{" + full_path + "}", file=f)
