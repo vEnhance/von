@@ -59,7 +59,7 @@ def get_bodies(raw_text, opts):
 
 	while True:
 		# TODO maybe give user instructions
-		raw_ps = user_file_input(initial=initial, extension=".tex", pre_hook=pre_hook)
+		raw_ps = user_file_input(initial=initial, extension="von.tex", pre_hook=pre_hook)
 		if raw_ps.count(SEPERATOR) >= 1:
 			bodies = [_.strip() for _ in raw_ps.split(SEPERATOR)[1:]]
 			if bodies[0] == '':
@@ -92,7 +92,7 @@ def get_yaml_info(opts):
 		hint=TAG_HINT_TEXT
 	)
 	while True:
-		raw_yaml = user_file_input(initial=initial, extension=".yaml", delete=True)
+		raw_yaml = user_file_input(initial=initial, extension="von.yaml", delete=True)
 		try:
 			d = yaml.safe_load(raw_yaml)
 			if d is None:
