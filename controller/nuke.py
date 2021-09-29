@@ -8,6 +8,7 @@ parser = view.Parser(prog='nuke', description='Fixes all the filenames to match 
 
 
 def main(self, argv):
+	parser.process(argv)
 	for p in model.getAllProblems():
 		puid = inferPUID(p.source)
 		src = VON_BASE_PATH / Path(p.path)
