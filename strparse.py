@@ -43,6 +43,7 @@ def remove_soft_newlines(text: str) -> str:
 
 def toAOPS(text):
 	text = demacro(text)
+	text = text.replace(r"\qedhere", "")
 	text = text.replace(r"\begin{asy}", "[asy]")
 	text = text.replace(r"\end{asy}", "[/asy]")
 	text = text.replace(r"\begin{center}", "")
