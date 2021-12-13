@@ -23,7 +23,7 @@ def vonOpen(path, *args, **kwargs):
 	return open(completePath(path), *args, **kwargs)
 
 
-class pickleObj(collections.MutableMapping):
+class pickleObj(collections.abc.MutableMapping):
 	def _initial(self):
 		return None
 
