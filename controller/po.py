@@ -278,11 +278,7 @@ def main(self, argv):
 		if not os.path.exists(VON_POST_OUTPUT_DIR):
 			os.mkdir(VON_POST_OUTPUT_DIR)
 		filepath = os.path.join(VON_POST_OUTPUT_DIR, f"{fname}.tex")
-		outpath = os.path.join(VON_POST_OUTPUT_DIR, f"{fname}.pdf")
 		with open(filepath, "w") as f:
 			print(s, file=f)
 		os.chdir(VON_POST_OUTPUT_DIR)
-		if os.path.exists(outpath):
-			os.system("latexmk %s" % filepath)
-		else:
-			os.system("latexmk -pv %s" % filepath)
+		os.system("latexmk -pv %s" % filepath)
