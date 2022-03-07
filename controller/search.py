@@ -1,5 +1,4 @@
 from .. import model, view
-from ..rc import VON_BASE_PATH
 
 parser = view.Parser(prog='search', description='Searches for problems by tags or text.')
 parser.add_argument('s_terms', nargs='*', metavar='term', help="Terms you want to search for.")
@@ -33,26 +32,14 @@ parser.add_argument(
 parser.add_argument(
 	'-r',
 	'--refine',
-	action="store_const",
-	default=False,
-	const=True,
+	action="store_true",
 	help="Prune through the Cache rather than the whole database."
 )
 parser.add_argument(
-	'-a',
-	'--alph',
-	action="store_const",
-	default=False,
-	const=True,
-	help="Sort the results alphabetically, not by sort tag."
+	'-a', '--alph', action="store_true", help="Sort the results alphabetically, not by sort tag."
 )
 parser.add_argument(
-	'-e',
-	'--everything',
-	action="store_const",
-	default=False,
-	const=True,
-	help="Allow searching everything."
+	'-e', '--everything', action="store_true", help="Allow searching everything."
 )
 otis_group = parser.add_mutually_exclusive_group()
 otis_group.add_argument('-n', '--notused', action='store_true', help="Problem not used in OTIS")
