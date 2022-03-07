@@ -54,6 +54,9 @@ parser.add_argument(
 	const=True,
 	help="Allow searching everything."
 )
+otis_group = parser.add_mutually_exclusive_group()
+otis_group.add_argument('-n', '--notused', action='store_true', help="Problem not used in OTIS")
+otis_group.add_argument('-o', '--occupied', action='store_true', help="Problem used in OTIS")
 
 
 def main(self, argv):
@@ -67,6 +70,12 @@ def main(self, argv):
 	if opts.everything is True and query_is_empty is False:
 		view.warn("Passing --everything with parameters makes no sense.")
 		return
+	if opts.notused is True:
+		in_otis = False
+	elif opts.used is True:
+		in_otis = True
+	else:
+		in_otis = None
 
 	search_path = model.getcwd()
 	if search_path != '':
@@ -80,7 +89,8 @@ def main(self, argv):
 		authors=opts.s_authors,
 		refine=opts.refine,
 		path=search_path,
-		alph_sort=opts.alph
+		alph_sort=opts.alph,
+		in_otis=in_otis
 	)
 
 	for i, entry in enumerate(result):

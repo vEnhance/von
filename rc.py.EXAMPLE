@@ -1,7 +1,7 @@
-import sys
-import os
-import tempfile
 import getpass
+import os
+import sys
+import tempfile
 
 # Pick a path to store the problems in
 # On Windows, the HOME variable doesn't exist
@@ -60,9 +60,13 @@ SORT_TAGS = ['trivial', 'easy', 'medium', 'tricky', 'hard', 'brutal']
 # anywhere else in this configuration file,
 # which is why TAG_HINT_TEXT can be helpful for memory.
 
+# If you run OTIS, fill this in
+OTIS_EVIL_JSON_PATH = None
+
 # The following lines should autodetect your operating system,
 # so you only need to change them if you have issues.
 import sys
+
 if sys.platform.startswith("win32"):
 	USER_OS = "windows"
 elif sys.platform.startswith("darwin"):

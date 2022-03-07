@@ -1,5 +1,6 @@
 import collections
 import functools
+import json
 import os
 import pickle as pickle
 import random
@@ -8,7 +9,7 @@ import yaml
 
 from . import view
 from .puid import inferPUID
-from .rc import SEPERATOR, SORT_TAGS, VON_BASE_PATH, VON_CACHE_PATH, VON_INDEX_PATH  # NOQA
+from .rc import OTIS_EVIL_JSON_PATH, SEPERATOR, SORT_TAGS, VON_BASE_PATH, VON_CACHE_PATH, VON_INDEX_PATH  # NOQA
 
 
 def shortenPath(path):
@@ -298,13 +299,35 @@ def viewDirectory(path):
 
 
 def runSearch(
-	terms=[], tags=[], sources=[], authors=[], path='', refine=False, alph_sort=False
+	terms=[],
+	tags=[],
+	sources=[],
+	authors=[],
+	path='',
+	refine=False,
+	alph_sort=False,
+	in_otis=None
 ):
+	if in_otis is not None and OTIS_EVIL_JSON_PATH is not None:
+		with open(OTIS_EVIL_JSON_PATH) as f:
+			evil_json = json.load(f)
+			otis_used = evil_json.values()
+	else:
+		otis_used = None
+
 	def _matches(entry):
+		if otis_used is not None:
+			if entry.source in otis_used and in_otis is False:
+				return False
+			elif entry.source not in otis_used and in_otis is not False:
+				return False
+
 		return (
-			all([entry.hasTag(_) for _ in tags]) and all([entry.hasTerm(_) for _ in terms]) and
-			all([entry.hasSource(_) for _ in sources]) and
-			all([entry.hasAuthor(_) for _ in authors]) and entry.path.startswith(path)
+			all([entry.hasTag(_) for _ in tags]) \
+                 and all([entry.hasTerm(_) for _ in terms]) \
+                 and all([entry.hasSource(_) for _ in sources]) \
+                 and all([entry.hasAuthor(_) for _ in authors]) \
+                 and entry.path.startswith(path)
 		)
 
 	if refine is False:
