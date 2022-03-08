@@ -59,7 +59,7 @@ def main(self, argv):
 		return
 	if opts.notused is True:
 		in_otis = False
-	elif opts.used is True:
+	elif opts.occupied is True:
 		in_otis = True
 	else:
 		in_otis = None
