@@ -311,15 +311,16 @@ def runSearch(
 	if in_otis is not None and OTIS_EVIL_JSON_PATH is not None:
 		with open(OTIS_EVIL_JSON_PATH) as f:
 			evil_json = json.load(f)
-			otis_used = evil_json.values()
+			otis_used_sources = evil_json.values()
 	else:
-		otis_used = None
+		otis_used_sources = None
 
 	def _matches(entry):
-		if otis_used is not None:
-			if entry.source in otis_used and in_otis is False:
+		if otis_used_sources is not None:
+			_used = entry.source in otis_used_sources or entry.hasTag('waltz')
+			if _used and in_otis is False:
 				return False
-			elif entry.source not in otis_used and in_otis is not False:
+			elif not _used and in_otis is True:
 				return False
 
 		return (
