@@ -323,11 +323,9 @@ def runSearch(
 				return False
 
 		return (
-			all([entry.hasTag(_) for _ in tags]) \
-                 and all([entry.hasTerm(_) for _ in terms]) \
-                 and all([entry.hasSource(_) for _ in sources]) \
-                 and all([entry.hasAuthor(_) for _ in authors]) \
-                 and entry.path.startswith(path)
+			all([entry.hasTag(_) for _ in tags]) and all([entry.hasTerm(_) for _ in terms]) and
+			all([entry.hasSource(_) for _ in sources]) and
+			all([entry.hasAuthor(_) for _ in authors]) and entry.path.startswith(path)
 		)
 
 	if refine is False:
