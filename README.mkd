@@ -1,5 +1,11 @@
 # VON: Problem Database
 
+![Language: Python](https://img.shields.io/github/languages/top/vEnhance/von)
+![License](https://img.shields.io/github/license/vEnhance/von)
+![Last commit](https://img.shields.io/github/last-commit/vEnhance/von)
+![Forks](https://img.shields.io/github/forks/vEnhance/von)
+![Stars](https://img.shields.io/github/stars/vEnhance/von)
+
 VON is a Python script I wrote in order to help me manage
 the problems and solutions to olympiad databases.
 There is no graphical user interface and it is based on the command line.
