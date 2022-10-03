@@ -215,7 +215,7 @@ class IndexEntry(GenericItem):
 
 def getcwd():
 	true_dir = os.getcwd()
-	if true_dir.startswith(VON_BASE_PATH):
+	if true_dir.startswith(VON_BASE_PATH) and true_dir != VON_BASE_PATH:
 		return os.path.relpath(true_dir, VON_BASE_PATH)
 	else:
 		return ''
