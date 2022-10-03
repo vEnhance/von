@@ -150,7 +150,17 @@ and output that you are adding in to `von`.
 If you have [von.sty][vonsty] and [latexmk][latexmk],
 then by using a similar mechanic to Asymptote,
 you can also directly query the database for problems.
-You should add `latex/latexmk` to your `.latexmkrc` for this to work.
+You should add a `pythontex` routine to your `.latexmkrc` for this to auto-work;
+an example might be:
+
+```perl
+sub pythontex {
+    system("pythontex --runall true \"$_[0]\"");
+    system("touch \$(basename \"$_[0]\").pytxmcr");
+    return;
+}
+add_cus_dep("pytxcode", "pytxmcr", 0, "pythontex");
+```
 
 The basic syntax is that `\voninclude{source}` will
 include the problem statement (0th body),
