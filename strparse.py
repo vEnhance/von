@@ -42,10 +42,11 @@ def remove_soft_newlines(text: str) -> str:
 
 
 def toAOPS(text):
+	DIVIDER = "\n" + r"-------------------" + "\n\n"
 	text = demacro(text)
 	text = text.replace(r"\qedhere", "")
-	text = text.replace(r"\begin{asy}", "[asy]")
-	text = text.replace(r"\end{asy}", "[/asy]")
+	text = text.replace(r"\begin{asy}", "\n" + "[asy]" + "\n")
+	text = text.replace(r"\end{asy}", "\n" + "[/asy]")
 	text = text.replace(r"\begin{center}", "")
 	text = text.replace(r"\end{center}", "")
 	text = text.replace(r"\par ", "\n")
@@ -65,8 +66,8 @@ def toAOPS(text):
 		text = text.replace(r"\end{" + env + "}", "")
 	text = text.replace(r"\begin{proof}", "[i]Proof.[/i] ")
 	text = text.replace(r"\end{proof}", r"$\blacksquare$" + "\n")
-	text = text.replace(r"\bigskip", "\n" + r"-------------------" + "\n")
-	text = text.replace(r"\medskip", "\n" + r"-------------------" + "\n")
+	text = text.replace(r"\bigskip", DIVIDER)
+	text = text.replace(r"\medskip", DIVIDER)
 	text = text.replace(r"\#", "#")
 	text = text.replace("%\n", "\n")  # strip trailing percent signs
 	# Remove Asy opacities, doesn't work on AoPS
@@ -75,10 +76,13 @@ def toAOPS(text):
 	text = re.sub(r"\\emph{([^}]*)}", r"[i]\1[/i]", text)
 	text = re.sub(r"\\textit{([^}]*)}", r"[i]\1[/i]", text)
 	text = re.sub(r"\\textbf{([^}]*)}", r"[b]\1[/b]", text)
-	text = re.sub(r"\\paragraph{([^}]*)}", r"[color=blue][b]\1[/b][/color]", text)
+	text = re.sub(r"\\paragraph{([^}]*)}", DIVIDER + r"[color=blue][b]\1[/b][/color]", text)
 	text = re.sub(r"\\url{([^}]*)}", r"[url]\1[/url]", text)
 	text = re.sub(r"\\href{([^}]*)}{([^}]*)}", r"[url=\1]\2[/url]", text)
 
 	# Join together newlines
-	paragraphs = [_.strip().replace("\n", " ") for _ in text.split('\n\n')]
+	paragraphs = [
+		' '.join([line.strip() for line in paragraph.splitlines()]).strip()
+		for paragraph in text.split('\n\n')
+	]
 	return '\n'.join(paragraphs)
