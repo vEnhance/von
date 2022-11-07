@@ -174,6 +174,14 @@ def getEntryString(entry, verbose=False):
 	if type(entry.hardness) == int:
 		s += APPLY_COLOR("BOLD_RED", f"{entry.hardness:2}M ")
 
+	# author
+	if entry.author is not None:
+		author_abbrev = ''.join(
+			word[0] for word in entry.author.split(' ')
+			if (all(_ in string.ascii_letters for _ in word) and word[0] in string.ascii_uppercase)
+		)
+		s += APPLY_COLOR("GREEN", "[" + author_abbrev + "]") + " "
+
 	# the description
 	s += entry.desc if verbose else entry.desc[:40]
 
