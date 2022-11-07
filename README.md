@@ -19,21 +19,21 @@ Here are a few hints:
 
 This program assumes you have:
 
-* Python 3 installed, and
-* A working LaTeX compiler with `latexmk` installed.
-	(I recommend [TeX Live][texlive]).
+- Python 3 installed, and
+- A working LaTeX compiler with `latexmk` installed.
+  (I recommend [TeX Live][texlive]).
 
 1. You **must** create a copy of `rc.py` based on `rc.py.EXAMPLE`.
-	This is the "settings" file for the script.
+   This is the "settings" file for the script.
 2. This directory should be included under PYTHONPATH,
-	and invoked by `python -m von` (to get an interactive terminal).
-	If you only want to issue one command, you can also type it directly,
-	e.g. `python -m von help` will list the help and exit.
+   and invoked by `python -m von` (to get an interactive terminal).
+   If you only want to issue one command, you can also type it directly,
+   e.g. `python -m von help` will list the help and exit.
 3. You may need to `pip install -r requirements.txt`.
-	On Windows, you want to `pip install -r requirements-windows.txt`.
+   On Windows, you want to `pip install -r requirements-windows.txt`.
 4. LaTeX integration uses [von.sty][vonsty].
-	The previewer requires [evan.sty][evansty].
-	(See below for details.)
+   The previewer requires [evan.sty][evansty].
+   (See below for details.)
 
 ## Help
 
@@ -44,41 +44,42 @@ To exit VON, type an EOF character.
 
 ## Storing problems and solutions
 
-* `add "Shortlist 2016 G2"`: add problem to database
+- `add "Shortlist 2016 G2"`: add problem to database
 
 1. Problems are stored in TeX files in `VON_BASE_PATH`. You can
-	keep sub-directories in here, as well, to organize those files.
+   keep sub-directories in here, as well, to organize those files.
 2. Problems and solutions are separated using `SEPARATOR` in `rc.py`,
-	which by default is three dashes padded by newlines.
-	So when entering new problems, write the statement, the separator,
-	and then the solution.
+   which by default is three dashes padded by newlines.
+   So when entering new problems, write the statement, the separator,
+   and then the solution.
 3. Actually more generally, each problem and solution is separated into
-	several "bodies", delimited by the seperator.
-	It's basically assumed that 0'th body is the problem statement
-	and the 1'st body is the solution,
-	but you can have further bodies for other purposes too.
+   several "bodies", delimited by the seperator.
+   It's basically assumed that 0'th body is the problem statement
+   and the 1'st body is the solution,
+   but you can have further bodies for other purposes too.
 
 ## Meta-data
 
-* `edit "Shortlist 2016 G2"`: edit entry for problem in database
+- `edit "Shortlist 2016 G2"`: edit entry for problem in database
 
 1. Meta-data is stored at the top of each file after being added.
-2. Problems must have a *source* like "Shortlist 2016 G2".
+2. Problems must have a _source_ like "Shortlist 2016 G2".
 3. Problems should also have a description, and a set of tags.
-	If a tag is specified as a sorting tag in `rc.py`,
-	it will be displayed differently,
-	but otherwise functionally equivalently.
+   If a tag is specified as a sorting tag in `rc.py`,
+   it will be displayed differently,
+   but otherwise functionally equivalently.
 4. Problems can also have an "author" attribute, which is displayed.
 5. Problems can also have a "hardness" attribute, an integer,
-	which is displayed differently by the user interface.
-	You can pick any scale you want; [here is mine][mohs].
-6. Problems can be marked as *SECRET*.
-	Problems marked as SECRET will appear in searches,
-	but will be replaced by placeholders (unless `--brave` is passed).
-	
-	There are two ways to mark a problem as SECRET:
-	* Include `SECRET` as a substring of the problem's source.
-	* Include `secret` as one of the problem's tags.
+   which is displayed differently by the user interface.
+   You can pick any scale you want; [here is mine][mohs].
+6. Problems can be marked as _SECRET_.
+   Problems marked as SECRET will appear in searches,
+   but will be replaced by placeholders (unless `--brave` is passed).
+
+   There are two ways to mark a problem as SECRET:
+
+   - Include `SECRET` as a substring of the problem's source.
+   - Include `secret` as one of the problem's tags.
 
 An example of an entry:
 
@@ -107,8 +108,8 @@ We will prove that $\boxed{n = 20 + 2^{19} = 524308}$ fits the bill.
 The `search` command searches everything.
 Use `search --help` for a lot of options.
 
-* `search "Shortlist 2016"`: search for problems with "Shortlist 2016"
-* `search -t anglechase`: searches for problems tagged `anglechase`
+- `search "Shortlist 2016"`: search for problems with "Shortlist 2016"
+- `search -t anglechase`: searches for problems tagged `anglechase`
 
 The `s` command is a shorthand for `search`.
 
@@ -124,8 +125,8 @@ the results are indexed by positive integers,
 and those indices can be used instead of the source.
 For example, `show 3` will display the 3rd problem in search results.
 
-* `show 3`: Print the 3rd problem
-* `po 3`: Produces a TeX/PDF of the problem and solution.
+- `show 3`: Print the 3rd problem
+- `po 3`: Produces a TeX/PDF of the problem and solution.
 
 Use `show --help` and `po --help` for more details.
 
@@ -170,9 +171,9 @@ Of course, this would most commonly be used with theorem environments,
 so you can use some shortcuts to this effect.
 The three possible shortcuts are:
 
-* `\von{X}` is shorthand for `\begin{problem}[X] \voninclude{X} \end{problem}`
-* `\von[text]{X}` is shorthand for `\begin{problem}[text] \voninclude{X} \end{problem}`
-* `\von*{X}` is shorthand for `\begin{problem} \voninclude{X} \end{problem}`
+- `\von{X}` is shorthand for `\begin{problem}[X] \voninclude{X} \end{problem}`
+- `\von[text]{X}` is shorthand for `\begin{problem}[text] \voninclude{X} \end{problem}`
+- `\von*{X}` is shorthand for `\begin{problem} \voninclude{X} \end{problem}`
 
 Of course, the string `problem` might want to be changed,
 if you are using a differently named theorem environment.
