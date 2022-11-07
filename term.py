@@ -8,14 +8,14 @@ from . import controller, model, view
 from .rc import USER_OS, VON_BASE_PATH
 from .view import APPLY_COLOR
 
-if USER_OS == "windows":
-	from pyreadline import Readline
+if USER_OS != "windows":
+	import readline
+	readline.set_completer_delims(' \t\n')
+else:
+	from pyreadline import Readline  # type: ignore
 	readline = Readline()
 	from colorama import init
 	init()
-else:
-	import readline
-	readline.set_completer_delims(' \t\n')
 
 WELCOME_STRING = APPLY_COLOR("BOLD_YELLOW", "Welcome to VON!")
 GOODBYE_STRING = APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D")
@@ -96,7 +96,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 			try:
 				func = getattr(self, 'do_' + arg)
 			except AttributeError:
-				views.error('Command {} not found'.format(arg))
+				view.error('Command {} not found'.format(arg))
 			else:
 				print(APPLY_COLOR("MAGENTA", "Getting `{} --help`...".format(arg)))
 				func(['--help'])
