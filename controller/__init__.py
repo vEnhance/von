@@ -1,4 +1,4 @@
-from . import add, asy, cd, clear, edit, index, nuke, paths, po, search, show, solve, status  # NOQA
+from . import add, asy, br, cd, clear, edit, index, nuke, paths, po, search, show, solve, status  # NOQA
 
 
 class VonController:
@@ -7,6 +7,7 @@ class VonController:
 
 	do_add = add.main
 	do_asy = asy.main
+	do_br = br.main
 	do_cd = cd.main
 	do_clear = clear.main
 	do_cs = do_cd

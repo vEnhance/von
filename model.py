@@ -100,6 +100,7 @@ class GenericItem:  # superclass to Problem, IndexEntry
 	i = None  # position in Cache, if any
 	author = None  # default
 	hardness = None  # default
+	aops = None
 
 	@property
 	def n(self):
@@ -155,6 +156,7 @@ class Problem(GenericItem):
 			source=self.source,
 			desc=self.desc,
 			author=self.author,
+			aops=self.aops,
 			hardness=self.hardness,
 			tags=self.tags,
 			path=self.path,
