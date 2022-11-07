@@ -1,4 +1,5 @@
 import collections
+import collections.abc
 import functools
 import json
 import os
@@ -26,14 +27,14 @@ def vonOpen(path, *args, **kwargs):
 
 class pickleObj(collections.abc.MutableMapping):
 	def _initial(self):
-		return None
+		return {}
 
 	def __init__(self, path, mode='rb'):
 		if not os.path.isfile(path) or os.path.getsize(path) == 0:
 			self.store = self._initial()
 		else:
 			with vonOpen(path, 'rb') as f:
-				self.store = pickle.load(f)
+				self.store = pickle.load(f)  # type: ignore
 		self.path = path
 		self.mode = mode
 
@@ -43,7 +44,7 @@ class pickleObj(collections.abc.MutableMapping):
 	def __exit__(self, type, value, traceback):
 		if self.mode == 'wb':
 			with vonOpen(self.path, 'wb') as f:
-				pickle.dump(self.store, f)
+				pickle.dump(self.store, f)  # type: ignore
 
 	def __getitem__(self, key):
 		try:
@@ -94,7 +95,7 @@ def VonCache(mode='rb'):
 class GenericItem:  # superclass to Problem, IndexEntry
 	desc = ""  # e.g. "Fiendish inequality"
 	source = ""  # used as problem ID, e.g. "USAMO 2000/6"
-	tags = []  # tags for the problem
+	tags: list[str] = []  # tags for the problem
 	path = ""  # path to problem TeX file
 	i = None  # position in Cache, if any
 	author = None  # default
@@ -133,7 +134,7 @@ class GenericItem:  # superclass to Problem, IndexEntry
 
 
 class Problem(GenericItem):
-	bodies = []  # statement, sol, comments, ...
+	bodies: list[str] = []  # statement, sol, comments, ...
 
 	def __init__(self, path, **kwargs):
 		self.path = path
@@ -186,7 +187,7 @@ class IndexEntry(GenericItem):
 		)
 
 	def hasAuthor(self, name):
-		if self.author is not None:
+		if self.author is None:
 			return False
 		haystacks = self.author.lower().strip().split(' ')
 		return name.lower() in haystacks
@@ -209,7 +210,8 @@ class IndexEntry(GenericItem):
 	@property
 	def full(self):
 		p = makeProblemFromPath(self.path)
-		p.i = self.i
+		if p is not None:
+			p.i = self.i
 		return p
 
 
