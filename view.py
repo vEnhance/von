@@ -148,9 +148,9 @@ def getEntryString(entry, verbose=False):
 
 	# source (glows for favorite or nice)
 	if verbose or len(entry.source) <= 16:
-		source_string = entry.source
+		source_string: str = entry.source
 	else:
-		words_in_source = entry.source.split(' ')
+		words_in_source: str = entry.source.split(' ')
 		source_string = ''
 		for word in words_in_source:
 			if word == "Shortlist":
@@ -176,11 +176,11 @@ def getEntryString(entry, verbose=False):
 
 	# author
 	if entry.author is not None:
-		author_abbrev = ''.join(
+		author_initials: str = ''.join(
 			word[0] for word in entry.author.split(' ')
-			if (all(_ in string.ascii_letters for _ in word) and word[0] in string.ascii_uppercase)
+			if (all(_ in string.ascii_letters + "-'" for _ in word))
 		)
-		s += APPLY_COLOR("GREEN", "[" + author_abbrev + "]") + " "
+		s += APPLY_COLOR("GREEN", "[" + author_initials + "]") + " "
 
 	# the description
 	s += entry.desc if verbose else entry.desc[:40]
