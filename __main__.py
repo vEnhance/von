@@ -1,6 +1,5 @@
 from . import term
 import sys
-from . import controller
 
 if __name__ == "__main__":
 	cmd = term.VonTerminal()

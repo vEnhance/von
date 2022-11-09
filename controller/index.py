@@ -4,5 +4,4 @@ parser = view.Parser(prog='index', description='Rebuilds the problem index. No a
 
 
 def main(self, argv):
-	opts = parser.process(argv)
 	model.rebuildIndex()
