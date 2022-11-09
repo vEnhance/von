@@ -6,6 +6,8 @@ import os
 import pickle as pickle
 import random
 
+from typing import Any, Callable
+
 import yaml
 
 from . import view
@@ -13,23 +15,23 @@ from .puid import inferPUID
 from .rc import OTIS_EVIL_JSON_PATH, SEPERATOR, SORT_TAGS, VON_BASE_PATH, VON_CACHE_PATH, VON_INDEX_PATH  # NOQA
 
 
-def shortenPath(path):
+def shortenPath(path: str):
 	return os.path.relpath(path, VON_BASE_PATH)
 
 
-def completePath(path):
+def completePath(path: str):
 	return os.path.join(VON_BASE_PATH, path)
 
 
-def vonOpen(path, *args, **kwargs):
+def vonOpen(path: str, *args: Any, **kwargs: Any):
 	return open(completePath(path), *args, **kwargs)
 
 
 class pickleObj(collections.abc.MutableMapping):
-	def _initial(self):
+	def _initial(self) -> Any:
 		return {}
 
-	def __init__(self, path, mode='rb'):
+	def __init__(self, path: str, mode='rb'):
 		if not os.path.isfile(path) or os.path.getsize(path) == 0:
 			self.store = self._initial()
 		else:
@@ -41,22 +43,32 @@ class pickleObj(collections.abc.MutableMapping):
 	def __enter__(self):
 		return self
 
-	def __exit__(self, type, value, traceback):
+	def __exit__(self, *_: Any):
 		if self.mode == 'wb':
 			with vonOpen(self.path, 'wb') as f:
 				pickle.dump(self.store, f)  # type: ignore
 
-	def __getitem__(self, key):
+	def __getitem__(self, key: Any):
 		try:
 			return self.store[key]
 		except IndexError:
 			raise IndexError(f"{key} not a valid key")
 
-	def __setitem__(self, key, value):
-		self.store[key] = value
+	def __setitem__(self, key: int | str, value: Any):
+		if isinstance(self.store, list):
+			assert isinstance(key, int)
+			self.store[key] = value
+		else:
+			assert isinstance(key, str)
+			self.store[key] = value
 
-	def __delitem__(self, key):
-		del self.store[key]
+	def __delitem__(self, key: str):
+		if isinstance(self.store, list):
+			assert isinstance(key, int)
+			del self.store[key]
+		else:
+			assert isinstance(key, str)
+			del self.store[key]
 
 	def __iter__(self):
 		return iter(self.store)
@@ -64,31 +76,39 @@ class pickleObj(collections.abc.MutableMapping):
 	def __len__(self):
 		return len(self.store)
 
-	def set(self, store):
+	def set(self, store: Any):
 		self.store = store
 
 
-class pickleDict(pickleObj):
-	def _initial(self):
+class pickleDictVonIndex(pickleObj):
+	store: dict[str, 'IndexEntry']
+	__getitem__: Callable[..., 'IndexEntry']
+
+	def _initial(self) -> dict[str, 'IndexEntry']:
 		return {}
 
 
-class pickleList(pickleObj):
-	def _initial(self):
+class pickleListVonCache(pickleObj):
+	store: list['IndexEntry']
+
+	def __getitem__(self, idx: int) -> 'IndexEntry':
+		return super().__getitem__(idx)
+
+	def _initial(self) -> list['IndexEntry']:
 		return []
 
-	def set(self, store):
+	def set(self, store: list['IndexEntry']):
 		for i in range(len(store)):
 			store[i].i = i
 		self.store = store
 
 
 def VonIndex(mode='rb'):
-	return pickleDict(VON_INDEX_PATH, mode)
+	return pickleDictVonIndex(VON_INDEX_PATH, mode)
 
 
 def VonCache(mode='rb'):
-	return pickleList(VON_CACHE_PATH, mode)
+	return pickleListVonCache(VON_CACHE_PATH, mode)
 
 
 @functools.total_ordering
@@ -97,10 +117,10 @@ class GenericItem:  # superclass to Problem, IndexEntry
 	source = ""  # used as problem ID, e.g. "USAMO 2000/6"
 	tags: list[str] = []  # tags for the problem
 	path = ""  # path to problem TeX file
-	i = None  # position in Cache, if any
-	author = None  # default
-	hardness = None  # default
-	url = None
+	i: int | None = None  # position in Cache, if any
+	author: str | None = None  # default
+	hardness: int | None = None  # default
+	url: str | None = None
 
 	@property
 	def n(self):
@@ -115,7 +135,7 @@ class GenericItem:  # superclass to Problem, IndexEntry
 
 	@property
 	def sortstring(self):
-		for i, d in enumerate(SORT_TAGS):
+		for d in SORT_TAGS:
 			if d in self.tags:
 				return d
 		return "NONE"
@@ -127,30 +147,30 @@ class GenericItem:  # superclass to Problem, IndexEntry
 		else:
 			return (self.sortvalue, -1, self.source)
 
-	def __eq__(self, other):
+	def __eq__(self, other) -> bool:
 		return self.sortkey == other.sortkey
 
-	def __lt__(self, other):
+	def __lt__(self, other) -> bool:
 		return self.sortkey < other.sortkey
 
 
 class Problem(GenericItem):
 	bodies: list[str] = []  # statement, sol, comments, ...
 
-	def __init__(self, path, **kwargs):
+	def __init__(self, path: str, **kwargs):
 		self.path = path
 		for key in kwargs:
 			setattr(self, key, kwargs[key])
 
 	@property
-	def state(self):
+	def state(self) -> str:
 		return self.bodies[0]
 
 	def __repr__(self):
 		return self.source
 
 	@property
-	def entry(self):
+	def entry(self) -> 'IndexEntry':
 		"""Returns an IndexEntry for storage in pickle"""
 		return IndexEntry(
 			source=self.source,
@@ -164,7 +184,7 @@ class Problem(GenericItem):
 		)
 
 	@property
-	def full(self):
+	def full(self) -> 'Problem':
 		view.warn("sketchy af")
 		return self
 
@@ -210,10 +230,9 @@ class IndexEntry(GenericItem):
 		return self
 
 	@property
-	def full(self):
+	def full(self) -> Problem:
 		p = makeProblemFromPath(self.path)
-		if p is not None:
-			p.i = self.i
+		assert p is not None
 		return p
 
 
@@ -229,21 +248,19 @@ def getCompleteCwd():
 	return completePath(getcwd())
 
 
-def makeProblemFromPath(path):
+def makeProblemFromPath(path: str) -> Problem:
 	# Creates a problem instance from a source, without looking at Index
 	with vonOpen(path, 'r') as f:
 		text = ''.join(f.readlines())
 	x = text.split(SEPERATOR)
 	data = yaml.safe_load(x[0])
-	if data is None:
-		view.warn(path + " gave None for data")
-		return None
+	assert data is not None
 	data['bodies'] = [_.strip() for _ in x[1:]]
 	return Problem(path, **data)
 
 
-def getAllProblems():
-	ret = []
+def getAllProblems() -> list[Problem]:
+	ret: list[Problem] = []
 	for root, _, filenames in os.walk(VON_BASE_PATH):
 		for fname in filenames:
 			if not fname.endswith('.tex'):
@@ -255,17 +272,17 @@ def getAllProblems():
 	return ret
 
 
-def getEntryByCacheNum(n):
+def getEntryByCacheNum(n: int) -> IndexEntry:
 	with VonCache() as cache:
 		return cache[n - 1]
 
 
-def getEntryBySource(source):
+def getEntryBySource(source: str) -> IndexEntry | None:
 	with VonIndex() as index:
-		return index.get(source, None)
+		return index[source] if source in index else None
 
 
-def getEntryByKey(key):
+def getEntryByKey(key: str):
 	# TODO this shouldn't actually be in model, but blah
 	if key.isdigit():
 		return getEntryByCacheNum(n=int(key))
@@ -273,7 +290,7 @@ def getEntryByKey(key):
 		return getEntryBySource(source=key)
 
 
-def addProblemByFileContents(path, text):
+def addProblemByFileContents(path: str, text: str):
 	with vonOpen(path, 'w') as f:
 		print(text, file=f)
 	view.log("Wrote to " + path)
@@ -283,13 +300,15 @@ def addProblemByFileContents(path, text):
 	return p
 
 
-def viewDirectory(path):
-	problems = []
-	dirs = []
-	for item_path in os.listdir(getCompleteCwd()):
-		abs_item_path = os.path.join(getCompleteCwd(), item_path)
+def viewDirectory(path: str):
+	problems: list['Problem'] = []
+	dirs: list[str] = []
+	for item_path in os.listdir(path):
+		abs_item_path = os.path.join(path, item_path)
 		if os.path.isfile(abs_item_path) and abs_item_path.endswith('.tex'):
-			problems.append(makeProblemFromPath(abs_item_path))
+			problem = makeProblemFromPath(abs_item_path)
+			assert problem is not None
+			problems.append(problem)
 		elif os.path.isdir(abs_item_path):
 			dirs.append(item_path)
 		else:
@@ -303,15 +322,15 @@ def viewDirectory(path):
 
 
 def runSearch(
-	terms=[],
-	tags=[],
-	sources=[],
-	authors=[],
+	terms: list[str] = [],
+	tags: list[str] = [],
+	sources: list[str] = [],
+	authors: list[str] = [],
 	path='',
 	refine=False,
 	alph_sort=False,
 	in_otis=None
-):
+) -> list[IndexEntry]:
 	if in_otis is not None and OTIS_EVIL_JSON_PATH is not None:
 		with open(OTIS_EVIL_JSON_PATH) as f:
 			evil_json = json.load(f)
@@ -319,9 +338,9 @@ def runSearch(
 	else:
 		otis_used_sources = None
 
-	def _matches(entry):
+	def _matches(entry: IndexEntry):
 		if otis_used_sources is not None:
-			_used = entry.source in otis_used_sources or entry.hasTag('waltz')
+			_used: bool = (entry.source in otis_used_sources) or entry.hasTag('waltz')
 			if _used and in_otis is False:
 				return False
 			elif not _used and in_otis is True:
@@ -335,10 +354,10 @@ def runSearch(
 
 	if refine is False:
 		with VonIndex() as index:
-			result = [entry for entry in index.values() if _matches(entry)]
+			result: list[IndexEntry] = [entry for entry in index.values() if _matches(entry)]
 	else:
 		with VonCache() as cache:
-			result = [entry for entry in cache if _matches(entry)]
+			result = [entry for entry in cache.values() if _matches(entry)]
 	if alph_sort:
 		result.sort(key=lambda e: e.source)
 	else:
@@ -348,7 +367,7 @@ def runSearch(
 	return result
 
 
-def augmentCache(*entries):
+def augmentCache(*entries: IndexEntry):
 	with VonCache('wb') as cache:
 		cache.set(cache.store + list(entries))
 
@@ -371,12 +390,12 @@ def readCache():
 # A certain magical Index~ <3
 
 
-def addEntryToIndex(entry):
+def addEntryToIndex(entry: IndexEntry):
 	with VonIndex('wb') as index:
 		index[entry.source] = entry
 
 
-def updateEntryByProblem(old_entry, new_problem):
+def updateEntryByProblem(old_entry: IndexEntry, new_problem: Problem):
 	new_problem.i = old_entry.i
 	new_entry = new_problem.entry
 
@@ -408,7 +427,7 @@ def setEntireIndex(d):
 
 
 def rebuildIndex():
-	d = {}
+	d: dict[str, IndexEntry] = {}
 	for p in getAllProblems():
 		if p.source in d:
 			fake_source = f"DUPLICATE {random.randrange(10**6, 10**7)}"

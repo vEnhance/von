@@ -10,6 +10,7 @@ except ModuleNotFoundError:
 	PYPERCLIP_AVAILABLE = False
 	pass
 
+from typing import Any
 import datetime
 import os
 import subprocess
@@ -85,7 +86,7 @@ url: <++>
 {hint}"""
 
 
-def get_yaml_info(opts):
+def get_yaml_info(opts) -> None | tuple[str, Any]:
 	initial = YAML_DATA_FILE.format(
 		path=model.completePath(DEFAULT_PATH),
 		now=datetime.datetime.now(),
@@ -97,7 +98,7 @@ def get_yaml_info(opts):
 		try:
 			d = yaml.safe_load(raw_yaml)
 			if d is None:
-				return (None, None)
+				return None
 			assert 'path' in d, "Path is mandatory"
 			assert 'source' in d, "Source is mandatory"
 			if d['path'][-1] != '/':
@@ -122,7 +123,7 @@ def get_yaml_info(opts):
 			return (target, output)
 
 
-def do_add_problem(raw_text, opts):
+def do_add_problem(raw_text: str, opts):
 	"""Core procedure. Opens two instances of editors to solicit user input
 	on problem and produce a problem instance."""
 
@@ -131,10 +132,11 @@ def do_add_problem(raw_text, opts):
 	if bodies is None:
 		view.warn("Aborting due to empty input...")
 		return
-	target, out_yaml = get_yaml_info(opts)
-	if out_yaml is None:
+	yaml_info = get_yaml_info(opts)
+	if yaml_info is None:
 		view.warn("Aborting due to empty input...")
 		return
+	target, out_yaml = yaml_info
 	out_text = NSEPERATOR.join([out_yaml] + bodies)
 	p = model.addProblemByFileContents(target, out_text)
 	assert p is not None
