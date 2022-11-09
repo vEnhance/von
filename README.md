@@ -1,4 +1,4 @@
-# VON: Problem Database
+# VON: vEnhance's Olympiad Navigator (A Problem Database)
 
 ![Language: Python](https://img.shields.io/github/languages/top/vEnhance/von)
 ![License](https://img.shields.io/github/license/vEnhance/von)
