@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  workflow_call: {}
+
+jobs:
+  types:
+    name: "Typecheck"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+      - name: Copy rc.py
+        run: |
+          cp rc.py.EXAMPLE rc.py
+
+        # --- dependency installation ---
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Load cached venv if cache exists
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies if cache miss
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      - name: Install root project
+        run: poetry install --no-interaction
+
+        # --- type checking ---
+      - name: pyright (via ReviewDog)
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          source .venv/bin/activate
+          BASE_PATH="$(cd "$(dirname "$0")" && pwd)"
+          cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit 1
+          TEMP_PATH="$(mktemp -d)"
+          PATH="${TEMP_PATH}:$PATH"
+
+          echo '::group::🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog'
+          curl -fL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b "${TEMP_PATH}" "${REVIEWDOG_VERSION}" 2>&1
+          echo '::endgroup::'
+
+          echo '::group::🐍 Installing pyright ...'
+          npm install pyright
+          echo '::endgroup::'
+
+          echo '::group::🔎 Running pyright with reviewdog 🐶 ...'
+          curl -fL https://raw.githubusercontent.com/jordemort/action-pyright/a72509b263749732e50c41d335964a100ec9c06a/pyright_to_rdjson/pyright_to_rdjson.py --output pyright_to_rdjson.py
+          "$(npm bin)/pyright" $(git ls-files '*.py' | grep -v migrations ) --outputjson |
+            python3 pyright_to_rdjson.py  |
+            reviewdog -f=rdjson -name="pyright-report" \
+              -reporter="github-check" \
+              -fail-on-error="true"
+          reviewdog_rc=$?
+          echo '::endgroup::'
+          exit $reviewdog_rc
+
+  style:
+    name: "Style check"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Copy rc.py
+        run: |
+          cp rc.py.EXAMPLE rc.py
+      - name: Setup Python
+        uses: actions/setup-python@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+          restore-keys: ${{ runner.os }}-pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pyflakes toml yapf git+https://github.com/codespell-project/codespell.git@fd1d5c0d8dd5d8072d0422ce4f05b6202aa89ba0 tomli
+      - name: Run Pyflakes
+        run: |
+          pyflakes .
+      - name: Run YAPF
+        run: |
+          yapf -d $(git ls-files '*.py')
+      - name: Run spell-check
+        run: |
+          codespell $(git ls-files)
