@@ -12,7 +12,7 @@ import yaml
 
 from . import view
 from .puid import inferPUID
-from .rc import OTIS_EVIL_JSON_PATH, SEPERATOR, SORT_TAGS, VON_BASE_PATH, VON_CACHE_PATH, VON_INDEX_PATH  # NOQA
+from .rc import OTIS_EVIL_JSON_PATH, SEPARATOR, SORT_TAGS, VON_BASE_PATH, VON_CACHE_PATH, VON_INDEX_PATH  # NOQA
 
 
 def shortenPath(path: str):
@@ -252,7 +252,7 @@ def makeProblemFromPath(path: str) -> Problem:
 	# Creates a problem instance from a source, without looking at Index
 	with vonOpen(path, 'r') as f:
 		text = ''.join(f.readlines())
-	x = text.split(SEPERATOR)
+	x = text.split(SEPARATOR)
 	data = yaml.safe_load(x[0])
 	assert data is not None
 	data['bodies'] = [_.strip() for _ in x[1:]]

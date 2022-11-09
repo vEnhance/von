@@ -53,7 +53,7 @@ To exit VON, type an EOF character.
    So when entering new problems, write the statement, the separator,
    and then the solution.
 3. Actually more generally, each problem and solution is separated into
-   several "bodies", delimited by the seperator.
+   several "bodies", delimited by the separator.
    It's basically assumed that 0'th body is the problem statement
    and the 1'st body is the solution,
    but you can have further bodies for other purposes too.

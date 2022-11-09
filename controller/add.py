@@ -1,6 +1,6 @@
 from .. import model, view
 from ..puid import inferPUID
-from ..rc import EDITOR, NSEPERATOR, SEPERATOR, TAG_HINT_TEXT
+from ..rc import EDITOR, NSEPARATOR, SEPARATOR, TAG_HINT_TEXT
 from . import preview
 
 try:
@@ -53,7 +53,7 @@ PS_INSTRUCT = """% Input your problem and solution below.
 
 
 def get_bodies(raw_text, opts):
-	initial = PS_INSTRUCT + NSEPERATOR + raw_text
+	initial = PS_INSTRUCT + NSEPARATOR + raw_text
 
 	def pre_hook(tempfile_name):
 		preview.make_preview(tempfile_name)
@@ -61,8 +61,8 @@ def get_bodies(raw_text, opts):
 	while True:
 		# TODO maybe give user instructions
 		raw_ps = user_file_input(initial=initial, extension="von.tex", pre_hook=pre_hook)
-		if raw_ps.count(SEPERATOR) >= 1:
-			bodies = [_.strip() for _ in raw_ps.split(SEPERATOR)[1:]]
+		if raw_ps.count(SEPARATOR) >= 1:
+			bodies = [_.strip() for _ in raw_ps.split(SEPARATOR)[1:]]
 			if bodies[0] == '':
 				return None
 			return bodies
@@ -137,7 +137,7 @@ def do_add_problem(raw_text: str, opts):
 		view.warn("Aborting due to empty input...")
 		return
 	target, out_yaml = yaml_info
-	out_text = NSEPERATOR.join([out_yaml] + bodies)
+	out_text = NSEPARATOR.join([out_yaml] + bodies)
 	p = model.addProblemByFileContents(target, out_text)
 	assert p is not None
 	e = p.entry

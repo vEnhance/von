@@ -37,8 +37,8 @@ VON_DEFAULT_AUTHOR = "Evan Chen"
 # In von, problem statement is separated from metadata
 # and solution using three dashes surrounded on its own line.
 # You can change that here.
-SEPERATOR = '\n---\n'
-NSEPERATOR = '\n' + SEPERATOR + '\n'
+SEPARATOR = '\n---\n'
+NSEPARATOR = '\n' + SEPARATOR + '\n'
 
 # Change to False below if
 # your terminal sucks and doesn't have color sequences
