@@ -7,16 +7,12 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/vEnhance/von/"
 
-[tool.yapf]
-based_on_style = "facebook"
-column_limit = 96
-use_tabs = true
-continuation_align_style = "VALIGN-RIGHT"
-continuation_indent_width = 2
-indent_width = 2
-align_closing_bracket_with_visual_indent = false
-split_before_dot = true
-split_before_expression_after_opening_paren = true
+[tool.poetry.group.dev.dependencies]
+codespell = "^2.2.2"
+pyflakes = "^2.3.1"
+pyright = "^1.1.275"
+toml = "^0.10.2"
+yapf = "^0.32.0"
 
 [tool.pyright]
 enableTypeIgnoreComments = true
@@ -87,3 +83,14 @@ skip = "puid.py"
 count = ""
 quiet-level = 3
 ignore-words-list = "ques"
+
+[tool.yapf]
+based_on_style = "facebook"
+column_limit = 96
+use_tabs = true
+continuation_align_style = "VALIGN-RIGHT"
+continuation_indent_width = 2
+indent_width = 2
+align_closing_bracket_with_visual_indent = false
+split_before_dot = true
+split_before_expression_after_opening_paren = true
