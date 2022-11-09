@@ -19,6 +19,19 @@ def file_escape(s):
 	return s
 
 
+def get_author_initials(author: str) -> str:
+	author_words = author.split(' ')
+	if len(author_words) == 0:
+		return '?'
+	elif len(author_words) == 1:
+		a = author_words[0]
+		if (capitals := ''.join(_ for _ in a if _ in string.ascii_uppercase)):
+			return capitals
+		return a
+	else:  # len(author_words) > 1
+		return ''.join(a[0] for a in author_words if a[0] in string.ascii_uppercase)
+
+
 # Arguments hacking whee
 # We have _OPTS here which will pick up any parse_args()
 _view_parser = argparse.ArgumentParser(add_help=False)
@@ -172,15 +185,13 @@ def getEntryString(entry, verbose=False):
 
 	# hardness
 	if type(entry.hardness) == int:
-		s += APPLY_COLOR("BOLD_RED", f"{entry.hardness:2}M ")
+		s += APPLY_COLOR("BOLD_RED", f"{entry.hardness:2}M")
+		s += " "
 
 	# author
 	if entry.author is not None:
-		author_initials: str = ''.join(
-			word[0] for word in entry.author.split(' ')
-			if (all(_ in string.ascii_letters + "-'" for _ in word))
-		)
-		s += APPLY_COLOR("GREEN", "[" + author_initials + "]") + " "
+		s += APPLY_COLOR("GREEN", "[" + get_author_initials(entry.author) + "]")
+		s += " "
 
 	# the description
 	s += entry.desc if verbose else entry.desc[:40]
