@@ -81,23 +81,23 @@ class pickleObj(collections.abc.MutableMapping):
 
 
 class pickleDictVonIndex(pickleObj):
-	store: dict[str, 'IndexEntry']
-	__getitem__: Callable[..., 'IndexEntry']
+	store: dict[str, 'PickleMappingEntry']
+	__getitem__: Callable[..., 'PickleMappingEntry']
 
-	def _initial(self) -> dict[str, 'IndexEntry']:
+	def _initial(self) -> dict[str, 'PickleMappingEntry']:
 		return {}
 
 
 class pickleListVonCache(pickleObj):
-	store: list['IndexEntry']
+	store: list['PickleMappingEntry']
 
-	def __getitem__(self, idx: int) -> 'IndexEntry':
+	def __getitem__(self, idx: int) -> 'PickleMappingEntry':
 		return super().__getitem__(idx)
 
-	def _initial(self) -> list['IndexEntry']:
+	def _initial(self) -> list['PickleMappingEntry']:
 		return []
 
-	def set(self, store: list['IndexEntry']):
+	def set(self, store: list['PickleMappingEntry']):
 		for i in range(len(store)):
 			store[i].i = i
 		self.store = store
@@ -112,7 +112,7 @@ def VonCache(mode='rb'):
 
 
 @functools.total_ordering
-class GenericItem:  # superclass to Problem, IndexEntry
+class GenericItem:  # superclass to Problem, PickleMappingEntry
 	desc = ""  # e.g. "Fiendish inequality"
 	source = ""  # used as problem ID, e.g. "USAMO 2000/6"
 	tags: list[str] = []  # tags for the problem
@@ -170,9 +170,9 @@ class Problem(GenericItem):
 		return self.source
 
 	@property
-	def entry(self) -> 'IndexEntry':
-		"""Returns an IndexEntry for storage in pickle"""
-		return IndexEntry(
+	def entry(self) -> 'PickleMappingEntry':
+		"""Returns an PickleMappingEntry for storage in pickle"""
+		return PickleMappingEntry(
 			source=self.source,
 			desc=self.desc,
 			author=self.author,
@@ -189,7 +189,7 @@ class Problem(GenericItem):
 		return self
 
 
-class IndexEntry(GenericItem):
+class PickleMappingEntry(GenericItem):
 	def __init__(self, **kwargs):
 		for key in kwargs:
 			if kwargs[key] is not None:
@@ -272,12 +272,12 @@ def getAllProblems() -> list[Problem]:
 	return ret
 
 
-def getEntryByCacheNum(n: int) -> IndexEntry:
+def getEntryByCacheNum(n: int) -> PickleMappingEntry:
 	with VonCache() as cache:
 		return cache[n - 1]
 
 
-def getEntryBySource(source: str) -> IndexEntry | None:
+def getEntryBySource(source: str) -> PickleMappingEntry | None:
 	with VonIndex() as index:
 		return index[source] if source in index else None
 
@@ -330,7 +330,7 @@ def runSearch(
 	refine=False,
 	alph_sort=False,
 	in_otis=None
-) -> list[IndexEntry]:
+) -> list[PickleMappingEntry]:
 	if in_otis is not None and OTIS_EVIL_JSON_PATH is not None:
 		with open(OTIS_EVIL_JSON_PATH) as f:
 			evil_json = json.load(f)
@@ -338,7 +338,7 @@ def runSearch(
 	else:
 		otis_used_sources = None
 
-	def _matches(entry: IndexEntry):
+	def _matches(entry: PickleMappingEntry):
 		if otis_used_sources is not None:
 			_used: bool = (entry.source in otis_used_sources) or entry.hasTag('waltz')
 			if _used and in_otis is False:
@@ -354,7 +354,7 @@ def runSearch(
 
 	if refine is False:
 		with VonIndex() as index:
-			result: list[IndexEntry] = [entry for entry in index.values() if _matches(entry)]
+			result: list[PickleMappingEntry] = [entry for entry in index.values() if _matches(entry)]
 	else:
 		with VonCache() as cache:
 			result = [entry for entry in cache.values() if _matches(entry)]
@@ -367,7 +367,7 @@ def runSearch(
 	return result
 
 
-def augmentCache(*entries: IndexEntry):
+def augmentCache(*entries: PickleMappingEntry):
 	with VonCache('wb') as cache:
 		cache.set(cache.store + list(entries))
 
@@ -390,12 +390,12 @@ def readCache():
 # A certain magical Index~ <3
 
 
-def addEntryToIndex(entry: IndexEntry):
+def addEntryToIndex(entry: PickleMappingEntry):
 	with VonIndex('wb') as index:
 		index[entry.source] = entry
 
 
-def updateEntryByProblem(old_entry: IndexEntry, new_problem: Problem):
+def updateEntryByProblem(old_entry: PickleMappingEntry, new_problem: Problem):
 	new_problem.i = old_entry.i
 	new_entry = new_problem.entry
 
@@ -427,7 +427,7 @@ def setEntireIndex(d):
 
 
 def rebuildIndex():
-	d: dict[str, IndexEntry] = {}
+	d: dict[str, PickleMappingEntry] = {}
 	for p in getAllProblems():
 		if p.source in d:
 			fake_source = f"DUPLICATE {random.randrange(10**6, 10**7)}"

@@ -1,10 +1,10 @@
 import subprocess
 
-from .model import IndexEntry, VonIndex, setCache
+from .model import PickleMappingEntry, VonIndex, setCache
 from .puid import inferPUID
 
 
-def _fzf_line(entry: IndexEntry) -> str:
+def _fzf_line(entry: PickleMappingEntry) -> str:
 	puid = inferPUID(entry.source)
 	return f'{puid}\t{entry.source:<13}\t{entry.desc}'
 
