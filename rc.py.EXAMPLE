@@ -65,7 +65,8 @@ OTIS_EVIL_JSON_PATH = None
 
 # The following lines should autodetect your operating system,
 # so you only need to change them if you have issues.
-import sys
+
+USER_OS: Literal['windows'] | Literal['mac'] | Literal['linux']
 
 if sys.platform.startswith("win32"):
 	USER_OS = "windows"
