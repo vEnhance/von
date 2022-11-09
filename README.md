@@ -3,12 +3,14 @@
 ![Language: Python](https://img.shields.io/github/languages/top/vEnhance/von)
 ![License](https://img.shields.io/github/license/vEnhance/von)
 ![Last commit](https://img.shields.io/github/last-commit/vEnhance/von)
+[<img src="https://github.com/vEnhance/von/actions/workflows/ci.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
+[<img src="https://github.com/vEnhance/von/actions/workflows/codeql-analysis.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
 ![Forks](https://img.shields.io/github/forks/vEnhance/von)
 ![Stars](https://img.shields.io/github/stars/vEnhance/von)
 
 VON is a Python script I wrote in order to help me manage
 the problems and solutions to olympiad databases.
-There is no graphical user interface and it is based on the command line.
+There is no graphical user interface, and it is based on the command line.
 It is designed to run on Linux systems.
 
 I haven't gotten around to properly documenting this,
@@ -47,7 +49,7 @@ To exit VON, type an EOF character.
 - `add "Shortlist 2016 G2"`: add problem to database
 
 1. Problems are stored in TeX files in `VON_BASE_PATH`. You can
-   keep sub-directories in here, as well, to organize those files.
+   keep subdirectories in here, as well, to organize those files.
 2. Problems and solutions are separated using `SEPARATOR` in `rc.py`,
    which by default is three dashes padded by newlines.
    So when entering new problems, write the statement, the separator,
