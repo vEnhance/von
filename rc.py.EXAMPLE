@@ -2,6 +2,7 @@ import getpass
 import os
 import sys
 import tempfile
+from typing import Literal
 
 # Pick a path to store the problems in
 # On Windows, the HOME variable doesn't exist
@@ -25,11 +26,16 @@ EDITOR = os.environ.get('EDITOR', 'vim')
 # (or if you prefer to put these in a more visible folder).
 
 # path to put previewer TeX file
-VON_PREVIEW_PATH = os.path.join(tempfile.gettempdir(), \
-  "preview_" + getpass.getuser(), "von_preview.tex")
+VON_PREVIEW_PATH = os.path.join(
+	tempfile.gettempdir(),
+	"preview_" + getpass.getuser(),
+	"von_preview.tex",
+)
 # path to put posted output files
-VON_POST_OUTPUT_DIR = os.path.join(tempfile.gettempdir(), \
-  "po_" + getpass.getuser())
+VON_POST_OUTPUT_DIR = os.path.join(
+	tempfile.gettempdir(),
+	"po_" + getpass.getuser(),
+)
 
 # Choose the default author for generated TeX files.
 VON_DEFAULT_AUTHOR = "Evan Chen"
