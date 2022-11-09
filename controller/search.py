@@ -36,7 +36,10 @@ parser.add_argument(
 	help="Prune through the Cache rather than the whole database."
 )
 parser.add_argument(
-	'-a', '--alph', action="store_true", help="Sort the results alphabetically, not by sort tag."
+	'-a',
+	'--alphabetical',
+	action="store_true",
+	help="Sort the results alphabetically, not by sort tag."
 )
 parser.add_argument(
 	'-e', '--everything', action="store_true", help="Allow searching everything."
@@ -76,7 +79,7 @@ def main(self, argv):
 		authors=opts.s_authors,
 		refine=opts.refine,
 		path=search_path,
-		alph_sort=opts.alph,
+		alph_sort=opts.alphabetical,
 		in_otis=in_otis
 	)
 
