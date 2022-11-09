@@ -41,5 +41,5 @@ def main(self, argv):
 		diagram = asys[opts.number - 1]
 
 		if not opts.comments:
-			diagram = re.sub('/\*.*?\*/', '', diagram, flags=re.DOTALL)
+			diagram = re.sub(r'/\*.*?\*/', '', diagram, flags=re.DOTALL)
 		print('\n'.join(line.strip() for line in diagram.strip().split('\n')))
