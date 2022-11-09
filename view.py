@@ -76,7 +76,7 @@ _view_parser.add_argument(
 	help="More verbose displays (e.g. include problem tags)."
 )
 
-_OPTS = _view_parser.parse_args([])
+OPTS = _view_parser.parse_args([])
 
 
 class Parser(argparse.ArgumentParser):
@@ -84,9 +84,9 @@ class Parser(argparse.ArgumentParser):
 		super(Parser, self).__init__(parents=[_view_parser], *args, **kwargs)
 
 	def process(self, *args, **kwargs):
-		global _OPTS
-		_OPTS = self.parse_args(*args, **kwargs)
-		return _OPTS
+		global OPTS
+		OPTS = self.parse_args(*args, **kwargs)
+		return OPTS
 
 
 # Color names {{{
@@ -119,7 +119,7 @@ if USE_COLOR is False:
 
 
 def APPLY_COLOR(color_name, s):
-	if _OPTS.color is False:
+	if OPTS.color is False:
 		return s
 	return _TERM_COLOR[color_name] + s + _TERM_COLOR["RESET"]
 
@@ -137,12 +137,12 @@ def getProblemString(problem):
 
 def getEntryString(entry, verbose=False):
 	# SPECIAL hide brave
-	if _OPTS.verbose is True:
+	if OPTS.verbose is True:
 		verbose = True
-	if entry.secret and not _OPTS.brave:
+	if entry.secret and not OPTS.brave:
 		return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
 
-	if _OPTS.tabs is True:
+	if OPTS.tabs is True:
 		s = '\t'.join([entry.source, entry.desc, entry.sortstring])
 		if verbose:
 			s += '\t' + ' '.join(entry.tags)
