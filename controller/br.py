@@ -12,9 +12,9 @@ def main(self, argv):
 	if entry is None:
 		view.error(opts.key + " not found")
 	else:
-		aops = entry.aops
-		if aops is None:
-			print("No AoPS link provided for this problem")
+		url = entry.url
+		if url is None:
+			print("No URL is provided for this problem")
 			sys.exit(1)
-		print(f"Opening {aops}...")
-		webbrowser.open(aops)
+		print(url)
+		webbrowser.open(url)

@@ -80,7 +80,7 @@ desc:   <++>     # e.g. Fiendish inequality
 path:   {path}<++>
 tags:   [{now.year}-{now.month:02d}, <++>]
 hardness: <++>
-aops: <++>
+url: <++>
 
 {hint}"""
 
