@@ -10,12 +10,12 @@ sys.modules['model'] = model
 index = model.VonIndex().store  # get the underlying dict
 
 
-def has(source):
+def has(source: str):
 	"""Checks whether a given source exists in database"""
 	return source in index
 
 
-def has_solution(source):
+def has_solution(source: str):
 	"""Checks whether a given source exists in database AND has a solution"""
 	if not has(source):
 		return False
@@ -23,30 +23,30 @@ def has_solution(source):
 	return len(entry.full.bodies) > 1
 
 
-def get_index(source, brave=False):
+def get_index(source: str, brave=False):
 	"""Returns the index entry for a given source"""
 	entry = index[source]
 	assert brave or not entry.secret
 	return entry
 
 
-def get(source, brave=False):
+def get(source: str, brave=False):
 	"""Returns the full data for a given source"""
 	entry = get_index(source, brave)
 	return entry.full
 
 
-def get_statement(source, brave=False):
+def get_statement(source: str, brave=False):
 	"""Returns just the problem statement for a given source"""
 	return get(source, brave).bodies[0]
 
 
-def get_solution(source, brave=False):
+def get_solution(source: str, brave=False):
 	"""Returns just the solution for a given source (asserts existence)"""
 	bodies = get(source, brave).bodies
 	assert len(bodies) > 1, f"{source} has no solution"
 	return bodies[1]
 
 
-def get_puid(source):
+def get_puid(source: str):
 	return puid.inferPUID(source)
