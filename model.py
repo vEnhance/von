@@ -329,7 +329,8 @@ def runSearch(
 	path='',
 	refine=False,
 	alph_sort=False,
-	in_otis=None
+	in_otis: bool | None = None,
+	has_url: bool | None = None
 ) -> list[PickleMappingEntry]:
 	if in_otis is not None and OTIS_EVIL_JSON_PATH is not None:
 		with open(OTIS_EVIL_JSON_PATH) as f:
@@ -338,12 +339,18 @@ def runSearch(
 	else:
 		otis_used_sources = None
 
-	def _matches(entry: PickleMappingEntry):
+	def _lambda_is_matching(entry: PickleMappingEntry):
 		if otis_used_sources is not None:
 			_used: bool = (entry.source in otis_used_sources) or entry.hasTag('waltz')
 			if _used and in_otis is False:
 				return False
 			elif not _used and in_otis is True:
+				return False
+
+		if has_url is not None:
+			if entry.url is None and has_url is True:
+				return False
+			if entry.url is not None and has_url is False:
 				return False
 
 		return (
@@ -354,10 +361,12 @@ def runSearch(
 
 	if refine is False:
 		with VonIndex() as index:
-			result: list[PickleMappingEntry] = [entry for entry in index.values() if _matches(entry)]
+			result: list[PickleMappingEntry] = [
+				entry for entry in index.values() if _lambda_is_matching(entry)
+			]
 	else:
 		with VonCache() as cache:
-			result = [entry for entry in cache.values() if _matches(entry)]
+			result = [entry for entry in cache.values() if _lambda_is_matching(entry)]
 	if alph_sort:
 		result.sort(key=lambda e: e.source)
 	else:

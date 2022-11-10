@@ -47,9 +47,12 @@ parser.add_argument(
 otis_group = parser.add_mutually_exclusive_group()
 otis_group.add_argument('-n', '--notused', action='store_true', help="Problem not used in OTIS")
 otis_group.add_argument('-o', '--occupied', action='store_true', help="Problem used in OTIS")
+url_group = parser.add_mutually_exclusive_group()
+url_group.add_argument('-l', '--linked', action='store_true', help="Problem has a URL provided")
+url_group.add_argument('-u', '--unlinked', action='store_true', help="Problem has no URL provided")
 
 
-def main(self, argv):
+def main(self, argv: list[str]):
 	opts = parser.process(argv)
 
 	query_is_empty = len(opts.s_terms + opts.s_tags + opts.s_sources + opts.s_authors) == 0
@@ -60,12 +63,20 @@ def main(self, argv):
 	if opts.everything is True and query_is_empty is False:
 		view.warn("Passing --everything with parameters makes no sense.")
 		return
+
 	if opts.notused is True:
 		in_otis = False
 	elif opts.occupied is True:
 		in_otis = True
 	else:
 		in_otis = None
+
+	if opts.unlinked is True:
+		has_url = False
+	elif opts.linked is True:
+		has_url = True
+	else:
+		has_url = None
 
 	search_path = model.getcwd()
 	if search_path != '':
@@ -80,10 +91,11 @@ def main(self, argv):
 		refine=opts.refine,
 		path=search_path,
 		alph_sort=opts.alphabetical,
-		in_otis=in_otis
+		in_otis=in_otis,
+		has_url=has_url,
 	)
 
-	for i, entry in enumerate(result):
+	for entry in result:
 		view.printEntry(entry)
 	if len(result) == 0:
 		view.warn("No matches found.")
