@@ -49,7 +49,9 @@ otis_group.add_argument('-n', '--notused', action='store_true', help="Problem no
 otis_group.add_argument('-o', '--occupied', action='store_true', help="Problem used in OTIS")
 url_group = parser.add_mutually_exclusive_group()
 url_group.add_argument('-l', '--linked', action='store_true', help="Problem has a URL provided")
-url_group.add_argument('-u', '--unlinked', action='store_true', help="Problem has no URL provided")
+url_group.add_argument(
+	'-u', '--unlinked', action='store_true', help="Problem has no URL provided"
+)
 
 
 def main(self, argv: list[str]):
