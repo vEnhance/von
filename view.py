@@ -156,8 +156,10 @@ def getEntryString(entry, verbose=False):
 			s += APPLY_COLOR("YELLOW", index_string)
 		elif "waltz" in entry.tags:
 			s += APPLY_COLOR("GREEN", index_string)
-		else:
+		elif entry.url is not None:
 			s += APPLY_COLOR("BOLD_RED", index_string)
+		else:
+			s += APPLY_COLOR("BOLD_MAGENTA", index_string)
 
 	# source (glows for favorite or nice)
 	if verbose or len(entry.source) <= 16:
