@@ -219,7 +219,7 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 """
 
 
-def main(self, argv):
+def main(self: object, argv: list[str]):
 	opts = parser.process(argv)
 
 	keys = opts.keys

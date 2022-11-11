@@ -25,7 +25,7 @@ parser.add_argument(
 )
 
 
-def main(self, argv):
+def main(self: object, argv: list[str]):
 	opts = parser.process(argv)
 	if opts.key is not None:
 		entry = model.getEntryByKey(opts.key)

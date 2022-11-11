@@ -7,7 +7,7 @@ parser = view.Parser(prog='br', description='Browse a problem on AoPS')
 parser.add_argument('key', help="The key of the problem to open")
 
 
-def main(self, argv):
+def main(self: object, argv: list[str]):
 	opts = parser.process(argv)
 	entry = model.getEntryByKey(opts.key)
 	if entry is None:

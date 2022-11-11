@@ -160,7 +160,7 @@ parser.add_argument(
 )
 
 
-def main(self, argv):
+def main(self: object, argv: list[str]):
 	opts = parser.process(argv)
 	opts.verbose = True
 	if opts.filename is not None:

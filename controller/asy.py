@@ -30,7 +30,7 @@ parser.add_argument(
 )
 
 
-def main(self, argv):
+def main(self: object, argv: list[str]):
 	opts = parser.process(argv)
 	entry = model.getEntryByKey(opts.key)
 	if entry is None:

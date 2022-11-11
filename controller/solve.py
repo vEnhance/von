@@ -36,7 +36,7 @@ parser.add_argument(
 r = re.compile(r'\\von(\*)?(\[([^\]]+)\])?\{([A-Za-z0-9 /\-?,.!]+)\}')
 
 
-def main(self, argv):
+def main(self: object, argv: list[str]):
 	opts = parser.process(argv)
 	s = ''
 
