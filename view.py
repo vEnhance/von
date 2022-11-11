@@ -38,9 +38,8 @@ def get_author_initials(author: str) -> str:
 			return capitals
 		return a
 	else:  # len(author_words) > 1
-		return ''.join(
-			a[0] for a in author_words if len(a) > 0 and a[0] in string.ascii_uppercase or a == ','
-		)
+		passes = lambda a: a and (a[0] in string.ascii_uppercase or a == ',')
+		return ''.join(a[0] for a in author_words if passes(a))
 
 
 # Arguments hacking whee
