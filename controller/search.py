@@ -1,4 +1,5 @@
 from .. import model, view
+import logging
 
 parser = view.Parser(prog='search', description='Searches for problems by tags or text.')
 parser.add_argument('s_terms', nargs='*', metavar='term', help="Terms you want to search for.")
@@ -60,10 +61,10 @@ def main(self, argv: list[str]):
 	query_is_empty = len(opts.s_terms + opts.s_tags + opts.s_sources + opts.s_authors) == 0
 
 	if opts.everything is False and query_is_empty is True:
-		view.warn("Must supply at least one search keyword or pass --everything option.")
+		logging.warning("Must supply at least one search keyword or pass --everything option.")
 		return
 	if opts.everything is True and query_is_empty is False:
-		view.warn("Passing --everything with parameters makes no sense.")
+		logging.warning("Passing --everything with parameters makes no sense.")
 		return
 
 	if opts.notused is True:
@@ -82,7 +83,7 @@ def main(self, argv: list[str]):
 
 	search_path = model.getcwd()
 	if search_path != '':
-		view.warn(
+		logging.info(
 			"Search restricted to " + view.APPLY_COLOR("BOLD_GREEN", view.formatPath(search_path))
 		)
 	result = model.runSearch(
@@ -100,4 +101,4 @@ def main(self, argv: list[str]):
 	for entry in result:
 		view.printEntry(entry)
 	if len(result) == 0:
-		view.warn("No matches found.")
+		logging.warning("No matches found.")

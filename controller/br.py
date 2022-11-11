@@ -1,4 +1,5 @@
 from .. import model, view
+import logging
 import sys
 import webbrowser
 
@@ -10,7 +11,7 @@ def main(self, argv):
 	opts = parser.process(argv)
 	entry = model.getEntryByKey(opts.key)
 	if entry is None:
-		view.error(opts.key + " not found")
+		logging.error(opts.key + " not found")
 	else:
 		url = entry.url
 		if url is None:

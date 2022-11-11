@@ -1,16 +1,21 @@
 import argparse
 import string
-import sys
 from typing import Any
 
-from .termcolors import TERM_COLOR
 from .model import Problem, PickleMappingEntry
+from .termcolors import TERM_COLOR
 from .puid import inferPUID
 from .rc import USER_OS
 
 if USER_OS == "windows":
 	from colorama import init  # type: ignore
 	init()
+
+
+def APPLY_COLOR(color_name: str, s: str):
+	if OPTS.color is False:
+		return s
+	return TERM_COLOR[color_name] + s + TERM_COLOR["RESET"]
 
 
 def file_escape(s: str):
@@ -92,20 +97,6 @@ class Parser(argparse.ArgumentParser):
 		return OPTS
 
 
-# Color names {{{
-# }}}
-
-
-def APPLY_COLOR(color_name: str, s: str):
-	if OPTS.color is False:
-		return s
-	return TERM_COLOR[color_name] + s + TERM_COLOR["RESET"]
-
-
-ERROR_PRE = APPLY_COLOR("BOLD_RED", "Error:")
-WARN_PRE = APPLY_COLOR("BOLD_YELLOW", "Warn:")
-
-
 def getProblemString(problem: Problem):
 	s = getEntryString(problem.entry, verbose=True)
 	s += "\n"
@@ -131,13 +122,18 @@ def getEntryString(entry: PickleMappingEntry, verbose=False):
 	if entry.i is not None:
 		index_string = f"{entry.i+1:3} "
 		if "final" in entry.tags:
-			s += APPLY_COLOR("YELLOW", index_string)
+			colored_index_string = APPLY_COLOR("YELLOW", index_string)
 		elif "waltz" in entry.tags:
-			s += APPLY_COLOR("GREEN", index_string)
+			colored_index_string = APPLY_COLOR("GREEN", index_string)
 		elif entry.url is not None:
-			s += APPLY_COLOR("BOLD_RED", index_string)
+			colored_index_string = APPLY_COLOR("BOLD_RED", index_string)
 		else:
-			s += APPLY_COLOR("BOLD_MAGENTA", index_string)
+			colored_index_string = APPLY_COLOR("BOLD_MAGENTA", index_string)
+
+		if entry.used_by_otis:
+			s += colored_index_string
+		else:
+			s += colored_index_string
 
 	# source (glows for favorite or nice)
 	if verbose or len(entry.source) <= 16:
@@ -212,17 +208,5 @@ def printDir(*args: Any, **kwargs: Any):
 	print(getDirString(*args, **kwargs))
 
 
-def warn(message: str):
-	print(WARN_PRE, message, file=sys.stderr)
-
-
-def error(message: str):
-	print(ERROR_PRE, message)
-
-
-def log(message: str):
-	print(message)
-
-
-def out(message: str):
-	print(message)
+def out(msg: str):
+	print(msg)

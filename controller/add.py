@@ -3,6 +3,8 @@ from ..puid import inferPUID
 from ..rc import EDITOR, NSEPARATOR, SEPARATOR, TAG_HINT_TEXT
 from . import preview
 
+import logging
+
 try:
 	import pyperclip
 	PYPERCLIP_AVAILABLE = True
@@ -43,7 +45,7 @@ def user_file_input(initial="", extension=".tmp", pre_hook=None, delete=False):
 
 def alert_error_tryagain(message=''):
 	"""Prints an error message and waits for user to confirm."""
-	view.error(message)
+	logging.error(message)
 	return input("** Press enter to continue: ")
 
 
@@ -130,11 +132,11 @@ def do_add_problem(raw_text: str, opts):
 	# Get problem and solution
 	bodies = get_bodies(raw_text, opts)
 	if bodies is None:
-		view.warn("Aborting due to empty input...")
+		logging.warning("Aborting due to empty input...")
 		return
 	yaml_info = get_yaml_info(opts)
 	if yaml_info is None:
-		view.warn("Aborting due to empty input...")
+		logging.warning("Aborting due to empty input...")
 		return
 	target, out_yaml = yaml_info
 	out_text = NSEPARATOR.join([out_yaml] + bodies)
@@ -163,7 +165,7 @@ def main(self, argv):
 	opts.verbose = True
 	if opts.filename is not None:
 		if not os.path.isfile(opts.filename):
-			view.error("The file " + opts.filename + " doesn't exist")
+			logging.error("The file " + opts.filename + " doesn't exist")
 			return
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())

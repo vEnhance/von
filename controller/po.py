@@ -1,4 +1,5 @@
 import os
+import logging
 
 from .. import model, strparse, view
 from ..fzf import fzf_choose
@@ -250,9 +251,9 @@ def main(self, argv):
 	for key in keys:
 		entry = model.getEntryByKey(key)
 		if entry is None:
-			view.error(key + " not found")
+			logging.error(key + " not found")
 		elif entry.secret and not opts.brave:
-			view.error(f"Problem `{entry.source}` not shown without --brave")
+			logging.error(f"Problem `{entry.source}` not shown without --brave")
 			return
 		else:
 			problem = entry.full

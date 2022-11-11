@@ -1,5 +1,6 @@
 import cmd
 import glob
+import logging
 import os
 import shlex
 import traceback
@@ -82,13 +83,13 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 	def direct(self, cargs):
 		# cargs = sys.argv ostensibly
 		if len(cargs) == 0:
-			view.error("No command given")
+			logging.error("No command given")
 		cmd = cargs[0]
 		if hasattr(self, 'do_' + cmd):
 			func = getattr(self, 'do_' + cmd)
 			func(cargs[1:])
 		else:
-			view.error("Command {} not recognized".format(cmd))
+			logging.error("Command {} not recognized".format(cmd))
 
 	def do_help(self, argv):
 		arg = ''.join(argv)
@@ -96,7 +97,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 			try:
 				func = getattr(self, 'do_' + arg)
 			except AttributeError:
-				view.error('Command {} not found'.format(arg))
+				logging.error('Command {} not found'.format(arg))
 			else:
 				print(APPLY_COLOR("MAGENTA", "Getting `{} --help`...".format(arg)))
 				func(['--help'])

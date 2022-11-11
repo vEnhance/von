@@ -1,5 +1,6 @@
 from .. import model, strparse, view
 from ..fzf import fzf_choose
+import logging
 
 parser = view.Parser(prog='show', description='Displays a problem by source name.')
 parser.add_argument('key', nargs='?', help="The key of the problem to open.", default=None)
@@ -31,9 +32,9 @@ def main(self, argv):
 	else:
 		entry = model.getEntryByKey(fzf_choose())
 	if entry is None:
-		view.error(opts.key + " not found")
+		logging.error(opts.key + " not found")
 	elif entry.secret and not opts.brave:
-		view.error("Problem can't be shown without --brave option")
+		logging.error("Problem can't be shown without --brave option")
 		return
 	else:
 		problem = entry.full
@@ -51,4 +52,4 @@ def main(self, argv):
 				else:
 					view.out(strparse.demacro(problem.bodies[b]))
 			except IndexError:
-				view.error("Couldn't access {}-th body of {}".format(b, problem.source))
+				logging.error("Couldn't access {}-th body of {}".format(b, problem.source))

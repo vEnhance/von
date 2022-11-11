@@ -1,4 +1,5 @@
 from .. import model, view
+import logging
 import re
 
 parser = view.Parser(
@@ -33,7 +34,7 @@ def main(self, argv):
 	opts = parser.process(argv)
 	entry = model.getEntryByKey(opts.key)
 	if entry is None:
-		view.error(opts.key + " not found")
+		logging.error(opts.key + " not found")
 	else:
 		problem = entry.full
 		soln = problem.bodies[opts.body]

@@ -1,3 +1,4 @@
+import logging
 import re
 
 from .. import model, strparse, view
@@ -68,5 +69,5 @@ def main(self, argv):
 						else:
 							s += r'\hrulebar' + '\n'
 					else:
-						view.warn("No solution to " + key)
+						logging.error("No solution to " + key)
 		view.out(s)

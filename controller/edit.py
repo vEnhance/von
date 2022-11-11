@@ -1,3 +1,4 @@
+import logging
 import subprocess
 
 from .. import model, view
@@ -32,7 +33,7 @@ def main(self, argv):
 		entries = [model.getEntryByKey(key) for key in opts.keys]
 	for entry in entries:
 		if entry is None:
-			view.error("Not found")
+			logging.error("Not found")
 		else:
 			full_path = model.completePath(entry.path)
 			preview.make_preview(full_path)

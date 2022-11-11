@@ -2,6 +2,7 @@ import collections
 import collections.abc
 import functools
 import json
+import logging
 import os
 import pickle as pickle
 import random
@@ -10,9 +11,16 @@ from typing import Any, Callable
 
 import yaml
 
-from . import view
 from .puid import inferPUID
 from .rc import OTIS_EVIL_JSON_PATH, SEPARATOR, SORT_TAGS, VON_BASE_PATH, VON_CACHE_PATH, VON_INDEX_PATH  # NOQA
+
+OTIS_USED_SOURCES_LIST: list[str] | None
+if OTIS_EVIL_JSON_PATH is not None:
+	with open(OTIS_EVIL_JSON_PATH) as f:
+		evil_json = json.load(f)
+		OTIS_HANDOUT_USED_SOURCES = evil_json.values()
+else:
+	OTIS_HANDOUT_USED_SOURCES = None
 
 
 def shortenPath(path: str):
@@ -147,17 +155,26 @@ class GenericItem:  # superclass to Problem, PickleMappingEntry
 		else:
 			return (self.sortvalue, -1, self.source)
 
-	def __eq__(self, other) -> bool:
+	@property
+	def used_by_otis(self):
+		if 'waltz' in self.tags:
+			return True
+		elif OTIS_HANDOUT_USED_SOURCES is not None:
+			return self.source in OTIS_HANDOUT_USED_SOURCES
+		else:
+			return False
+
+	def __eq__(self, other: 'GenericItem') -> bool:
 		return self.sortkey == other.sortkey
 
-	def __lt__(self, other) -> bool:
+	def __lt__(self, other: 'GenericItem') -> bool:
 		return self.sortkey < other.sortkey
 
 
 class Problem(GenericItem):
 	bodies: list[str] = []  # statement, sol, comments, ...
 
-	def __init__(self, path: str, **kwargs):
+	def __init__(self, path: str, **kwargs: Any):
 		self.path = path
 		for key in kwargs:
 			setattr(self, key, kwargs[key])
@@ -185,21 +202,21 @@ class Problem(GenericItem):
 
 	@property
 	def full(self) -> 'Problem':
-		view.warn("sketchy af")
+		logging.warn("Sketchy af")
 		return self
 
 
 class PickleMappingEntry(GenericItem):
-	def __init__(self, **kwargs):
+	def __init__(self, **kwargs: Any):
 		for key in kwargs:
 			if kwargs[key] is not None:
 				setattr(self, key, kwargs[key])
 
 	# search things
-	def hasTag(self, tag):
+	def hasTag(self, tag: str):
 		return tag.lower() in [_.lower() for _ in self.tags]
 
-	def hasTerm(self, term):
+	def hasTerm(self, term: str):
 		blob = self.source + ' ' + self.desc
 		if self.author is not None:
 			blob += ' ' + self.author
@@ -208,13 +225,13 @@ class PickleMappingEntry(GenericItem):
 			term.upper() in inferPUID(self.source)
 		)
 
-	def hasAuthor(self, name):
+	def hasAuthor(self, name: str):
 		if self.author is None:
 			return False
 		haystacks = self.author.lower().strip().split(' ')
 		return name.lower() in haystacks
 
-	def hasSource(self, source):
+	def hasSource(self, source: str):
 		return source.lower() in self.source.lower()
 
 	def __repr__(self):
@@ -226,7 +243,7 @@ class PickleMappingEntry(GenericItem):
 
 	@property
 	def entry(self):
-		view.warn("sketchy af")
+		logging.warn("sketchy af")
 		return self
 
 	@property
@@ -293,7 +310,7 @@ def getEntryByKey(key: str):
 def addProblemByFileContents(path: str, text: str):
 	with vonOpen(path, 'w') as f:
 		print(text, file=f)
-	view.log("Wrote to " + path)
+	logging.info("Wrote to " + path)
 	# Now update cache
 	p = makeProblemFromPath(shortenPath(path))
 	addProblemToIndex(p)
@@ -322,29 +339,21 @@ def viewDirectory(path: str):
 
 
 def runSearch(
-	terms: list[str] = [],
-	tags: list[str] = [],
-	sources: list[str] = [],
-	authors: list[str] = [],
+	terms: list[str] | None = None,
+	tags: list[str] | None = None,
+	sources: list[str] | None = None,
+	authors: list[str] | None = None,
 	path='',
 	refine=False,
 	alph_sort=False,
 	in_otis: bool | None = None,
 	has_url: bool | None = None
 ) -> list[PickleMappingEntry]:
-	if in_otis is not None and OTIS_EVIL_JSON_PATH is not None:
-		with open(OTIS_EVIL_JSON_PATH) as f:
-			evil_json = json.load(f)
-			otis_used_sources = evil_json.values()
-	else:
-		otis_used_sources = None
-
 	def _lambda_is_matching(entry: PickleMappingEntry):
-		if otis_used_sources is not None:
-			_used: bool = (entry.source in otis_used_sources) or entry.hasTag('waltz')
-			if _used and in_otis is False:
+		if OTIS_HANDOUT_USED_SOURCES is not None:
+			if entry.used_by_otis and in_otis is False:
 				return False
-			elif not _used and in_otis is True:
+			elif not entry.used_by_otis and in_otis is True:
 				return False
 
 		if has_url is not None:
@@ -353,10 +362,14 @@ def runSearch(
 			if entry.url is not None and has_url is False:
 				return False
 
-		return (
-			all([entry.hasTag(_) for _ in tags]) and all([entry.hasTerm(_) for _ in terms]) and
-			all([entry.hasSource(_) for _ in sources]) and
-			all([entry.hasAuthor(_) for _ in authors]) and entry.path.startswith(path)
+		return all(
+			(
+				entry.path.startswith(path),
+				(not tags or all([entry.hasTag(_) for _ in tags])),
+				(not terms or all([entry.hasTerm(_) for _ in terms])),
+				(not sources or all([entry.hasSource(_) for _ in sources])),
+				(not authors or all([entry.hasAuthor(_) for _ in authors])),
+			)
 		)
 
 	if refine is False:
@@ -381,7 +394,7 @@ def augmentCache(*entries: PickleMappingEntry):
 		cache.set(cache.store + list(entries))
 
 
-def setCache(entries):
+def setCache(entries: list[PickleMappingEntry]):
 	with VonCache('wb') as cache:
 		cache.set(entries)
 
@@ -423,16 +436,16 @@ def updateEntryByProblem(old_entry: PickleMappingEntry, new_problem: Problem):
 	return index[new_entry.source]
 
 
-def addProblemToIndex(problem):
+def addProblemToIndex(problem: Problem):
 	with VonIndex('wb') as index:
 		p = problem
 		index[p.source] = p.entry
 		return index[p.source]
 
 
-def setEntireIndex(d):
+def setEntireIndex(von_index_dict: dict[str, PickleMappingEntry]):
 	with VonIndex('wb') as index:
-		index.set(d)
+		index.set(von_index_dict)
 
 
 def rebuildIndex():
@@ -440,7 +453,7 @@ def rebuildIndex():
 	for p in getAllProblems():
 		if p.source in d:
 			fake_source = f"DUPLICATE {random.randrange(10**6, 10**7)}"
-			view.error(p.source + " is being repeated, replacing with " + fake_source)
+			logging.error(p.source + " is being repeated, replacing with " + fake_source)
 			p.source = fake_source
 		d[p.source] = p.entry
 	setEntireIndex(d)
