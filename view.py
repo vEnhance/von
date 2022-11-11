@@ -28,7 +28,7 @@ def file_escape(s: str):
 
 
 def get_author_initials(author: str) -> str:
-	author_words = author.split(' ')
+	author_words = author.replace(',', ' ,').split(' ')
 	if len(author_words) == 0:
 		return '?'
 	elif len(author_words) == 1:
@@ -37,7 +37,9 @@ def get_author_initials(author: str) -> str:
 			return capitals
 		return a
 	else:  # len(author_words) > 1
-		return ''.join(a[0] for a in author_words if a[0] in string.ascii_uppercase)
+		return ''.join(
+			a[0] for a in author_words if len(a) > 0 and a[0] in string.ascii_uppercase or a == ','
+		)
 
 
 # Arguments hacking whee
@@ -122,18 +124,17 @@ def getEntryString(entry: PickleMappingEntry, verbose=False):
 	if entry.i is not None:
 		index_string = f"{entry.i+1:3} "
 		if "final" in entry.tags:
-			colored_index_string = APPLY_COLOR("YELLOW", index_string)
+			s += APPLY_COLOR("YELLOW", index_string)
 		elif "waltz" in entry.tags:
-			colored_index_string = APPLY_COLOR("GREEN", index_string)
-		elif entry.url is not None:
-			colored_index_string = APPLY_COLOR("BOLD_RED", index_string)
-		else:
-			colored_index_string = APPLY_COLOR("BOLD_MAGENTA", index_string)
-
-		if entry.used_by_otis:
-			s += colored_index_string
-		else:
-			s += colored_index_string
+			s += APPLY_COLOR("GREEN", index_string)
+		elif entry.url is not None and entry.used_by_otis is False:
+			s += APPLY_COLOR("RED", index_string)
+		elif entry.url is not None and entry.used_by_otis is True:
+			s += APPLY_COLOR("BOLD_RED", index_string)
+		elif entry.used_by_otis is False:  # url missing
+			s += APPLY_COLOR("MAGENTA", index_string)
+		else:  # url missing, used by OTIS
+			s += APPLY_COLOR("BOLD_MAGENTA", index_string)
 
 	# source (glows for favorite or nice)
 	if verbose or len(entry.source) <= 16:
@@ -175,11 +176,24 @@ def getEntryString(entry: PickleMappingEntry, verbose=False):
 	# sorting hashtag
 	s += " " + APPLY_COLOR("RED", "#" + entry.sortstring)
 
-	# author
+	# PUID, author credits
 	if verbose:
-		s += "\n" + " " * 4 + "PUID:" + APPLY_COLOR("CYAN", inferPUID(entry.source))
+		s += "\n" + " " * 4
+		s += "PUID:" + APPLY_COLOR("CYAN", inferPUID(entry.source))
 		if entry.author is not None:
 			s += APPLY_COLOR("CYAN", " | " + entry.author)
+		if entry.url is not None:
+			url = entry.url
+			if url.startswith('http://'):
+				url = url[7:]
+			if url.startswith('https://'):
+				url = url[8:]
+			if url.startswith('www.'):
+				url = url[4:]
+			if len(url) > 32:
+				url = url[:29] + '...'
+			s += " | "
+			s += APPLY_COLOR("BG_BLUE", url)
 
 	# tags
 	if verbose:
