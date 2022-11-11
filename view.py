@@ -1,16 +1,19 @@
 import argparse
 import string
 import sys
+from typing import Any
 
+from .termcolors import TERM_COLOR
+from .model import Problem, PickleMappingEntry
 from .puid import inferPUID
-from .rc import USE_COLOR, USER_OS
+from .rc import USER_OS
 
 if USER_OS == "windows":
-	from colorama import init
+	from colorama import init  # type: ignore
 	init()
 
 
-def file_escape(s):
+def file_escape(s: str):
 	s = s.replace("/", "-")
 	s = s.replace(" ", "")
 	s = ''.join([_ for _ in s if _ in string.ascii_letters + string.digits + '-'])
@@ -80,62 +83,37 @@ OPTS = _view_parser.parse_args([])
 
 
 class Parser(argparse.ArgumentParser):
-	def __init__(self, *args, **kwargs):
+	def __init__(self, *args: Any, **kwargs: Any):
 		super(Parser, self).__init__(parents=[_view_parser], *args, **kwargs)
 
-	def process(self, *args, **kwargs):
+	def process(self, *args: Any, **kwargs: Any):
 		global OPTS
 		OPTS = self.parse_args(*args, **kwargs)
 		return OPTS
 
 
 # Color names {{{
-_TERM_COLOR = {}
-_TERM_COLOR["NORMAL"] = ""
-_TERM_COLOR["RESET"] = "\033[m"
-_TERM_COLOR["BOLD"] = "\033[1m"
-_TERM_COLOR["RED"] = "\033[31m"
-_TERM_COLOR["GREEN"] = "\033[32m"
-_TERM_COLOR["YELLOW"] = "\033[33m"
-_TERM_COLOR["BLUE"] = "\033[34m"
-_TERM_COLOR["MAGENTA"] = "\033[35m"
-_TERM_COLOR["CYAN"] = "\033[36m"
-_TERM_COLOR["BOLD_RED"] = "\033[1;31m"
-_TERM_COLOR["BOLD_GREEN"] = "\033[1;32m"
-_TERM_COLOR["BOLD_YELLOW"] = "\033[1;33m"
-_TERM_COLOR["BOLD_BLUE"] = "\033[1;34m"
-_TERM_COLOR["BOLD_MAGENTA"] = "\033[1;35m"
-_TERM_COLOR["BOLD_CYAN"] = "\033[1;36m"
-_TERM_COLOR["BG_RED"] = "\033[41m"
-_TERM_COLOR["BG_GREEN"] = "\033[42m"
-_TERM_COLOR["BG_YELLOW"] = "\033[43m"
-_TERM_COLOR["BG_BLUE"] = "\033[44m"
-_TERM_COLOR["BG_MAGENTA"] = "\033[45m"
-_TERM_COLOR["BG_CYAN"] = "\033[46m"
-if USE_COLOR is False:
-	for key in list(_TERM_COLOR.keys()):
-		_TERM_COLOR[key] = ""
 # }}}
 
 
-def APPLY_COLOR(color_name, s):
+def APPLY_COLOR(color_name: str, s: str):
 	if OPTS.color is False:
 		return s
-	return _TERM_COLOR[color_name] + s + _TERM_COLOR["RESET"]
+	return TERM_COLOR[color_name] + s + TERM_COLOR["RESET"]
 
 
 ERROR_PRE = APPLY_COLOR("BOLD_RED", "Error:")
 WARN_PRE = APPLY_COLOR("BOLD_YELLOW", "Warn:")
 
 
-def getProblemString(problem):
+def getProblemString(problem: Problem):
 	s = getEntryString(problem.entry, verbose=True)
 	s += "\n"
 	s += APPLY_COLOR("CYAN", problem.state.strip())
 	return s
 
 
-def getEntryString(entry, verbose=False):
+def getEntryString(entry: PickleMappingEntry, verbose=False):
 	# SPECIAL hide brave
 	if OPTS.verbose is True:
 		verbose = True
@@ -165,7 +143,7 @@ def getEntryString(entry, verbose=False):
 	if verbose or len(entry.source) <= 16:
 		source_string: str = entry.source
 	else:
-		words_in_source: str = entry.source.split(' ')
+		words_in_source: list[str] = entry.source.split(' ')
 		source_string = ''
 		for word in words_in_source:
 			if word == "Shortlist":
@@ -214,37 +192,37 @@ def getEntryString(entry, verbose=False):
 	return s
 
 
-def formatPath(path):
+def formatPath(path: str):
 	return 'VON/' + path
 
 
-def getDirString(path):
+def getDirString(path: str):
 	return "Directory " + APPLY_COLOR("BOLD_BLUE", path)
 
 
-def printProblem(*args, **kwargs):
+def printProblem(*args: Any, **kwargs: Any):
 	print(getProblemString(*args, **kwargs))
 
 
-def printEntry(*args, **kwargs):
+def printEntry(*args: Any, **kwargs: Any):
 	print(getEntryString(*args, **kwargs))
 
 
-def printDir(*args, **kwargs):
+def printDir(*args: Any, **kwargs: Any):
 	print(getDirString(*args, **kwargs))
 
 
-def warn(message):
+def warn(message: str):
 	print(WARN_PRE, message, file=sys.stderr)
 
 
-def error(message):
+def error(message: str):
 	print(ERROR_PRE, message)
 
 
-def log(message):
+def log(message: str):
 	print(message)
 
 
-def out(message):
+def out(message: str):
 	print(message)
