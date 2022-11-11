@@ -5,7 +5,7 @@ import os
 import shlex
 import traceback
 
-from . import controller, model, view
+from . import controller, model
 from .rc import USER_OS, VON_BASE_PATH
 from .view import APPLY_COLOR
 
@@ -15,14 +15,14 @@ if USER_OS != "windows":
 else:
 	from pyreadline import Readline  # type: ignore
 	readline = Readline()
-	from colorama import init
+	from colorama import init  # type: ignore
 	init()
 
 WELCOME_STRING = APPLY_COLOR("BOLD_YELLOW", "Welcome to VON!")
 GOODBYE_STRING = APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D")
 
 
-def _complete_path(path):
+def _complete_path(path: str):
 	if os.path.isdir(path):
 		return glob.glob(os.path.join(path, '*'))
 	else:
@@ -43,7 +43,8 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 	def emptyline(self):
 		pass
 
-	def completedefault(self, text, line, start_idx, end_idx):
+	def completedefault(self, text: str, line: str, start_idx: int, end_idx: int):
+		del line, start_idx, end_idx
 		return _complete_path(text)
 
 	def run(self):
@@ -80,7 +81,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 				return self.default(line)
 			return func(argv)
 
-	def direct(self, cargs):
+	def direct(self, cargs: list[str]):
 		# cargs = sys.argv ostensibly
 		if len(cargs) == 0:
 			logging.error("No command given")
@@ -91,7 +92,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 		else:
 			logging.error("Command {} not recognized".format(cmd))
 
-	def do_help(self, argv):
+	def do_help(self, argv: list[str]):
 		arg = ''.join(argv)
 		if arg:
 			try:

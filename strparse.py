@@ -2,9 +2,9 @@ import re
 
 
 # Demacro
-def demacro(text):
+def demacro(text: str) -> str:
 	# TODO this doesn't quite work, but oh well
-	replacements = [
+	replacements: list[tuple[str, str]] = [
 		(r"\ii", r"\item"),
 		(r"\wh", r"\widehat"),
 		(r"\wt", r"\widetilde"),
@@ -41,7 +41,7 @@ def remove_soft_newlines(text: str) -> str:
 	return re.sub(r'[a-zA-Z]\n[a-zA-Z]', rm_newline, text)
 
 
-def toAOPS(text):
+def toAOPS(text: str) -> str:
 	DIVIDER = "\n" + r"-------------------" + "\n\n"
 	text = demacro(text)
 	text = text.replace(r"\qedhere", "")

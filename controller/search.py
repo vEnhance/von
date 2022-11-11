@@ -55,7 +55,7 @@ url_group.add_argument(
 )
 
 
-def main(self, argv: list[str]):
+def main(self: object, argv: list[str]):
 	opts = parser.process(argv)
 
 	query_is_empty = len(opts.s_terms + opts.s_tags + opts.s_sources + opts.s_authors) == 0

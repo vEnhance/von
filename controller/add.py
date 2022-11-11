@@ -12,7 +12,8 @@ except ModuleNotFoundError:
 	PYPERCLIP_AVAILABLE = False
 	pass
 
-from typing import Any
+from argparse import Namespace
+from typing import Any, Callable
 import datetime
 import os
 import subprocess
@@ -22,7 +23,12 @@ import traceback
 import yaml
 
 
-def user_file_input(initial="", extension=".tmp", pre_hook=None, delete=False):
+def user_file_input(
+	initial="",
+	extension=".tmp",
+	pre_hook: Callable[[str], None] = None,
+	delete: bool = False,
+):
 	"""Opens in $EDITOR a file with content 'initial'
 	and 'extension', and returns edited file.
 	If pre_hook is not None, runs pre_hook(tf.name) before opening EDITOR.
@@ -54,10 +60,11 @@ PS_INSTRUCT = """% Input your problem and solution below.
 % vim: tw=72"""
 
 
-def get_bodies(raw_text, opts):
+def get_bodies(raw_text: str, opts: Namespace):
+	del opts
 	initial = PS_INSTRUCT + NSEPARATOR + raw_text
 
-	def pre_hook(tempfile_name):
+	def pre_hook(tempfile_name: str):
 		preview.make_preview(tempfile_name)
 
 	while True:
@@ -88,7 +95,7 @@ url: <++>
 {hint}"""
 
 
-def get_yaml_info(opts) -> None | tuple[str, Any]:
+def get_yaml_info(opts: Namespace) -> None | tuple[str, Any]:
 	initial = YAML_DATA_FILE.format(
 		path=model.completePath(DEFAULT_PATH),
 		now=datetime.datetime.now(),
@@ -125,7 +132,7 @@ def get_yaml_info(opts) -> None | tuple[str, Any]:
 			return (target, output)
 
 
-def do_add_problem(raw_text: str, opts):
+def do_add_problem(raw_text: str, opts: Namespace):
 	"""Core procedure. Opens two instances of editors to solicit user input
 	on problem and produce a problem instance."""
 
@@ -161,6 +168,7 @@ parser.add_argument(
 
 
 def main(self: object, argv: list[str]):
+	del self
 	opts = parser.process(argv)
 	opts.verbose = True
 	if opts.filename is not None:

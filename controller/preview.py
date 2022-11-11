@@ -3,7 +3,7 @@ import os
 from ..rc import USER_OS, VON_PREVIEW_PATH
 
 
-def make_preview(full_path):
+def make_preview(full_path: str):
 	if not os.path.exists(os.path.dirname(VON_PREVIEW_PATH)):
 		os.mkdir(os.path.dirname(VON_PREVIEW_PATH))
 	if USER_OS == "windows":
