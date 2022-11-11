@@ -15,7 +15,8 @@ if USER_OS == "windows":
 def APPLY_COLOR(color_name: str, s: str):
 	if OPTS.color is False:
 		return s
-	return TERM_COLOR[color_name] + s + TERM_COLOR["RESET"]
+	num_leading_spaces = len(s) - len(s.lstrip())
+	return " " * num_leading_spaces + TERM_COLOR[color_name] + s.lstrip() + TERM_COLOR["RESET"]
 
 
 def file_escape(s: str):
@@ -122,19 +123,20 @@ def getEntryString(entry: PickleMappingEntry, verbose=False):
 
 	# SPECIAL GLOW for index number
 	if entry.i is not None:
-		index_string = f"{entry.i+1:3} "
+		index_string = f"{entry.i+1:3}"
 		if "final" in entry.tags:
 			s += APPLY_COLOR("YELLOW", index_string)
 		elif "waltz" in entry.tags:
 			s += APPLY_COLOR("GREEN", index_string)
 		elif entry.url is not None and entry.used_by_otis is False:
-			s += APPLY_COLOR("RED", index_string)
-		elif entry.url is not None and entry.used_by_otis is True:
 			s += APPLY_COLOR("BOLD_RED", index_string)
+		elif entry.url is not None and entry.used_by_otis is True:
+			s += APPLY_COLOR("RED", index_string)
 		elif entry.used_by_otis is False:  # url missing
-			s += APPLY_COLOR("MAGENTA", index_string)
+			s += APPLY_COLOR("BG_BLUE", index_string)
 		else:  # url missing, used by OTIS
-			s += APPLY_COLOR("BOLD_MAGENTA", index_string)
+			s += APPLY_COLOR("BG_MAGENTA", index_string)
+		s += " "
 
 	# source (glows for favorite or nice)
 	if verbose or len(entry.source) <= 16:
