@@ -273,6 +273,8 @@ def makeProblemFromPath(path: str) -> Problem:
 	data = yaml.safe_load(x[0])
 	assert data is not None
 	data['bodies'] = [_.strip() for _ in x[1:]]
+	assert data['source']
+	assert data['desc']
 	return Problem(path, **data)
 
 
