@@ -1,9 +1,19 @@
+import datetime
+import logging
+import os
+import re
+import subprocess
+import tempfile
+import traceback
+from argparse import Namespace
+from typing import Any, Callable
+
+import yaml
+
 from .. import model, view
 from ..puid import inferPUID
 from ..rc import EDITOR, NSEPARATOR, SEPARATOR, TAG_HINT_TEXT
 from . import preview
-
-import logging
 
 try:
 	import pyperclip
@@ -12,15 +22,10 @@ except ModuleNotFoundError:
 	PYPERCLIP_AVAILABLE = False
 	pass
 
-from argparse import Namespace
-from typing import Any, Callable
-import datetime
-import os
-import subprocess
-import tempfile
-import traceback
-
-import yaml
+# https://urlregex.com/
+RE_URL = re.compile(
+	r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+)
 
 
 def user_file_input(
@@ -55,14 +60,16 @@ def alert_error_tryagain(message=''):
 	return input("** Press enter to continue: ")
 
 
-PS_INSTRUCT = """% Input your problem and solution below.
+PS_INSTRUCT = r"""% Input your problem and solution below.
 % Three dashes on a newline indicate the breaking points.
-% vim: tw=72"""
+% vim: tw=72
+% URL detected: {url}
+"""
 
 
-def get_bodies(raw_text: str, opts: Namespace):
+def solicit_user_for_content(raw_text: str, url: str, opts: Namespace):
 	del opts
-	initial = PS_INSTRUCT + NSEPARATOR + raw_text
+	initial = PS_INSTRUCT.format(url=url) + NSEPARATOR + raw_text
 
 	def pre_hook(tempfile_name: str):
 		preview.make_preview(tempfile_name)
@@ -70,6 +77,7 @@ def get_bodies(raw_text: str, opts: Namespace):
 	while True:
 		# TODO maybe give user instructions
 		raw_ps = user_file_input(initial=initial, extension="von.tex", pre_hook=pre_hook)
+
 		if raw_ps.count(SEPARATOR) >= 1:
 			bodies = [_.strip() for _ in raw_ps.split(SEPARATOR)[1:]]
 			if bodies[0] == '':
@@ -90,17 +98,18 @@ desc:   <++>     # e.g. Fiendish inequality
 path:   {path}<++>
 tags:   [{now.year}-{now.month:02d}, <++>]
 hardness: <++>
-url: <++>
+url: {url}
 
 {hint}"""
 
 
-def get_yaml_info(opts: Namespace) -> None | tuple[str, Any]:
+def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
 	initial = YAML_DATA_FILE.format(
 		path=model.completePath(DEFAULT_PATH),
 		now=datetime.datetime.now(),
 		source="<++>" if opts.source is None else opts.source,
-		hint=TAG_HINT_TEXT
+		hint=TAG_HINT_TEXT,
+		url=url,
 	)
 	while True:
 		raw_yaml = user_file_input(initial=initial, extension="von.yaml", delete=True)
@@ -132,26 +141,27 @@ def get_yaml_info(opts: Namespace) -> None | tuple[str, Any]:
 			return (target, output)
 
 
-def do_add_problem(raw_text: str, opts: Namespace):
+def do_add_problem(raw_text: str, url: str, opts: Namespace):
 	"""Core procedure. Opens two instances of editors to solicit user input
 	on problem and produce a problem instance."""
 
 	# Get problem and solution
-	bodies = get_bodies(raw_text, opts)
+	bodies = solicit_user_for_content(raw_text, url, opts)
 	if bodies is None:
 		logging.warning("Aborting due to empty input...")
 		return
-	yaml_info = get_yaml_info(opts)
+
+	yaml_info = solicit_user_for_yaml(opts, url)
 	if yaml_info is None:
 		logging.warning("Aborting due to empty input...")
 		return
+
 	target, out_yaml = yaml_info
 	out_text = NSEPARATOR.join([out_yaml] + bodies)
 	p = model.addProblemByFileContents(target, out_text)
 	assert p is not None
-	e = p.entry
-	model.augmentCache(e)
-	view.printEntry(e)
+	model.augmentCache(p.entry)
+	view.printEntry(p.entry)
 
 
 parser = view.Parser(prog='add', description='Adds a problem to VON.')
@@ -171,6 +181,7 @@ def main(self: object, argv: list[str]):
 	del self
 	opts = parser.process(argv)
 	opts.verbose = True
+	url = '<++>'
 	if opts.filename is not None:
 		if not os.path.isfile(opts.filename):
 			logging.error("The file " + opts.filename + " doesn't exist")
@@ -178,8 +189,12 @@ def main(self: object, argv: list[str]):
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())
 	else:
-		initial_text = pyperclip.paste() if PYPERCLIP_AVAILABLE else ''
-		assert isinstance(initial_text, str)
-		if initial_text.strip() == '':
+		if (PYPERCLIP_AVAILABLE is True and (clipboard_text := pyperclip.paste().strip()) != ''):
+			if RE_URL.fullmatch(clipboard_text) is not None:
+				initial_text = '<++>'
+				url = clipboard_text
+			else:
+				initial_text = clipboard_text
+		else:
 			initial_text = '<++>'
-	do_add_problem(initial_text, opts)
+	do_add_problem(initial_text, url, opts)
