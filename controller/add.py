@@ -24,15 +24,15 @@ except ModuleNotFoundError:
 
 # https://urlregex.com/
 RE_URL = re.compile(
-	r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
 )
 
 
 def user_file_input(
-	initial="",
-	extension=".tmp",
-	pre_hook: Callable[[str], None] = None,
-	delete: bool = False,
+    initial="",
+    extension=".tmp",
+    pre_hook: Callable[[str], None] = None,
+    delete: bool = False,
 ):
 	"""Opens in $EDITOR a file with content 'initial'
 	and 'extension', and returns edited file.
@@ -69,14 +69,17 @@ PS_INSTRUCT = r"""% Input your problem and solution below.
 
 def solicit_user_for_content(raw_text: str, url: str, opts: Namespace):
 	del opts
-	initial = PS_INSTRUCT.format(url=url) + NSEPARATOR + raw_text
+	initial = PS_INSTRUCT.format(
+	    url=url if url != '<++>' else "None") + NSEPARATOR + raw_text
 
 	def pre_hook(tempfile_name: str):
 		preview.make_preview(tempfile_name)
 
 	while True:
 		# TODO maybe give user instructions
-		raw_ps = user_file_input(initial=initial, extension="von.tex", pre_hook=pre_hook)
+		raw_ps = user_file_input(initial=initial,
+		                         extension="von.tex",
+		                         pre_hook=pre_hook)
 
 		if raw_ps.count(SEPARATOR) >= 1:
 			bodies = [_.strip() for _ in raw_ps.split(SEPARATOR)[1:]]
@@ -105,14 +108,16 @@ url: {url}
 
 def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
 	initial = YAML_DATA_FILE.format(
-		path=model.completePath(DEFAULT_PATH),
-		now=datetime.datetime.now(),
-		source="<++>" if opts.source is None else opts.source,
-		hint=TAG_HINT_TEXT,
-		url=url,
+	    path=model.completePath(DEFAULT_PATH),
+	    now=datetime.datetime.now(),
+	    source="<++>" if opts.source is None else opts.source,
+	    hint=TAG_HINT_TEXT,
+	    url=url,
 	)
 	while True:
-		raw_yaml = user_file_input(initial=initial, extension="von.yaml", delete=True)
+		raw_yaml = user_file_input(initial=initial,
+		                           extension="von.yaml",
+		                           delete=True)
 		try:
 			d = yaml.safe_load(raw_yaml)
 			if d is None:
@@ -121,11 +126,12 @@ def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
 			assert 'source' in d, "Source is mandatory"
 			if d['path'][-1] != '/':
 				d['path'] += '/'
-			assert os.path.isdir(d['path']), d['path'] + " directory non-existent"
+			assert os.path.isdir(
+			    d['path']), d['path'] + " directory non-existent"
 			target = d['path'] + inferPUID(d['source']) + '.tex'
 			assert not os.path.isfile(target), target + " already taken"
 			assert model.getEntryByKey(
-				d['source']
+			    d['source']
 			) is None, d['source'] + " is already an existing problem source"
 		except AssertionError:
 			traceback.print_exc()
@@ -135,9 +141,8 @@ def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
 			del d['path']
 			# darn PyYAML used to do this fine -_-
 			tags = d.pop('tags')
-			output = yaml.dump(
-				d, default_flow_style=False
-			).strip() + "\n" + "tags: [" + ', '.join(tags) + ']'
+			output = yaml.dump(d, default_flow_style=False).strip(
+			) + "\n" + "tags: [" + ', '.join(tags) + ']'
 			return (target, output)
 
 
@@ -165,16 +170,15 @@ def do_add_problem(raw_text: str, url: str, opts: Namespace):
 
 
 parser = view.Parser(prog='add', description='Adds a problem to VON.')
-parser.add_argument(
-	'source', default=None, nargs='?', help="If specified, sets the source for the new problem."
-)
-parser.add_argument(
-	'-f',
-	'--file',
-	dest='filename',
-	default=None,
-	help="If specified, uses contents of file as body"
-)
+parser.add_argument('source',
+                    default=None,
+                    nargs='?',
+                    help="If specified, sets the source for the new problem.")
+parser.add_argument('-f',
+                    '--file',
+                    dest='filename',
+                    default=None,
+                    help="If specified, uses contents of file as body")
 
 
 def main(self: object, argv: list[str]):
@@ -189,7 +193,8 @@ def main(self: object, argv: list[str]):
 		with open(opts.filename) as f:
 			initial_text = ''.join(f.readlines())
 	else:
-		if (PYPERCLIP_AVAILABLE is True and (clipboard_text := pyperclip.paste().strip()) != ''):
+		if (PYPERCLIP_AVAILABLE is True and
+		    (clipboard_text := pyperclip.paste().strip()) != ''):
 			if RE_URL.fullmatch(clipboard_text) is not None:
 				initial_text = '<++>'
 				url = clipboard_text

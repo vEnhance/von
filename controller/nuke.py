@@ -4,7 +4,8 @@ from .. import model, view
 from ..puid import inferPUID
 from ..rc import VON_BASE_PATH
 
-parser = view.Parser(prog='nuke', description='Fixes all the filenames to match PUID')
+parser = view.Parser(prog='nuke',
+                     description='Fixes all the filenames to match PUID')
 
 
 def main(self: object, argv: list[str]):

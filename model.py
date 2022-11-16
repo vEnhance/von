@@ -36,6 +36,7 @@ def vonOpen(path: str, *args: Any, **kwargs: Any):
 
 
 class pickleObj(collections.abc.MutableMapping):
+
 	def _initial(self) -> Any:
 		return {}
 
@@ -189,16 +190,14 @@ class Problem(GenericItem):
 	@property
 	def entry(self) -> 'PickleMappingEntry':
 		"""Returns an PickleMappingEntry for storage in pickle"""
-		return PickleMappingEntry(
-			source=self.source,
-			desc=self.desc,
-			author=self.author,
-			url=self.url,
-			hardness=self.hardness,
-			tags=self.tags,
-			path=self.path,
-			i=self.i
-		)
+		return PickleMappingEntry(source=self.source,
+		                          desc=self.desc,
+		                          author=self.author,
+		                          url=self.url,
+		                          hardness=self.hardness,
+		                          tags=self.tags,
+		                          path=self.path,
+		                          i=self.i)
 
 	@property
 	def full(self) -> 'Problem':
@@ -207,6 +206,7 @@ class Problem(GenericItem):
 
 
 class PickleMappingEntry(GenericItem):
+
 	def __init__(self, **kwargs: Any):
 		for key in kwargs:
 			if kwargs[key] is not None:
@@ -220,10 +220,8 @@ class PickleMappingEntry(GenericItem):
 		blob = self.source + ' ' + self.desc
 		if self.author is not None:
 			blob += ' ' + self.author
-		return (
-			term.lower() in blob.lower() or term in self.tags or
-			term.upper() in inferPUID(self.source)
-		)
+		return (term.lower() in blob.lower() or term in self.tags or
+		        term.upper() in inferPUID(self.source))
 
 	def hasAuthor(self, name: str):
 		if self.author is None:
@@ -340,17 +338,16 @@ def viewDirectory(path: str):
 	return (entries, dirs)
 
 
-def runSearch(
-	terms: list[str] | None = None,
-	tags: list[str] | None = None,
-	sources: list[str] | None = None,
-	authors: list[str] | None = None,
-	path='',
-	refine=False,
-	alph_sort=False,
-	in_otis: bool | None = None,
-	has_url: bool | None = None
-) -> list[PickleMappingEntry]:
+def runSearch(terms: list[str] | None = None,
+              tags: list[str] | None = None,
+              sources: list[str] | None = None,
+              authors: list[str] | None = None,
+              path='',
+              refine=False,
+              alph_sort=False,
+              in_otis: bool | None = None,
+              has_url: bool | None = None) -> list[PickleMappingEntry]:
+
 	def _lambda_is_matching(entry: PickleMappingEntry):
 		if OTIS_HANDOUT_USED_SOURCES is not None:
 			if entry.used_by_otis and in_otis is False:
@@ -364,24 +361,24 @@ def runSearch(
 			if entry.url is not None and has_url is False:
 				return False
 
-		return all(
-			(
-				entry.path.startswith(path),
-				(not tags or all([entry.hasTag(_) for _ in tags])),
-				(not terms or all([entry.hasTerm(_) for _ in terms])),
-				(not sources or all([entry.hasSource(_) for _ in sources])),
-				(not authors or all([entry.hasAuthor(_) for _ in authors])),
-			)
-		)
+		return all((
+		    entry.path.startswith(path),
+		    (not tags or all([entry.hasTag(_) for _ in tags])),
+		    (not terms or all([entry.hasTerm(_) for _ in terms])),
+		    (not sources or all([entry.hasSource(_) for _ in sources])),
+		    (not authors or all([entry.hasAuthor(_) for _ in authors])),
+		))
 
 	if refine is False:
 		with VonIndex() as index:
 			result: list[PickleMappingEntry] = [
-				entry for entry in index.values() if _lambda_is_matching(entry)
+			    entry for entry in index.values() if _lambda_is_matching(entry)
 			]
 	else:
 		with VonCache() as cache:
-			result = [entry for entry in cache.values() if _lambda_is_matching(entry)]
+			result = [
+			    entry for entry in cache.values() if _lambda_is_matching(entry)
+			]
 	if alph_sort:
 		result.sort(key=lambda e: e.source)
 	else:
@@ -455,7 +452,8 @@ def rebuildIndex():
 	for p in getAllProblems():
 		if p.source in d:
 			fake_source = f"DUPLICATE {random.randrange(10**6, 10**7)}"
-			logging.error(p.source + " is being repeated, replacing with " + fake_source)
+			logging.error(p.source + " is being repeated, replacing with " +
+			              fake_source)
 			p.source = fake_source
 		d[p.source] = p.entry
 	setEntireIndex(d)

@@ -5,35 +5,42 @@ from .. import model, strparse, view
 from ..fzf import fzf_choose
 from ..rc import VON_DEFAULT_AUTHOR, VON_POST_OUTPUT_DIR
 
-parser = view.Parser(prog='po', description='Prepares a LaTeX file to send to Po-Shen!')
-parser.add_argument('keys', nargs='*', help="The keys of the problem to propose.")
-parser.add_argument('-t', '--title', default=None, help="Title of the LaTeX document.")
-parser.add_argument('-s', '--subtitle', default=None, help="Subtitle of the LaTeX document.")
+parser = view.Parser(prog='po',
+                     description='Prepares a LaTeX file to send to Po-Shen!')
+parser.add_argument('keys',
+                    nargs='*',
+                    help="The keys of the problem to propose.")
+parser.add_argument('-t',
+                    '--title',
+                    default=None,
+                    help="Title of the LaTeX document.")
+parser.add_argument('-s',
+                    '--subtitle',
+                    default=None,
+                    help="Subtitle of the LaTeX document.")
+parser.add_argument('--author',
+                    default=VON_DEFAULT_AUTHOR,
+                    help="Author of the LaTeX document.")
+parser.add_argument('--date',
+                    default=r'\today',
+                    help="Date of the LaTeX document.")
+parser.add_argument('-k',
+                    '--sourced',
+                    action='store_const',
+                    const=True,
+                    default=False,
+                    help="Include the source.")
 parser.add_argument(
-	'--author', default=VON_DEFAULT_AUTHOR, help="Author of the LaTeX document."
-)
-parser.add_argument('--date', default=r'\today', help="Date of the LaTeX document.")
+    '--tex',
+    action='store_const',
+    const=True,
+    default=False,
+    help="Supply only the TeX source, rather than compiling to PDF.")
 parser.add_argument(
-	'-k',
-	'--sourced',
-	action='store_const',
-	const=True,
-	default=False,
-	help="Include the source."
-)
-parser.add_argument(
-	'--tex',
-	action='store_const',
-	const=True,
-	default=False,
-	help="Supply only the TeX source, rather than compiling to PDF."
-)
-parser.add_argument(
-	'-f',
-	'--filename',
-	default=None,
-	help="Filename for the file to produce (defaults to po.tex)."
-)
+    '-f',
+    '--filename',
+    default=None,
+    help="Filename for the file to produce (defaults to po.tex).")
 
 LATEX_PREAMBLE = r"""
 \usepackage{amsmath,amssymb,amsthm}

@@ -16,13 +16,15 @@ def APPLY_COLOR(color_name: str, s: str):
 	if OPTS.color is False:
 		return s
 	num_leading_spaces = len(s) - len(s.lstrip())
-	return " " * num_leading_spaces + TERM_COLOR[color_name] + s.lstrip() + TERM_COLOR["RESET"]
+	return " " * num_leading_spaces + TERM_COLOR[color_name] + s.lstrip(
+	) + TERM_COLOR["RESET"]
 
 
 def file_escape(s: str):
 	s = s.replace("/", "-")
 	s = s.replace(" ", "")
-	s = ''.join([_ for _ in s if _ in string.ascii_letters + string.digits + '-'])
+	s = ''.join(
+	    [_ for _ in s if _ in string.ascii_letters + string.digits + '-'])
 	if s == '':
 		s += 'emptyname'
 	return s
@@ -38,10 +40,9 @@ def get_author_initials(author: str) -> str:
 			return capitals
 		return a
 	else:  # len(author_words) > 1
-		passes = lambda a: a and (
-			a[0] in string.ascii_uppercase or a == ',' or
-			all(_ in string.ascii_letters + string.digits for _ in a)
-		)
+		passes = lambda a: a and (a[0] in string.ascii_uppercase or a == ',' or
+		                          all(_ in string.ascii_letters + string.digits
+		                              for _ in a))
 		return ''.join(a[0] for a in author_words if passes(a))
 
 
@@ -49,50 +50,44 @@ def get_author_initials(author: str) -> str:
 # We have _OPTS here which will pick up any parse_args()
 _view_parser = argparse.ArgumentParser(add_help=False)
 _view_parser.add_argument(
-	'-q',
-	'--quiet',
-	action="store_const",
-	default=False,
-	const=True,
-	help="Suppress some output (only with ls now)."
-)  # TODO generalize
+    '-q',
+    '--quiet',
+    action="store_const",
+    default=False,
+    const=True,
+    help="Suppress some output (only with ls now).")  # TODO generalize
+_view_parser.add_argument('--nocolor',
+                          action="store_const",
+                          dest='color',
+                          default=True,
+                          const=False,
+                          help="Suppress color output.")
 _view_parser.add_argument(
-	'--nocolor',
-	action="store_const",
-	dest='color',
-	default=True,
-	const=False,
-	help="Suppress color output."
-)
+    '--tabs',
+    action="store_const",
+    dest='tabs',
+    default=False,
+    const=True,
+    help="Uses tabs as separator for data in list-type commands.")
+_view_parser.add_argument('--brave',
+                          action="store_const",
+                          dest='brave',
+                          default=False,
+                          const=True,
+                          help="Show problems marked as SECRET.")
 _view_parser.add_argument(
-	'--tabs',
-	action="store_const",
-	dest='tabs',
-	default=False,
-	const=True,
-	help="Uses tabs as separator for data in list-type commands."
-)
-_view_parser.add_argument(
-	'--brave',
-	action="store_const",
-	dest='brave',
-	default=False,
-	const=True,
-	help="Show problems marked as SECRET."
-)
-_view_parser.add_argument(
-	'-v',
-	'--verbose',
-	action="store_const",
-	default=False,
-	const=True,
-	help="More verbose displays (e.g. include problem tags)."
-)
+    '-v',
+    '--verbose',
+    action="store_const",
+    default=False,
+    const=True,
+    help="More verbose displays (e.g. include problem tags).")
 
 OPTS = _view_parser.parse_args([])
 
 
 class Parser(argparse.ArgumentParser):
+
 	def __init__(self, *args: Any, **kwargs: Any):
 		super(Parser, self).__init__(parents=[_view_parser], *args, **kwargs)
 

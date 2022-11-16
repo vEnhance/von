@@ -30,20 +30,21 @@ def _complete_path(path: str):
 
 
 class VonTerminal(cmd.Cmd, controller.VonController):
+
 	def getcwd(self):
 		return model.getcwd().replace(VON_BASE_PATH.rstrip("/"), '')
 
 	@property
 	def prompt(self):
-		return (
-			APPLY_COLOR("BOLD_CYAN", "VON/") + APPLY_COLOR("YELLOW", self.getcwd()) + "\n" +
-			APPLY_COLOR("BOLD_GREEN", ":)") + " "
-		)
+		return (APPLY_COLOR("BOLD_CYAN", "VON/") +
+		        APPLY_COLOR("YELLOW", self.getcwd()) + "\n" +
+		        APPLY_COLOR("BOLD_GREEN", ":)") + " ")
 
 	def emptyline(self):
 		pass
 
-	def completedefault(self, text: str, line: str, start_idx: int, end_idx: int):
+	def completedefault(self, text: str, line: str, start_idx: int,
+	                    end_idx: int):
 		del line, start_idx, end_idx
 		return _complete_path(text)
 
@@ -100,7 +101,9 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 			except AttributeError:
 				logging.error('Command {} not found'.format(arg))
 			else:
-				print(APPLY_COLOR("MAGENTA", "Getting `{} --help`...".format(arg)))
+				print(
+				    APPLY_COLOR("MAGENTA",
+				                "Getting `{} --help`...".format(arg)))
 				func(['--help'])
 		else:
 			print("Here is a list of available commands:")

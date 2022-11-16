@@ -2,6 +2,7 @@ from . import add, asy, br, cd, clear, edit, index, nuke, paths, po, search, sho
 
 
 class VonController:
+
 	def do_ls(self, argv: list[str]):
 		self.do_cd(['.'] + argv)
 
