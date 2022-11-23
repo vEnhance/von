@@ -123,7 +123,6 @@ LATEX_PREAMBLE = r"""
 	mdframed={style=mdblackbox}
 ]{thmblackbox}
 
-
 \declaretheorem[style=thmbluebox,name=Theorem]{theorem}
 \declaretheorem[style=thmbluebox,name=Lemma,sibling=theorem]{lemma}
 \declaretheorem[style=thmbluebox,name=Proposition,sibling=theorem]{proposition}
@@ -159,6 +158,7 @@ LATEX_PREAMBLE = r"""
 \usepackage{hyperref}
 \usepackage[shortlabels]{enumitem}
 \usepackage{multirow}
+\usepackage{ellipsis}
 
 \usepackage{epic} % diagrams
 \usepackage{tikz-cd} % diagrams
