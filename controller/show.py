@@ -42,12 +42,12 @@ def main(self: object, argv: list[str]):
         logging.error("Problem can't be shown without --brave option")
         return
     else:
-        problem = entry.full
         b = opts.body
+        problem = entry.full
         if b is None and opts.aops:
             b = 0
         if b is None:
-            view.printProblem(problem)
+            view.printProblem(problem, i=entry.i)
         else:
             try:
                 if opts.aops:

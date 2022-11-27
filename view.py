@@ -89,7 +89,8 @@ OPTS = _view_parser.parse_args([])
 class Parser(argparse.ArgumentParser):
 
     def __init__(self, *args: Any, **kwargs: Any):
-        super(Parser, self).__init__(parents=[_view_parser], *args, **kwargs)
+        super(Parser, self).__init__(parents=[_view_parser], *args,
+                                     **kwargs)  # type: ignore
 
     def process(self, *args: Any, **kwargs: Any):
         global OPTS
@@ -97,14 +98,16 @@ class Parser(argparse.ArgumentParser):
         return OPTS
 
 
-def getProblemString(problem: Problem):
-    s = getEntryString(problem.entry, verbose=True)
+def getProblemString(problem: Problem, i: int | None = None):
+    s = getEntryString(problem.entry, verbose=True, i=i)
     s += "\n"
     s += APPLY_COLOR("CYAN", problem.state.strip())
     return s
 
 
-def getEntryString(entry: PickleMappingEntry, verbose=False):
+def getEntryString(entry: PickleMappingEntry,
+                   verbose=False,
+                   i: int | None = None):
     # SPECIAL hide brave
     if OPTS.verbose is True:
         verbose = True
@@ -119,8 +122,10 @@ def getEntryString(entry: PickleMappingEntry, verbose=False):
     s = ""
 
     # SPECIAL GLOW for index number
-    if entry.i is not None:
-        index_string = f"{entry.i+1:3}"
+    if i is None:
+        i = entry.i
+    if i is not None:
+        index_string = f"{i+1:3}"
         if "final" in entry.tags:
             s += APPLY_COLOR("YELLOW", index_string)
         elif "waltz" in entry.tags:

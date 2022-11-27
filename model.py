@@ -291,12 +291,20 @@ def getAllProblems() -> list[Problem]:
 
 def getEntryByCacheNum(n: int) -> PickleMappingEntry:
     with VonCache() as cache:
-        return cache[n - 1]
+        entry = cache[n - 1]
+        return entry
 
 
 def getEntryBySource(source: str) -> PickleMappingEntry | None:
     with VonIndex() as index:
-        return index[source] if source in index else None
+        if source not in index:
+            return None
+        entry = index[source]
+    with VonCache() as cache:
+        for cache_entry in cache:
+            if cache_entry.source == entry.source:
+                return cache_entry
+        return entry
 
 
 def getEntryByKey(key: str):
