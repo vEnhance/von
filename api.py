@@ -1,6 +1,6 @@
 # For importing von externally
 from . import model
-from . import puid
+from .puid import inferPUID
 
 # For Pickle...
 import sys
@@ -8,6 +8,8 @@ import sys
 sys.modules['model'] = model
 
 index = model.VonIndex().store  # get the underlying dict
+
+source_to_puid_lookup = {inferPUID(source): source for source in index}
 
 
 def has(source: str):
@@ -49,4 +51,8 @@ def get_solution(source: str, brave=False):
 
 
 def get_puid(source: str):
-	return puid.inferPUID(source)
+	return inferPUID(source)
+
+
+def get_source(puid: str) -> str | None:
+	return source_to_puid_lookup.get(puid)
