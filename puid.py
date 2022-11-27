@@ -141,12 +141,12 @@ lookup = {
     "PUMaC Finals": "PUF",
 }
 for k, v in list(lookup.items()):
-	lookup[k + ' MO'] = v + 'MO'
-	lookup[k + ' TST'] = v + 'TST'
-	lookup[k + ' RMM TST'] = v + 'RST'
-	lookup[k + ' EGMO TST'] = v + 'EST'
-	lookup[k + ' JBMO TST'] = v + 'JST'
-	lookup[k + ' TSTST'] = v + 'TSTST'
+    lookup[k + ' MO'] = v + 'MO'
+    lookup[k + ' TST'] = v + 'TST'
+    lookup[k + ' RMM TST'] = v + 'RST'
+    lookup[k + ' EGMO TST'] = v + 'EST'
+    lookup[k + ' JBMO TST'] = v + 'JST'
+    lookup[k + ' TSTST'] = v + 'TSTST'
 
 lookup['ARML Local'] = 'ARMLOC'
 lookup['Balkan'] = 'BALK'
@@ -199,33 +199,33 @@ sorted_lookup_keys.sort(key=lambda x: (-len(x), x))
 
 
 def getOnlyAlphanum(s: str) -> str:
-	return re.sub(r'[^A-Z0-9]', '', s.upper())
+    return re.sub(r'[^A-Z0-9]', '', s.upper())
 
 
 def inferPUID(source: str) -> str:
-	source = source.replace("Finals", "F")
-	if (m := re_generic.match(source)) is not None:
-		d = m.groupdict()
-		contest = d['contest'].strip()
-		source = (d['year'] + lookup.get(contest, getOnlyAlphanum(contest)) +
-		          getOnlyAlphanum(d['stem'] or ''))
-		if contest in lookup:
-			return source
-		thresh = 11
-	elif source[0] == 'H' and source[1:].isdigit():
-		return source
-	else:
-		for k in sorted_lookup_keys:
-			if source.startswith(k):
-				source = lookup[k] + source[len(k):]
-				thresh = 11
-				break
-		else:
-			thresh = 8
-	source = getOnlyAlphanum(source)
-	if len(source) <= thresh:
-		return source
-	else:
-		# still too long, return some sort of hash
-		return 'Z' + (hashlib.sha256(
-		    source.encode('ascii')).hexdigest())[0:7].upper()
+    source = source.replace("Finals", "F")
+    if (m := re_generic.match(source)) is not None:
+        d = m.groupdict()
+        contest = d['contest'].strip()
+        source = (d['year'] + lookup.get(contest, getOnlyAlphanum(contest)) +
+                  getOnlyAlphanum(d['stem'] or ''))
+        if contest in lookup:
+            return source
+        thresh = 11
+    elif source[0] == 'H' and source[1:].isdigit():
+        return source
+    else:
+        for k in sorted_lookup_keys:
+            if source.startswith(k):
+                source = lookup[k] + source[len(k):]
+                thresh = 11
+                break
+        else:
+            thresh = 8
+    source = getOnlyAlphanum(source)
+    if len(source) <= thresh:
+        return source
+    else:
+        # still too long, return some sort of hash
+        return 'Z' + (hashlib.sha256(
+            source.encode('ascii')).hexdigest())[0:7].upper()

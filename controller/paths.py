@@ -5,5 +5,5 @@ parser = view.Parser(prog='paths',
 
 
 def main(self: object, argv: list[str]):
-	for entry in model.readCache():
-		print(entry.path)
+    for entry in model.readCache():
+        print(entry.path)

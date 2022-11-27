@@ -62,52 +62,52 @@ url_group.add_argument('-u',
 
 
 def main(self: object, argv: list[str]):
-	opts = parser.process(argv)
+    opts = parser.process(argv)
 
-	query_is_empty = len(opts.s_terms + opts.s_tags + opts.s_sources +
-	                     opts.s_authors) == 0
+    query_is_empty = len(opts.s_terms + opts.s_tags + opts.s_sources +
+                         opts.s_authors) == 0
 
-	if opts.everything is False and query_is_empty is True:
-		logging.warning(
-		    "Must supply at least one search keyword or pass --everything option."
-		)
-		return
-	if opts.everything is True and query_is_empty is False:
-		logging.warning("Passing --everything with parameters makes no sense.")
-		return
+    if opts.everything is False and query_is_empty is True:
+        logging.warning(
+            "Must supply at least one search keyword or pass --everything option."
+        )
+        return
+    if opts.everything is True and query_is_empty is False:
+        logging.warning("Passing --everything with parameters makes no sense.")
+        return
 
-	if opts.notused is True:
-		in_otis = False
-	elif opts.occupied is True:
-		in_otis = True
-	else:
-		in_otis = None
+    if opts.notused is True:
+        in_otis = False
+    elif opts.occupied is True:
+        in_otis = True
+    else:
+        in_otis = None
 
-	if opts.unlinked is True:
-		has_url = False
-	elif opts.linked is True:
-		has_url = True
-	else:
-		has_url = None
+    if opts.unlinked is True:
+        has_url = False
+    elif opts.linked is True:
+        has_url = True
+    else:
+        has_url = None
 
-	search_path = model.getcwd()
-	if search_path != '':
-		logging.info(
-		    "Search restricted to " +
-		    view.APPLY_COLOR("BOLD_GREEN", view.formatPath(search_path)))
-	result = model.runSearch(
-	    terms=opts.s_terms,
-	    tags=opts.s_tags,
-	    sources=opts.s_sources,
-	    authors=opts.s_authors,
-	    refine=opts.refine,
-	    path=search_path,
-	    alph_sort=opts.alphabetical,
-	    in_otis=in_otis,
-	    has_url=has_url,
-	)
+    search_path = model.getcwd()
+    if search_path != '':
+        logging.info(
+            "Search restricted to " +
+            view.APPLY_COLOR("BOLD_GREEN", view.formatPath(search_path)))
+    result = model.runSearch(
+        terms=opts.s_terms,
+        tags=opts.s_tags,
+        sources=opts.s_sources,
+        authors=opts.s_authors,
+        refine=opts.refine,
+        path=search_path,
+        alph_sort=opts.alphabetical,
+        in_otis=in_otis,
+        has_url=has_url,
+    )
 
-	for entry in result:
-		view.printEntry(entry)
-	if len(result) == 0:
-		logging.warning("No matches found.")
+    for entry in result:
+        view.printEntry(entry)
+    if len(result) == 0:
+        logging.warning("No matches found.")

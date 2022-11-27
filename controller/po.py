@@ -50,77 +50,77 @@ LATEX_PREAMBLE = r"""
 \usepackage{listings}
 
 \mdfdefinestyle{mdbluebox}{%
-	roundcorner = 10pt,
-	linewidth=1pt,
-	skipabove=12pt,
-	innerbottommargin=9pt,
-	skipbelow=2pt,
-	linecolor=blue,
-	nobreak=true,
-	backgroundcolor=TealBlue!5,
+    roundcorner = 10pt,
+    linewidth=1pt,
+    skipabove=12pt,
+    innerbottommargin=9pt,
+    skipbelow=2pt,
+    linecolor=blue,
+    nobreak=true,
+    backgroundcolor=TealBlue!5,
 }
 \declaretheoremstyle[
-	headfont=\sffamily\bfseries\color{MidnightBlue},
-	mdframed={style=mdbluebox},
-	headpunct={\\[3pt]},
-	postheadspace={0pt}
+    headfont=\sffamily\bfseries\color{MidnightBlue},
+    mdframed={style=mdbluebox},
+    headpunct={\\[3pt]},
+    postheadspace={0pt}
 ]{thmbluebox}
 
 \mdfdefinestyle{mdredbox}{%
-	linewidth=0.5pt,
-	skipabove=12pt,
-	frametitleaboveskip=5pt,
-	frametitlebelowskip=0pt,
-	skipbelow=2pt,
-	frametitlefont=\bfseries,
-	innertopmargin=4pt,
-	innerbottommargin=8pt,
-	nobreak=true,
-	backgroundcolor=Salmon!5,
-	linecolor=RawSienna,
+    linewidth=0.5pt,
+    skipabove=12pt,
+    frametitleaboveskip=5pt,
+    frametitlebelowskip=0pt,
+    skipbelow=2pt,
+    frametitlefont=\bfseries,
+    innertopmargin=4pt,
+    innerbottommargin=8pt,
+    nobreak=true,
+    backgroundcolor=Salmon!5,
+    linecolor=RawSienna,
 }
 \declaretheoremstyle[
-	headfont=\bfseries\color{RawSienna},
-	mdframed={style=mdredbox},
-	headpunct={\\[3pt]},
-	postheadspace={0pt},
+    headfont=\bfseries\color{RawSienna},
+    mdframed={style=mdredbox},
+    headpunct={\\[3pt]},
+    postheadspace={0pt},
 ]{thmredbox}
 
 \mdfdefinestyle{mdgreenbox}{%
-	skipabove=8pt,
-	linewidth=2pt,
-	rightline=false,
-	leftline=true,
-	topline=false,
-	bottomline=false,
-	linecolor=ForestGreen,
-	backgroundcolor=ForestGreen!5,
+    skipabove=8pt,
+    linewidth=2pt,
+    rightline=false,
+    leftline=true,
+    topline=false,
+    bottomline=false,
+    linecolor=ForestGreen,
+    backgroundcolor=ForestGreen!5,
 }
 \declaretheoremstyle[
-	headfont=\bfseries\sffamily\color{ForestGreen!70!black},
-	bodyfont=\normalfont,
-	spaceabove=2pt,
-	spacebelow=1pt,
-	mdframed={style=mdgreenbox},
-	headpunct={ --- },
+    headfont=\bfseries\sffamily\color{ForestGreen!70!black},
+    bodyfont=\normalfont,
+    spaceabove=2pt,
+    spacebelow=1pt,
+    mdframed={style=mdgreenbox},
+    headpunct={ --- },
 ]{thmgreenbox}
 
 \mdfdefinestyle{mdblackbox}{%
-	skipabove=8pt,
-	linewidth=3pt,
-	rightline=false,
-	leftline=true,
-	topline=false,
-	bottomline=false,
-	linecolor=black,
-	backgroundcolor=RedViolet!5!gray!5,
+    skipabove=8pt,
+    linewidth=3pt,
+    rightline=false,
+    leftline=true,
+    topline=false,
+    bottomline=false,
+    linecolor=black,
+    backgroundcolor=RedViolet!5!gray!5,
 }
 \declaretheoremstyle[
-	headfont=\bfseries,
-	bodyfont=\normalfont\small,
-	spaceabove=0pt,
-	spacebelow=0pt,
-	mdframed={style=mdblackbox}
+    headfont=\bfseries,
+    bodyfont=\normalfont\small,
+    spaceabove=0pt,
+    spacebelow=0pt,
+    mdframed={style=mdblackbox}
 ]{thmblackbox}
 
 \declaretheorem[style=thmbluebox,name=Theorem]{theorem}
@@ -174,9 +174,9 @@ settings.outformat="pdf";
 import geometry;
 // recalibrate fill and filldraw for conics
 void filldraw(picture pic = currentpicture, conic g, pen fillpen=defaultpen, pen drawpen=defaultpen)
-	{ filldraw(pic, (path) g, fillpen, drawpen); }
+    { filldraw(pic, (path) g, fillpen, drawpen); }
 void fill(picture pic = currentpicture, conic g, pen p=defaultpen)
-	{ filldraw(pic, (path) g, p); }
+    { filldraw(pic, (path) g, p); }
 // some geometry
 pair foot(pair P, pair A, pair B) { return foot(triangle(A,B,P).VC); }
 pair orthocenter(pair A, pair B, pair C) { return orthocentercenter(A,B,C); }
@@ -189,23 +189,23 @@ pair OP(path p, path q) { return intersectionpoints(p,q)[1]; }
 path Line(pair A, pair B, real a=0.6, real b=a) { return (a*(A-B)+A)--(b*(B-A)+B); }
 // cse5 more useful functions
 picture CC() {
-	picture p=rotate(0)*currentpicture;
-	currentpicture.erase();
-	return p;
+    picture p=rotate(0)*currentpicture;
+    currentpicture.erase();
+    return p;
 }
 pair MP(Label s, pair A, pair B = plain.S, pen p = defaultpen) {
-	Label L = s;
-	L.s = "$"+s.s+"$";
-	label(s, A, B, p);
-	return A;
+    Label L = s;
+    L.s = "$"+s.s+"$";
+    label(s, A, B, p);
+    return A;
 }
 pair Drawing(Label s = "", pair A, pair B = plain.S, pen p = defaultpen) {
-	dot(MP(s, A, B, p), p);
-	return A;
+    dot(MP(s, A, B, p), p);
+    return A;
 }
 path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
-	draw(g, p, ar);
-	return g;
+    draw(g, p, ar);
+    return g;
 }
 \end{asydef}
 
@@ -227,66 +227,66 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 
 
 def main(self: object, argv: list[str]):
-	opts = parser.process(argv)
+    opts = parser.process(argv)
 
-	keys = opts.keys
-	if len(keys) == 0:
-		keys = [fzf_choose()]
+    keys = opts.keys
+    if len(keys) == 0:
+        keys = [fzf_choose()]
 
-	# Better default title:
-	if opts.title is not None:
-		title = opts.title
-	elif len(keys) == 1:
-		entry = model.getEntryByKey(keys[0])
-		if entry is not None:
-			title = entry.source
-		else:
-			title = "Solution"
-	else:
-		title = "Solutions"
+    # Better default title:
+    if opts.title is not None:
+        title = opts.title
+    elif len(keys) == 1:
+        entry = model.getEntryByKey(keys[0])
+        if entry is not None:
+            title = entry.source
+        else:
+            title = "Solution"
+    else:
+        title = "Solutions"
 
-	s = r"\documentclass[11pt]{scrartcl}" + "\n"
-	s += LATEX_PREAMBLE.replace("AUTHOR", opts.author).replace("TITLE", title)
-	s += r"\begin{document}" + "\n"
-	s += r"\title{" + title + "}" + "\n"
-	if opts.subtitle is not None:
-		s += r"\subtitle{" + opts.subtitle + "}" + "\n"
-	s += r"\author{" + opts.author + "}" + "\n"
-	s += r"\date{" + opts.date + "}" + "\n"
-	s += r"\maketitle" + "\n"
-	s += "\n"
-	for key in keys:
-		entry = model.getEntryByKey(key)
-		if entry is None:
-			logging.error(key + " not found")
-		elif entry.secret and not opts.brave:
-			logging.error(f"Problem `{entry.source}` not shown without --brave")
-			return
-		else:
-			problem = entry.full
-			s += r"\begin{problem}" if len(keys) > 1 else r"\begin{problem*}"
-			if opts.sourced:
-				s += "[" + entry.source + "]"
-			s += "\n"
-			s += strparse.demacro(problem.bodies[0]) + "\n"
-			s += r"\end{problem}" if len(keys) > 1 else r"\end{problem*}"
-			s += "\n" + r"\hrulebar" + "\n\n"
-			s += strparse.demacro(problem.bodies[1]) + "\n"
-			s += r"\pagebreak" + "\n\n"
-	s += r"\end{document}"
-	if opts.tex:
-		view.out(s)
-	else:
-		if opts.filename is not None:
-			fname = opts.filename
-		elif len(keys) == 1:
-			fname = view.file_escape(title)
-		else:
-			fname = 'po'
-		if not os.path.exists(VON_POST_OUTPUT_DIR):
-			os.mkdir(VON_POST_OUTPUT_DIR)
-		filepath = os.path.join(VON_POST_OUTPUT_DIR, f"{fname}.tex")
-		with open(filepath, "w") as f:
-			print(s, file=f)
-		os.chdir(VON_POST_OUTPUT_DIR)
-		os.system("latexmk -pv %s" % filepath)
+    s = r"\documentclass[11pt]{scrartcl}" + "\n"
+    s += LATEX_PREAMBLE.replace("AUTHOR", opts.author).replace("TITLE", title)
+    s += r"\begin{document}" + "\n"
+    s += r"\title{" + title + "}" + "\n"
+    if opts.subtitle is not None:
+        s += r"\subtitle{" + opts.subtitle + "}" + "\n"
+    s += r"\author{" + opts.author + "}" + "\n"
+    s += r"\date{" + opts.date + "}" + "\n"
+    s += r"\maketitle" + "\n"
+    s += "\n"
+    for key in keys:
+        entry = model.getEntryByKey(key)
+        if entry is None:
+            logging.error(key + " not found")
+        elif entry.secret and not opts.brave:
+            logging.error(f"Problem `{entry.source}` not shown without --brave")
+            return
+        else:
+            problem = entry.full
+            s += r"\begin{problem}" if len(keys) > 1 else r"\begin{problem*}"
+            if opts.sourced:
+                s += "[" + entry.source + "]"
+            s += "\n"
+            s += strparse.demacro(problem.bodies[0]) + "\n"
+            s += r"\end{problem}" if len(keys) > 1 else r"\end{problem*}"
+            s += "\n" + r"\hrulebar" + "\n\n"
+            s += strparse.demacro(problem.bodies[1]) + "\n"
+            s += r"\pagebreak" + "\n\n"
+    s += r"\end{document}"
+    if opts.tex:
+        view.out(s)
+    else:
+        if opts.filename is not None:
+            fname = opts.filename
+        elif len(keys) == 1:
+            fname = view.file_escape(title)
+        else:
+            fname = 'po'
+        if not os.path.exists(VON_POST_OUTPUT_DIR):
+            os.mkdir(VON_POST_OUTPUT_DIR)
+        filepath = os.path.join(VON_POST_OUTPUT_DIR, f"{fname}.tex")
+        with open(filepath, "w") as f:
+            print(s, file=f)
+        os.chdir(VON_POST_OUTPUT_DIR)
+        os.system("latexmk -pv %s" % filepath)

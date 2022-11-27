@@ -25,18 +25,18 @@ parser.add_argument(
 
 
 def main(self: object, argv: list[str]):
-	opts = parser.process(argv)
-	entry = model.getEntryByKey(opts.key)
-	if entry is None:
-		logging.error(opts.key + " not found")
-	else:
-		problem = entry.full
-		soln = problem.bodies[opts.body]
-		asys = re.findall(r"\\begin\{asy\}(.+?)\\end\{asy\}",
-		                  soln,
-		                  flags=re.DOTALL)
-		diagram = asys[opts.number - 1]
+    opts = parser.process(argv)
+    entry = model.getEntryByKey(opts.key)
+    if entry is None:
+        logging.error(opts.key + " not found")
+    else:
+        problem = entry.full
+        soln = problem.bodies[opts.body]
+        asys = re.findall(r"\\begin\{asy\}(.+?)\\end\{asy\}",
+                          soln,
+                          flags=re.DOTALL)
+        diagram = asys[opts.number - 1]
 
-		if not opts.comments:
-			diagram = re.sub(r'/\*.*?\*/', '', diagram, flags=re.DOTALL)
-		print('\n'.join(line.strip() for line in diagram.strip().split('\n')))
+        if not opts.comments:
+            diagram = re.sub(r'/\*.*?\*/', '', diagram, flags=re.DOTALL)
+        print('\n'.join(line.strip() for line in diagram.strip().split('\n')))

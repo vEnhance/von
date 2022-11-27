@@ -24,5 +24,5 @@ TERM_COLOR["BG_MAGENTA"] = "\033[45m"
 TERM_COLOR["BG_CYAN"] = "\033[46m"
 
 if USE_COLOR is False:
-	for key in list(TERM_COLOR.keys()):
-		TERM_COLOR[key] = ""
+    for key in list(TERM_COLOR.keys()):
+        TERM_COLOR[key] = ""

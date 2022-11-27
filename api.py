@@ -13,46 +13,46 @@ source_to_puid_lookup = {inferPUID(source): source for source in index}
 
 
 def has(source: str):
-	"""Checks whether a given source exists in database"""
-	return source in index
+    """Checks whether a given source exists in database"""
+    return source in index
 
 
 def has_solution(source: str):
-	"""Checks whether a given source exists in database AND has a solution"""
-	if not has(source):
-		return False
-	entry = index[source]
-	return len(entry.full.bodies) > 1
+    """Checks whether a given source exists in database AND has a solution"""
+    if not has(source):
+        return False
+    entry = index[source]
+    return len(entry.full.bodies) > 1
 
 
 def get_index(source: str, brave=False):
-	"""Returns the index entry for a given source"""
-	entry = index[source]
-	assert brave or not entry.secret
-	return entry
+    """Returns the index entry for a given source"""
+    entry = index[source]
+    assert brave or not entry.secret
+    return entry
 
 
 def get(source: str, brave=False):
-	"""Returns the full data for a given source"""
-	entry = get_index(source, brave)
-	return entry.full
+    """Returns the full data for a given source"""
+    entry = get_index(source, brave)
+    return entry.full
 
 
 def get_statement(source: str, brave=False):
-	"""Returns just the problem statement for a given source"""
-	return get(source, brave).bodies[0]
+    """Returns just the problem statement for a given source"""
+    return get(source, brave).bodies[0]
 
 
 def get_solution(source: str, brave=False):
-	"""Returns just the solution for a given source (asserts existence)"""
-	bodies = get(source, brave).bodies
-	assert len(bodies) > 1, f"{source} has no solution"
-	return bodies[1]
+    """Returns just the solution for a given source (asserts existence)"""
+    bodies = get(source, brave).bodies
+    assert len(bodies) > 1, f"{source} has no solution"
+    return bodies[1]
 
 
 def get_puid(source: str):
-	return inferPUID(source)
+    return inferPUID(source)
 
 
 def get_source(puid: str) -> str | None:
-	return source_to_puid_lookup.get(puid)
+    return source_to_puid_lookup.get(puid)

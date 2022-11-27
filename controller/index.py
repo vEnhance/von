@@ -5,4 +5,4 @@ parser = view.Parser(prog='index',
 
 
 def main(self: object, argv: list[str]):
-	model.rebuildIndex()
+    model.rebuildIndex()

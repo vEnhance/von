@@ -32,37 +32,37 @@ r = re.compile(r'\\von(\*)?(\[([^\]]+)\])?\{([A-Za-z0-9 /\-?,.!]+)\}')
 
 
 def main(self: object, argv: list[str]):
-	opts = parser.process(argv)
-	s = ''
+    opts = parser.process(argv)
+    s = ''
 
-	with open(opts.filename) as f:
-		for line in f:
-			result = r.match(line)
-			if result is None:
-				s += line
-			else:
-				has_star = result.group(1) is not None
-				source = result.group(2)
-				key = result.group(4)
-				if has_star and not opts.sourced:
-					s += r'\begin{problem}' + '\n'
-				elif source is not None:
-					s += r'\begin{problem}' + source + '\n'
-				else:
-					s += r'\begin{problem}[' + key + ']' + '\n'
-				entry = model.getEntryByKey(key)
-				assert entry is not None, key
-				problem = entry.full
-				s += strparse.demacro(problem.bodies[0]) + '\n'
-				s += r'\end{problem}' + '\n'
-				if not opts.lazy:
-					if len(problem.bodies) > 1:
-						s += r'\subsubsection*{\ul{Solution}}' + '\n'
-						s += strparse.demacro(problem.bodies[1]) + '\n'
-						if opts.pagebreaks:
-							s += r'\newpage' + '\n'
-						else:
-							s += r'\hrulebar' + '\n'
-					else:
-						logging.error("No solution to " + key)
-		view.out(s)
+    with open(opts.filename) as f:
+        for line in f:
+            result = r.match(line)
+            if result is None:
+                s += line
+            else:
+                has_star = result.group(1) is not None
+                source = result.group(2)
+                key = result.group(4)
+                if has_star and not opts.sourced:
+                    s += r'\begin{problem}' + '\n'
+                elif source is not None:
+                    s += r'\begin{problem}' + source + '\n'
+                else:
+                    s += r'\begin{problem}[' + key + ']' + '\n'
+                entry = model.getEntryByKey(key)
+                assert entry is not None, key
+                problem = entry.full
+                s += strparse.demacro(problem.bodies[0]) + '\n'
+                s += r'\end{problem}' + '\n'
+                if not opts.lazy:
+                    if len(problem.bodies) > 1:
+                        s += r'\subsubsection*{\ul{Solution}}' + '\n'
+                        s += strparse.demacro(problem.bodies[1]) + '\n'
+                        if opts.pagebreaks:
+                            s += r'\newpage' + '\n'
+                        else:
+                            s += r'\hrulebar' + '\n'
+                    else:
+                        logging.error("No solution to " + key)
+        view.out(s)

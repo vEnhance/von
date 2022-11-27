@@ -31,31 +31,31 @@ parser.add_argument('-p',
 
 
 def main(self: object, argv: list[str]):
-	opts = parser.process(argv)
-	if opts.key is not None:
-		entry = model.getEntryByKey(opts.key)
-	else:
-		entry = model.getEntryByKey(fzf_choose())
-	if entry is None:
-		logging.error(opts.key + " not found")
-	elif entry.secret and not opts.brave:
-		logging.error("Problem can't be shown without --brave option")
-		return
-	else:
-		problem = entry.full
-		b = opts.body
-		if b is None and opts.aops:
-			b = 0
-		if b is None:
-			view.printProblem(problem)
-		else:
-			try:
-				if opts.aops:
-					view.out(strparse.toAOPS(problem.bodies[b]))
-				elif opts.preserve:
-					view.out(problem.bodies[b])
-				else:
-					view.out(strparse.demacro(problem.bodies[b]))
-			except IndexError:
-				logging.error("Couldn't access {}-th body of {}".format(
-				    b, problem.source))
+    opts = parser.process(argv)
+    if opts.key is not None:
+        entry = model.getEntryByKey(opts.key)
+    else:
+        entry = model.getEntryByKey(fzf_choose())
+    if entry is None:
+        logging.error(opts.key + " not found")
+    elif entry.secret and not opts.brave:
+        logging.error("Problem can't be shown without --brave option")
+        return
+    else:
+        problem = entry.full
+        b = opts.body
+        if b is None and opts.aops:
+            b = 0
+        if b is None:
+            view.printProblem(problem)
+        else:
+            try:
+                if opts.aops:
+                    view.out(strparse.toAOPS(problem.bodies[b]))
+                elif opts.preserve:
+                    view.out(problem.bodies[b])
+                else:
+                    view.out(strparse.demacro(problem.bodies[b]))
+            except IndexError:
+                logging.error("Couldn't access {}-th body of {}".format(
+                    b, problem.source))
