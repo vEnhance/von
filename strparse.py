@@ -56,8 +56,8 @@ def toAOPS(text: str) -> str:
     text = text.replace(r"\begin{itemize}", "[list]")
     text = text.replace(r"\end{itemize}", "[/list]")
     for env in [
-        'theorem', 'claim', 'lemma', 'proposition', 'corollary', 'definition',
-        'remark'
+            'theorem', 'claim', 'lemma', 'proposition', 'corollary',
+            'definition', 'remark'
     ]:
         text = text.replace(
             r"\begin{" + env + "*}",
