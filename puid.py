@@ -143,11 +143,16 @@ lookup = {
 for k, v in list(lookup.items()):
     lookup[k + ' MO'] = v + 'MO'
     lookup[k + ' TST'] = v + 'TST'
+    lookup[k + ' GST'] = v + 'EST'  # GMO selection test
     lookup[k + ' RMM TST'] = v + 'RST'
     lookup[k + ' EGMO TST'] = v + 'EST'
     lookup[k + ' JBMO TST'] = v + 'JST'
     lookup[k + ' TSTST'] = v + 'TSTST'
 
+lookup['AMC 10A'] = '10A'
+lookup['AMC 10B'] = '10B'
+lookup['AMC 12A'] = '12A'
+lookup['AMC 12B'] = '12A'
 lookup['ARML Local'] = 'ARMLOC'
 lookup['Balkan'] = 'BALK'
 lookup['Baltic Way'] = 'BWAY'
@@ -163,7 +168,6 @@ lookup['Czech Polish Slovak'] = 'CPS'
 lookup['December TST'] = 'DECTST'
 lookup['ELMO SL'] = 'ESL'
 lookup['European Cup'] = 'EURCUP'
-lookup['GST'] = 'USAEST'
 lookup['HMMT'] = 'HMMT'
 lookup['HMNT'] = 'HMNT'
 lookup['Iberoamerican'] = 'IBERO'
@@ -189,9 +193,10 @@ lookup['Tuymaada'] = 'TMD'
 lookup['Twitch'] = 'TWCH'
 lookup['USAMO'] = 'AMO'
 lookup['USAMTS'] = 'USMT'
+lookup['USA GST'] = 'USAEST'
 
 # whooooo
-REGEX = r"(?P<contest>[a-zA-Z ]+)(19|20)(?P<year>[0-9][0-9])(?P<stem>[ \/](?P<locator>[0-9A-Za-z\.\/\- ]+))?$"
+REGEX = r"(?P<contest>[a-zA-Z][a-zA-Z0-9 ]+)(19|20)(?P<year>[0-9][0-9])(?P<stem>[ \/](?P<locator>[0-9A-Za-z\.\/\- ]+))?$"
 re_generic = re.compile(REGEX)
 
 sorted_lookup_keys = list(lookup.keys())
