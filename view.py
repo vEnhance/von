@@ -185,7 +185,8 @@ def getEntryString(entry: PickleMappingEntry,
         s += "\n" + " " * 4
         s += "PUID:" + APPLY_COLOR("CYAN", inferPUID(entry.source))
         if entry.author is not None:
-            s += APPLY_COLOR("CYAN", " | " + entry.author)
+            s += APPLY_COLOR("RESET", " | ")
+            s += APPLY_COLOR("GREEN", entry.author)
         if entry.url is not None:
             url = entry.url
             if url.startswith('http://'):
