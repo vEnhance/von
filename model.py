@@ -12,7 +12,14 @@ from typing import Any, Callable
 import yaml
 
 from .puid import inferPUID
-from .rc import OTIS_EVIL_JSON_PATH, SEPARATOR, SORT_TAGS, VON_BASE_PATH, VON_CACHE_PATH, VON_INDEX_PATH  # NOQA
+from .rc import (
+    OTIS_EVIL_JSON_PATH,
+    SEPARATOR,
+    SORT_TAGS,
+    VON_BASE_PATH,
+    VON_CACHE_PATH,
+    VON_INDEX_PATH,
+)  # NOQA
 
 OTIS_USED_SOURCES_LIST: list[str] | None
 if OTIS_EVIL_JSON_PATH is not None:
@@ -36,15 +43,14 @@ def vonOpen(path: str, *args: Any, **kwargs: Any):
 
 
 class pickleObj(collections.abc.MutableMapping):
-
     def _initial(self) -> Any:
         return {}
 
-    def __init__(self, path: str, mode='rb'):
+    def __init__(self, path: str, mode="rb"):
         if not os.path.isfile(path) or os.path.getsize(path) == 0:
             self.store = self._initial()
         else:
-            with vonOpen(path, 'rb') as f:
+            with vonOpen(path, "rb") as f:
                 self.store = pickle.load(f)  # type: ignore
         self.path = path
         self.mode = mode
@@ -53,8 +59,8 @@ class pickleObj(collections.abc.MutableMapping):
         return self
 
     def __exit__(self, *_: Any):
-        if self.mode == 'wb':
-            with vonOpen(self.path, 'wb') as f:
+        if self.mode == "wb":
+            with vonOpen(self.path, "wb") as f:
                 pickle.dump(self.store, f)  # type: ignore
 
     def __getitem__(self, key: Any):
@@ -90,33 +96,33 @@ class pickleObj(collections.abc.MutableMapping):
 
 
 class pickleDictVonIndex(pickleObj):
-    store: dict[str, 'PickleMappingEntry']
-    __getitem__: Callable[..., 'PickleMappingEntry']
+    store: dict[str, "PickleMappingEntry"]
+    __getitem__: Callable[..., "PickleMappingEntry"]
 
-    def _initial(self) -> dict[str, 'PickleMappingEntry']:
+    def _initial(self) -> dict[str, "PickleMappingEntry"]:
         return {}
 
 
 class pickleListVonCache(pickleObj):
-    store: list['PickleMappingEntry']
+    store: list["PickleMappingEntry"]
 
-    def __getitem__(self, idx: int) -> 'PickleMappingEntry':
+    def __getitem__(self, idx: int) -> "PickleMappingEntry":
         return super().__getitem__(idx)
 
-    def _initial(self) -> list['PickleMappingEntry']:
+    def _initial(self) -> list["PickleMappingEntry"]:
         return []
 
-    def set(self, store: list['PickleMappingEntry']):
+    def set(self, store: list["PickleMappingEntry"]):
         for i in range(len(store)):
             store[i].i = i
         self.store = store
 
 
-def VonIndex(mode='rb'):
+def VonIndex(mode="rb"):
     return pickleDictVonIndex(VON_INDEX_PATH, mode)
 
 
-def VonCache(mode='rb'):
+def VonCache(mode="rb"):
     return pickleListVonCache(VON_CACHE_PATH, mode)
 
 
@@ -158,17 +164,17 @@ class GenericItem:  # superclass to Problem, PickleMappingEntry
 
     @property
     def used_by_otis(self):
-        if 'waltz' in self.tags:
+        if "waltz" in self.tags:
             return True
         elif OTIS_HANDOUT_USED_SOURCES is not None:
             return self.source in OTIS_HANDOUT_USED_SOURCES
         else:
             return False
 
-    def __eq__(self, other: 'GenericItem') -> bool:
+    def __eq__(self, other: "GenericItem") -> bool:
         return self.sortkey == other.sortkey
 
-    def __lt__(self, other: 'GenericItem') -> bool:
+    def __lt__(self, other: "GenericItem") -> bool:
         return self.sortkey < other.sortkey
 
 
@@ -188,25 +194,26 @@ class Problem(GenericItem):
         return self.source
 
     @property
-    def entry(self) -> 'PickleMappingEntry':
+    def entry(self) -> "PickleMappingEntry":
         """Returns an PickleMappingEntry for storage in pickle"""
-        return PickleMappingEntry(source=self.source,
-                                  desc=self.desc,
-                                  author=self.author,
-                                  url=self.url,
-                                  hardness=self.hardness,
-                                  tags=self.tags,
-                                  path=self.path,
-                                  i=self.i)
+        return PickleMappingEntry(
+            source=self.source,
+            desc=self.desc,
+            author=self.author,
+            url=self.url,
+            hardness=self.hardness,
+            tags=self.tags,
+            path=self.path,
+            i=self.i,
+        )
 
     @property
-    def full(self) -> 'Problem':
+    def full(self) -> "Problem":
         logging.warn("Sketchy af")
         return self
 
 
 class PickleMappingEntry(GenericItem):
-
     def __init__(self, **kwargs: Any):
         for key in kwargs:
             if kwargs[key] is not None:
@@ -217,16 +224,19 @@ class PickleMappingEntry(GenericItem):
         return tag.lower() in [_.lower() for _ in self.tags]
 
     def hasTerm(self, term: str):
-        blob = self.source + ' ' + self.desc
+        blob = self.source + " " + self.desc
         if self.author is not None:
-            blob += ' ' + self.author
-        return (term.lower() in blob.lower() or term in self.tags or
-                term.upper() in inferPUID(self.source))
+            blob += " " + self.author
+        return (
+            term.lower() in blob.lower()
+            or term in self.tags
+            or term.upper() in inferPUID(self.source)
+        )
 
     def hasAuthor(self, name: str):
         if self.author is None:
             return False
-        haystacks = self.author.lower().strip().split(' ')
+        haystacks = self.author.lower().strip().split(" ")
         return name.lower() in haystacks
 
     def hasSource(self, source: str):
@@ -237,7 +247,7 @@ class PickleMappingEntry(GenericItem):
 
     @property
     def secret(self):
-        return 'SECRET' in self.source or 'secret' in self.tags
+        return "SECRET" in self.source or "secret" in self.tags
 
     @property
     def entry(self):
@@ -256,7 +266,7 @@ def getcwd():
     if true_dir.startswith(VON_BASE_PATH) and true_dir != VON_BASE_PATH:
         return os.path.relpath(true_dir, VON_BASE_PATH)
     else:
-        return ''
+        return ""
 
 
 def getCompleteCwd():
@@ -265,14 +275,14 @@ def getCompleteCwd():
 
 def makeProblemFromPath(path: str) -> Problem:
     # Creates a problem instance from a source, without looking at Index
-    with vonOpen(path, 'r') as f:
-        text = ''.join(f.readlines())
+    with vonOpen(path, "r") as f:
+        text = "".join(f.readlines())
     x = text.split(SEPARATOR)
     data = yaml.safe_load(x[0])
     assert data is not None
-    data['bodies'] = [_.strip() for _ in x[1:]]
-    assert data['source']
-    assert data['desc']
+    data["bodies"] = [_.strip() for _ in x[1:]]
+    assert data["source"]
+    assert data["desc"]
     return Problem(path, **data)
 
 
@@ -280,7 +290,7 @@ def getAllProblems() -> list[Problem]:
     ret: list[Problem] = []
     for root, _, filenames in os.walk(VON_BASE_PATH):
         for fname in filenames:
-            if not fname.endswith('.tex'):
+            if not fname.endswith(".tex"):
                 continue
             path = shortenPath(os.path.join(root, fname))
             p = makeProblemFromPath(path)
@@ -316,7 +326,7 @@ def getEntryByKey(key: str):
 
 
 def addProblemByFileContents(path: str, text: str):
-    with vonOpen(path, 'w') as f:
+    with vonOpen(path, "w") as f:
         print(text, file=f)
     logging.info("Wrote to " + path)
     # Now update cache
@@ -326,11 +336,11 @@ def addProblemByFileContents(path: str, text: str):
 
 
 def viewDirectory(path: str):
-    problems: list['Problem'] = []
+    problems: list["Problem"] = []
     dirs: list[str] = []
     for item_path in os.listdir(path):
         abs_item_path = os.path.join(path, item_path)
-        if os.path.isfile(abs_item_path) and abs_item_path.endswith('.tex'):
+        if os.path.isfile(abs_item_path) and abs_item_path.endswith(".tex"):
             problem = makeProblemFromPath(abs_item_path)
             assert problem is not None
             problems.append(problem)
@@ -346,16 +356,17 @@ def viewDirectory(path: str):
     return (entries, dirs)
 
 
-def runSearch(terms: list[str] | None = None,
-              tags: list[str] | None = None,
-              sources: list[str] | None = None,
-              authors: list[str] | None = None,
-              path='',
-              refine=False,
-              alph_sort=False,
-              in_otis: bool | None = None,
-              has_url: bool | None = None) -> list[PickleMappingEntry]:
-
+def runSearch(
+    terms: list[str] | None = None,
+    tags: list[str] | None = None,
+    sources: list[str] | None = None,
+    authors: list[str] | None = None,
+    path="",
+    refine=False,
+    alph_sort=False,
+    in_otis: bool | None = None,
+    has_url: bool | None = None,
+) -> list[PickleMappingEntry]:
     def _lambda_is_matching(entry: PickleMappingEntry):
         if OTIS_HANDOUT_USED_SOURCES is not None:
             if entry.used_by_otis and in_otis is False:
@@ -369,13 +380,15 @@ def runSearch(terms: list[str] | None = None,
             if entry.url is not None and has_url is False:
                 return False
 
-        return all((
-            entry.path.startswith(path),
-            (not tags or all([entry.hasTag(_) for _ in tags])),
-            (not terms or all([entry.hasTerm(_) for _ in terms])),
-            (not sources or all([entry.hasSource(_) for _ in sources])),
-            (not authors or all([entry.hasAuthor(_) for _ in authors])),
-        ))
+        return all(
+            (
+                entry.path.startswith(path),
+                (not tags or all([entry.hasTag(_) for _ in tags])),
+                (not terms or all([entry.hasTerm(_) for _ in terms])),
+                (not sources or all([entry.hasSource(_) for _ in sources])),
+                (not authors or all([entry.hasAuthor(_) for _ in authors])),
+            )
+        )
 
     if refine is False:
         with VonIndex() as index:
@@ -384,9 +397,7 @@ def runSearch(terms: list[str] | None = None,
             ]
     else:
         with VonCache() as cache:
-            result = [
-                entry for entry in cache.values() if _lambda_is_matching(entry)
-            ]
+            result = [entry for entry in cache.values() if _lambda_is_matching(entry)]
     if alph_sort:
         result.sort(key=lambda e: e.source)
     else:
@@ -397,17 +408,17 @@ def runSearch(terms: list[str] | None = None,
 
 
 def augmentCache(*entries: PickleMappingEntry):
-    with VonCache('wb') as cache:
+    with VonCache("wb") as cache:
         cache.set(cache.store + list(entries))
 
 
 def setCache(entries: list[PickleMappingEntry]):
-    with VonCache('wb') as cache:
+    with VonCache("wb") as cache:
         cache.set(entries)
 
 
 def clearCache():
-    with VonCache('wb') as cache:
+    with VonCache("wb") as cache:
         cache.set([])
 
 
@@ -420,7 +431,7 @@ def readCache():
 
 
 def addEntryToIndex(entry: PickleMappingEntry):
-    with VonIndex('wb') as index:
+    with VonIndex("wb") as index:
         index[entry.source] = entry
 
 
@@ -428,11 +439,11 @@ def updateEntryByProblem(old_entry: PickleMappingEntry, new_problem: Problem):
     new_problem.i = old_entry.i
     new_entry = new_problem.entry
 
-    with VonIndex('wb') as index:
+    with VonIndex("wb") as index:
         if old_entry.source != new_entry.source:
             del index[old_entry.source]
         index[new_entry.source] = new_entry
-    with VonCache('wb') as cache:
+    with VonCache("wb") as cache:
         for i, entry in enumerate(cache):
             if entry.source == old_entry.source:
                 new_entry.i = i
@@ -444,14 +455,14 @@ def updateEntryByProblem(old_entry: PickleMappingEntry, new_problem: Problem):
 
 
 def addProblemToIndex(problem: Problem):
-    with VonIndex('wb') as index:
+    with VonIndex("wb") as index:
         p = problem
         index[p.source] = p.entry
         return index[p.source]
 
 
 def setEntireIndex(von_index_dict: dict[str, PickleMappingEntry]):
-    with VonIndex('wb') as index:
+    with VonIndex("wb") as index:
         index.set(von_index_dict)
 
 
@@ -460,8 +471,9 @@ def rebuildIndex():
     for p in getAllProblems():
         if p.source in d:
             fake_source = f"DUPLICATE {random.randrange(10**6, 10**7)}"
-            logging.error(p.source + " is being repeated, replacing with " +
-                          fake_source)
+            logging.error(
+                p.source + " is being repeated, replacing with " + fake_source
+            )
             p.source = fake_source
         d[p.source] = p.entry
     setEntireIndex(d)

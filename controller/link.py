@@ -3,8 +3,8 @@ import logging
 import pyperclip
 import sys
 
-parser = view.Parser(prog='link', description='Pastes the URL to clipboard')
-parser.add_argument('key', help="The key of the problem to open")
+parser = view.Parser(prog="link", description="Pastes the URL to clipboard")
+parser.add_argument("key", help="The key of the problem to open")
 
 
 def main(self: object, argv: list[str]):

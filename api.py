@@ -5,7 +5,7 @@ from .puid import inferPUID
 # For Pickle...
 import sys
 
-sys.modules['model'] = model
+sys.modules["model"] = model
 
 index = model.VonIndex().store  # get the underlying dict
 

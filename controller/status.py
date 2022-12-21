@@ -1,6 +1,6 @@
 from .. import model, view
 
-parser = view.Parser(prog='ss', description='Prints the Cache.')
+parser = view.Parser(prog="ss", description="Prints the Cache.")
 
 
 def main(self: object, argv: list[str]):

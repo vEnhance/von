@@ -2,32 +2,35 @@ from .. import model, strparse, view
 from ..fzf import fzf_choose
 import logging
 
-parser = view.Parser(prog='show',
-                     description='Displays a problem by source name.')
-parser.add_argument('key',
-                    nargs='?',
-                    help="The key of the problem to open.",
-                    default=None)
-parser.add_argument('-b',
-                    '--body',
-                    nargs='?',
-                    type=int,
-                    const=0,
-                    default=None,
-                    help="Prints only the b-th body.")
+parser = view.Parser(prog="show", description="Displays a problem by source name.")
 parser.add_argument(
-    '-a',
-    '--aops',
-    action='store_const',
+    "key", nargs="?", help="The key of the problem to open.", default=None
+)
+parser.add_argument(
+    "-b",
+    "--body",
+    nargs="?",
+    type=int,
+    const=0,
+    default=None,
+    help="Prints only the b-th body.",
+)
+parser.add_argument(
+    "-a",
+    "--aops",
+    action="store_const",
     const=True,
     default=False,
-    help="Returns string in `AoPS mode'. Automatically causes -b.")
-parser.add_argument('-p',
-                    '--preserve',
-                    action='store_const',
-                    const=True,
-                    default=False,
-                    help="With -b, suppress macro expansion from body.")
+    help="Returns string in `AoPS mode'. Automatically causes -b.",
+)
+parser.add_argument(
+    "-p",
+    "--preserve",
+    action="store_const",
+    const=True,
+    default=False,
+    help="With -b, suppress macro expansion from body.",
+)
 
 
 def main(self: object, argv: list[str]):
@@ -57,5 +60,6 @@ def main(self: object, argv: list[str]):
                 else:
                     view.out(strparse.demacro(problem.bodies[b]))
             except IndexError:
-                logging.error("Couldn't access {}-th body of {}".format(
-                    b, problem.source))
+                logging.error(
+                    "Couldn't access {}-th body of {}".format(b, problem.source)
+                )

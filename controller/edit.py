@@ -6,19 +6,21 @@ from ..fzf import fzf_choose
 from ..rc import EDITOR
 from . import preview
 
-parser = view.Parser(prog='edit',
-                     description='Opens problem(s) by source name.')
-parser.add_argument('-a',
-                    '--all',
-                    action='store_const',
-                    dest='all',
-                    default=False,
-                    const=True,
-                    help="Edit all problems in cache")
+parser = view.Parser(prog="edit", description="Opens problem(s) by source name.")
 parser.add_argument(
-    'keys',
-    nargs='*',
-    help="The key of the problem to open (either source or cache index).")
+    "-a",
+    "--all",
+    action="store_const",
+    dest="all",
+    default=False,
+    const=True,
+    help="Edit all problems in cache",
+)
+parser.add_argument(
+    "keys",
+    nargs="*",
+    help="The key of the problem to open (either source or cache index).",
+)
 
 
 def main(self: object, argv: list[str]):
@@ -40,7 +42,6 @@ def main(self: object, argv: list[str]):
             subprocess.call([EDITOR, full_path])  # do editing
 
             problem = model.makeProblemFromPath(entry.path)
-            new_entry = model.updateEntryByProblem(old_entry=entry,
-                                                   new_problem=problem)
+            new_entry = model.updateEntryByProblem(old_entry=entry, new_problem=problem)
             # update cache after editing problem
             view.printEntry(new_entry)

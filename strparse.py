@@ -37,8 +37,8 @@ def demacro(text: str) -> str:
 
 
 def remove_soft_newlines(text: str) -> str:
-    rm_newline = lambda m: m.group(0).replace('\n', ' ')
-    return re.sub(r'[a-zA-Z]\n[a-zA-Z]', rm_newline, text)
+    rm_newline = lambda m: m.group(0).replace("\n", " ")
+    return re.sub(r"[a-zA-Z]\n[a-zA-Z]", rm_newline, text)
 
 
 def toAOPS(text: str) -> str:
@@ -56,16 +56,23 @@ def toAOPS(text: str) -> str:
     text = text.replace(r"\begin{itemize}", "[list]")
     text = text.replace(r"\end{itemize}", "[/list]")
     for env in [
-            'theorem', 'claim', 'lemma', 'proposition', 'corollary',
-            'definition', 'remark'
+        "theorem",
+        "claim",
+        "lemma",
+        "proposition",
+        "corollary",
+        "definition",
+        "remark",
     ]:
         text = text.replace(
             r"\begin{" + env + "*}",
-            "\n\n" + "[b][color=red]" + env.title() + ":[/color][/b] ")
+            "\n\n" + "[b][color=red]" + env.title() + ":[/color][/b] ",
+        )
         text = text.replace(r"\end{" + env + "*}", "")
         text = text.replace(
             r"\begin{" + env + "}",
-            "\n\n" + "[b][color=red]" + env.title() + ":[/color][/b] ")
+            "\n\n" + "[b][color=red]" + env.title() + ":[/color][/b] ",
+        )
         text = text.replace(r"\end{" + env + "}", "")
     text = text.replace(r"\begin{proof}", "[i]Proof.[/i] ")
     text = text.replace(r"\end{proof}", r"$\blacksquare$" + "\n")
@@ -79,15 +86,15 @@ def toAOPS(text: str) -> str:
     text = re.sub(r"\\emph{([^}]*)}", r"[i]\1[/i]", text)
     text = re.sub(r"\\textit{([^}]*)}", r"[i]\1[/i]", text)
     text = re.sub(r"\\textbf{([^}]*)}", r"[b]\1[/b]", text)
-    text = re.sub(r"\\paragraph{([^}]*)}",
-                  DIVIDER + r"[color=blue][b]\1[/b][/color]", text)
+    text = re.sub(
+        r"\\paragraph{([^}]*)}", DIVIDER + r"[color=blue][b]\1[/b][/color]", text
+    )
     text = re.sub(r"\\url{([^}]*)}", r"[url]\1[/url]", text)
     text = re.sub(r"\\href{([^}]*)}{([^}]*)}", r"[url=\1]\2[/url]", text)
 
     # Join together newlines
     paragraphs = [
-        ' '.join([line.strip()
-                  for line in paragraph.splitlines()]).strip()
-        for paragraph in text.split('\n\n')
+        " ".join([line.strip() for line in paragraph.splitlines()]).strip()
+        for paragraph in text.split("\n\n")
     ]
-    return '\n'.join(paragraphs)
+    return "\n".join(paragraphs)

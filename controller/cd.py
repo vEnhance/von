@@ -2,8 +2,8 @@ import os
 
 from .. import model, view
 
-parser = view.Parser(prog='cd', description='Changes the working directory.')
-parser.add_argument('path', help='The path to change to')
+parser = view.Parser(prog="cd", description="Changes the working directory.")
+parser.add_argument("path", help="The path to change to")
 
 
 def main(self: object, argv: list[str]):

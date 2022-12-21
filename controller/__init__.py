@@ -1,10 +1,25 @@
-from . import add, asy, br, cd, clear, edit, link, index, nuke, paths, po, search, show, solve, status  # NOQA
+from . import (
+    add,
+    asy,
+    br,
+    cd,
+    clear,
+    edit,
+    link,
+    index,
+    nuke,
+    paths,
+    po,
+    search,
+    show,
+    solve,
+    status,
+)  # NOQA
 
 
 class VonController:
-
     def do_ls(self, argv: list[str]):
-        self.do_cd(['.'] + argv)
+        self.do_cd(["."] + argv)
 
     do_add = add.main
     do_asy = asy.main

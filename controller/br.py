@@ -3,8 +3,8 @@ import logging
 import sys
 import webbrowser
 
-parser = view.Parser(prog='br', description='Browse a problem on AoPS')
-parser.add_argument('key', help="The key of the problem to open")
+parser = view.Parser(prog="br", description="Browse a problem on AoPS")
+parser.add_argument("key", help="The key of the problem to open")
 
 
 def main(self: object, argv: list[str]):

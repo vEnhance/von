@@ -9,6 +9,7 @@ from .rc import USER_OS
 
 if USER_OS == "windows":
     from colorama import init  # type: ignore
+
     init()
 
 
@@ -16,81 +17,93 @@ def APPLY_COLOR(color_name: str, s: str):
     if OPTS.color is False:
         return s
     num_leading_spaces = len(s) - len(s.lstrip())
-    return " " * num_leading_spaces + TERM_COLOR[color_name] + s.lstrip(
-    ) + TERM_COLOR["RESET"]
+    return (
+        " " * num_leading_spaces
+        + TERM_COLOR[color_name]
+        + s.lstrip()
+        + TERM_COLOR["RESET"]
+    )
 
 
 def file_escape(s: str):
     s = s.replace("/", "-")
     s = s.replace(" ", "")
-    s = ''.join(
-        [_ for _ in s if _ in string.ascii_letters + string.digits + '-'])
-    if s == '':
-        s += 'emptyname'
+    s = "".join([_ for _ in s if _ in string.ascii_letters + string.digits + "-"])
+    if s == "":
+        s += "emptyname"
     return s
 
 
 def get_author_initials(author: str) -> str:
-    author_words = author.replace(',', ' ,').split(' ')
+    author_words = author.replace(",", " ,").split(" ")
     if len(author_words) == 0:
-        return '?'
+        return "?"
     elif len(author_words) == 1:
         a = author_words[0]
-        if (capitals := ''.join(_ for _ in a if _ in string.ascii_uppercase)):
+        if capitals := "".join(_ for _ in a if _ in string.ascii_uppercase):
             return capitals
         return a
     else:  # len(author_words) > 1
-        passes = lambda a: a and (a[0] in string.ascii_uppercase or a == ',' or
-                                  all(_ in string.ascii_letters + string.digits
-                                      for _ in a))
-        return ''.join(a[0] for a in author_words if passes(a))
+        passes = lambda a: a and (
+            a[0] in string.ascii_uppercase
+            or a == ","
+            or all(_ in string.ascii_letters + string.digits for _ in a)
+        )
+        return "".join(a[0] for a in author_words if passes(a))
 
 
 # Arguments hacking whee
 # We have _OPTS here which will pick up any parse_args()
 _view_parser = argparse.ArgumentParser(add_help=False)
 _view_parser.add_argument(
-    '-q',
-    '--quiet',
+    "-q",
+    "--quiet",
     action="store_const",
     default=False,
     const=True,
-    help="Suppress some output (only with ls now).")  # TODO generalize
-_view_parser.add_argument('--nocolor',
-                          action="store_const",
-                          dest='color',
-                          default=True,
-                          const=False,
-                          help="Suppress color output.")
+    help="Suppress some output (only with ls now).",
+)  # TODO generalize
 _view_parser.add_argument(
-    '--tabs',
+    "--nocolor",
     action="store_const",
-    dest='tabs',
-    default=False,
-    const=True,
-    help="Uses tabs as separator for data in list-type commands.")
-_view_parser.add_argument('--brave',
-                          action="store_const",
-                          dest='brave',
-                          default=False,
-                          const=True,
-                          help="Show problems marked as SECRET.")
+    dest="color",
+    default=True,
+    const=False,
+    help="Suppress color output.",
+)
 _view_parser.add_argument(
-    '-v',
-    '--verbose',
+    "--tabs",
+    action="store_const",
+    dest="tabs",
+    default=False,
+    const=True,
+    help="Uses tabs as separator for data in list-type commands.",
+)
+_view_parser.add_argument(
+    "--brave",
+    action="store_const",
+    dest="brave",
+    default=False,
+    const=True,
+    help="Show problems marked as SECRET.",
+)
+_view_parser.add_argument(
+    "-v",
+    "--verbose",
     action="store_const",
     default=False,
     const=True,
-    help="More verbose displays (e.g. include problem tags).")
+    help="More verbose displays (e.g. include problem tags).",
+)
 
 OPTS = _view_parser.parse_args([])
 
 
 class Parser(argparse.ArgumentParser):
-
     def __init__(self, *args: Any, **kwargs: Any):
-        super(Parser, self).__init__(parents=[_view_parser], *args,
-                                     **kwargs)  # type: ignore
+        super(Parser, self).__init__(
+            parents=[_view_parser], *args, **kwargs
+        )  # type: ignore
 
     def process(self, *args: Any, **kwargs: Any):
         global OPTS
@@ -105,9 +118,7 @@ def getProblemString(problem: Problem, i: int | None = None):
     return s
 
 
-def getEntryString(entry: PickleMappingEntry,
-                   verbose=False,
-                   i: int | None = None):
+def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = None):
     # SPECIAL hide brave
     if OPTS.verbose is True:
         verbose = True
@@ -115,9 +126,9 @@ def getEntryString(entry: PickleMappingEntry,
         return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
 
     if OPTS.tabs is True:
-        s = '\t'.join([entry.source, entry.desc, entry.sortstring])
+        s = "\t".join([entry.source, entry.desc, entry.sortstring])
         if verbose:
-            s += '\t' + ' '.join(entry.tags)
+            s += "\t" + " ".join(entry.tags)
         return s
     s = ""
 
@@ -144,21 +155,21 @@ def getEntryString(entry: PickleMappingEntry,
     if verbose or len(entry.source) <= 16:
         source_string: str = entry.source
     else:
-        words_in_source: list[str] = entry.source.split(' ')
-        source_string = ''
+        words_in_source: list[str] = entry.source.split(" ")
+        source_string = ""
         for word in words_in_source:
             if word == "Shortlist":
                 source_string += "Shrt. "
             elif any(_ in string.ascii_lowercase for _ in word):
-                source_string += word[:1] + '.'
+                source_string += word[:1] + "."
             else:
-                source_string += word + ' '
+                source_string += word + " "
         source_string = source_string.strip()
-    if 'favorite' in entry.tags:
+    if "favorite" in entry.tags:
         s += APPLY_COLOR("BOLD_YELLOW", source_string)
-    elif 'nice' in entry.tags:
+    elif "nice" in entry.tags:
         s += APPLY_COLOR("BOLD_CYAN", source_string)
-    elif 'good' in entry.tags:
+    elif "good" in entry.tags:
         s += APPLY_COLOR("BOLD_MAGENTA", source_string)
     else:
         s += APPLY_COLOR("BOLD_BLUE", source_string)
@@ -189,26 +200,26 @@ def getEntryString(entry: PickleMappingEntry,
             s += APPLY_COLOR("GREEN", entry.author)
         if entry.url is not None:
             url = entry.url
-            if url.startswith('http://'):
+            if url.startswith("http://"):
                 url = url[7:]
-            if url.startswith('https://'):
+            if url.startswith("https://"):
                 url = url[8:]
-            if url.startswith('www.'):
+            if url.startswith("www."):
                 url = url[4:]
             if len(url) > 32:
-                url = url[:29] + '...'
+                url = url[:29] + "..."
             s += " | "
             s += APPLY_COLOR("BG_BLUE", url)
 
     # tags
     if verbose:
         s += "\n" + " " * 4
-        s += APPLY_COLOR("MAGENTA", ' '.join(entry.tags))
+        s += APPLY_COLOR("MAGENTA", " ".join(entry.tags))
     return s
 
 
 def formatPath(path: str):
-    return 'VON/' + path
+    return "VON/" + path
 
 
 def getDirString(path: str):
