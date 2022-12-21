@@ -100,7 +100,6 @@ source: {source}     # e.g. USAMO 2000/6. This must be unique
 desc:   <++>     # e.g. Fiendish inequality
 path:   {path}<++>
 tags:   [{now.year}-{now.month:02d}, <++>]
-hardness: <++>
 url: {url}
 
 {hint}"""
