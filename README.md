@@ -1,4 +1,5 @@
 # VON: vEnhance's Olympiad Navigator
+
 ## A problem database written in Python
 
 ![Language: Python](https://img.shields.io/github/languages/top/vEnhance/von)
@@ -6,6 +7,11 @@
 ![Last commit](https://img.shields.io/github/last-commit/vEnhance/von)
 [<img src="https://github.com/vEnhance/von/actions/workflows/ci.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
 [<img src="https://github.com/vEnhance/von/actions/workflows/codeql-analysis.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
+
+[<img src="https://img.shields.io/badge/python%20style-black-000000.svg" alt="Python style: black">](https://github.com/psf/black)
+[<img src="https://img.shields.io/badge/types-pyright-00cca7.svg" alt="types: pyright">](https://github.com/PyCQA/pyflakes)
+[<img src="https://img.shields.io/badge/types-mypy-00cca7.svg" alt="types: mypy">](http://mypy-lang.org/)
+[<img src="https://img.shields.io/badge/lint-pyflakes-ff69b4.svg" alt="lint: pyflakes">](https://github.com/PyCQA/pyflakes)
 ![Forks](https://img.shields.io/github/forks/vEnhance/von)
 ![Stars](https://img.shields.io/github/stars/vEnhance/von)
 
