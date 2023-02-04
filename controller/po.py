@@ -37,8 +37,9 @@ parser.add_argument(
     help="Filename for the file to produce (defaults to po.tex).",
 )
 
-LATEX_PREAMBLE = r"""
-\usepackage{amsmath,amssymb,amsthm}
+LATEX_PREAMBLE = r"""\usepackage{amsmath,amssymb,amsthm}
+\usepackage[minimal]{yhmath}
+
 \PassOptionsToPackage{usenames,svgnames,dvipsnames}{xcolor}
 \usepackage{thmtools}
 \usepackage[framemethod=TikZ]{mdframed}
@@ -214,6 +215,7 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 \rohead{\normalfont\footnotesize\textbf{TITLE}}
 \pagestyle{scrheadings}
 
+\providecommand{\arc}[1]{\wideparen{#1}}
 \newcommand{\hrulebar}{
   \par\hspace{\fill}\rule{0.95\linewidth}{.7pt}\hspace{\fill}
   \par\nointerlineskip \vspace{\baselineskip}
