@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 from .. import model, strparse, view
 from ..fzf import fzf_choose
@@ -267,6 +267,8 @@ def main(self: object, argv: list[str]):
             s += "\n"
             s += strparse.demacro(problem.bodies[0]) + "\n"
             s += r"\end{problem}" if len(keys) > 1 else r"\end{problem*}"
+            if entry.url:
+                s += r"\noindent\emph{Link}: \url{" + entry.url + "}" + "\n"
             s += "\n" + r"\hrulebar" + "\n\n"
             s += strparse.demacro(problem.bodies[1]) + "\n"
             s += r"\pagebreak" + "\n\n"
