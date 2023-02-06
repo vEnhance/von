@@ -138,7 +138,6 @@ lookup = {
     "Yemen": "YEM",
     "Yugoslavia": "YUG",
     "Zimbabwe": "ZWE",
-    "PUMaC Finals": "PUF",
 }
 for k, v in list(lookup.items()):
     lookup[k + " MO"] = v + "MO"
@@ -177,10 +176,12 @@ lookup["January TST"] = "JANTST"
 lookup["KoMaL"] = "KML"
 lookup["Kurschak"] = "KSK"
 lookup["Longlist"] = "LL"
+lookup["math.SE"] = "MSE"
 lookup["MP4G"] = "MP4G"
 lookup["Math Prize"] = "MPO"
 lookup["Napkin"] = "NAP"
 lookup["NIMO Winter"] = "NIMOW"
+lookup["PUMaC Finals"] = "PUF"
 lookup["Putnam"] = "PTNM"
 lookup["Schweitzer"] = "MSZ"
 lookup["Serbia RMM TST"] = "SRBRST"
