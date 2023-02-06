@@ -6,23 +6,22 @@ import logging
 import os
 import pickle as pickle
 import random
-
-from typing import Any, Callable
+from typing import Any, Callable, TextIO
 
 import yaml
 
 from .puid import inferPUID
-from .rc import (
+from .rc import (  # NOQA
     OTIS_EVIL_JSON_PATH,
     SEPARATOR,
     SORT_TAGS,
     VON_BASE_PATH,
     VON_CACHE_PATH,
     VON_INDEX_PATH,
-)  # NOQA
+)
 
 OTIS_USED_SOURCES_LIST: list[str] | None
-if OTIS_EVIL_JSON_PATH is not None:
+if OTIS_EVIL_JSON_PATH is not None:  # type: ignore
     with open(OTIS_EVIL_JSON_PATH) as f:
         evil_json = json.load(f)
         OTIS_HANDOUT_USED_SOURCES = evil_json.values()
@@ -38,7 +37,7 @@ def completePath(path: str):
     return os.path.join(VON_BASE_PATH, path)
 
 
-def vonOpen(path: str, *args: Any, **kwargs: Any):
+def vonOpen(path: str, *args: Any, **kwargs: Any) -> TextIO:
     return open(completePath(path), *args, **kwargs)
 
 
@@ -294,8 +293,7 @@ def getAllProblems() -> list[Problem]:
                 continue
             path = shortenPath(os.path.join(root, fname))
             p = makeProblemFromPath(path)
-            if p is not None:
-                ret.append(p)
+            ret.append(p)
     return ret
 
 
