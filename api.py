@@ -24,12 +24,11 @@ def has_solution(source: str):
     entry = index[source]
     return len(entry.full.bodies) > 1
 
-
 def get_index(source: str, brave=False):
     """Returns the index entry for a given source"""
-    entry = index[source]
+    entry = index.get(source)
 
-    if not source in index:
+    if entry is None:
         puid = source.upper()
         for indice in index:
             index_entry = index[indice]
@@ -38,15 +37,18 @@ def get_index(source: str, brave=False):
                 entry = index_entry
                 break
 
-    assert brave or not entry.secret
+    assert entry is None or brave or not entry.secret
     return entry
 
 
 def get(source: str, brave=False):
     """Returns the full data for a given source"""
     entry = get_index(source, brave)
-    return entry.full
 
+    if entry is None:
+        return model.Problem("", bodies=["No Von problem found!", "No Von problem found!"], source="", desc="", url="")
+
+    return entry.full
 
 def get_statement(source: str, brave=False):
     """Returns just the problem statement for a given source"""
