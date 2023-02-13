@@ -28,6 +28,16 @@ def has_solution(source: str):
 def get_index(source: str, brave=False):
     """Returns the index entry for a given source"""
     entry = index[source]
+
+    if not source in index:
+        puid = source.upper()
+        for indice in index:
+            index_entry = index[indice]
+
+            if puid == inferPUID(index_entry.source):
+                entry = index_entry
+                break
+
     assert brave or not entry.secret
     return entry
 
