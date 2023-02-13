@@ -43,6 +43,7 @@ This program assumes you have:
 4. LaTeX integration uses [von.sty][vonsty].
    The previewer requires [evan.sty][evansty].
    (See below for details.)
+5. If fuzzy searching is desired, install ![fzf](https://github.com/junegunn/fzf).
 
 ## Help
 
@@ -123,6 +124,10 @@ Use `search --help` for a lot of options.
 The `s` command is a shorthand for `search`.
 
 You can use `search --everything` to list all problems.
+
+Alternatively, the `f` command opens an interface which 
+allows you to fuzzily search for a problem across problems with a preview. 
+It is an alias for `show` without arguments.
 
 ## Displaying problems
 
