@@ -135,6 +135,10 @@ def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
             traceback.print_exc()
             alert_error_tryagain("Assertions failed, please try again.")
             initial = raw_yaml
+        except yaml.scanner.ScannerError:
+            traceback.print_exc()
+            alert_error_tryagain("Could not parse YAML, please try again.")
+            initial = raw_yaml
         else:
             del d["path"]
             # darn PyYAML used to do this fine -_-
