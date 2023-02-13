@@ -9,6 +9,7 @@ from argparse import Namespace
 from typing import Any, Callable
 
 import yaml
+from yaml.scanner import ScannerError
 
 from .. import model, view
 from ..puid import inferPUID
@@ -135,7 +136,7 @@ def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
             traceback.print_exc()
             alert_error_tryagain("Assertions failed, please try again.")
             initial = raw_yaml
-        except yaml.scanner.ScannerError:
+        except ScannerError:
             traceback.print_exc()
             alert_error_tryagain("Could not parse YAML, please try again.")
             initial = raw_yaml
@@ -184,6 +185,14 @@ parser.add_argument(
     help="If specified, sets the source for the new problem.",
 )
 parser.add_argument(
+    "-c",
+    action="store_const",
+    default=False,
+    dest="copy",
+    const=True,
+    help="If specified, uses clipboard for either url if matching, else for body",
+)
+parser.add_argument(
     "-f",
     "--file",
     dest="filename",
@@ -205,7 +214,8 @@ def main(self: object, argv: list[str]):
             initial_text = "".join(f.readlines())
     else:
         if (
-            PYPERCLIP_AVAILABLE is True
+            opts.copy
+            and PYPERCLIP_AVAILABLE
             and (clipboard_text := pyperclip.paste().strip()) != ""
         ):
             if RE_URL.fullmatch(clipboard_text) is not None:

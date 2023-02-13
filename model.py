@@ -310,11 +310,9 @@ def getEntryByTerm(term: str) -> PickleMappingEntry | None:
             entry = index[term]
 
         if entry is None:
-            term_upper = term.upper()
-            for indice in index:
-                index_entry = index[indice]
-
-                if term_upper == inferPUID(index_entry.source):
+            puid = term.upper()
+            for index_source, index_entry in index.store.items():
+                if puid == inferPUID(index_source):
                     entry = index_entry
                     break
 

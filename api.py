@@ -31,10 +31,8 @@ def get_index(source: str, brave=False):
 
     if entry is None:
         puid = source.upper()
-        for indice in index:
-            index_entry = index[indice]
-
-            if puid == inferPUID(index_entry.source):
+        for index_source, index_entry in index.items():
+            if puid == inferPUID(index_source):
                 entry = index_entry
                 break
 
