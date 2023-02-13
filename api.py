@@ -27,14 +27,32 @@ def has_solution(source: str):
 
 def get_index(source: str, brave=False):
     """Returns the index entry for a given source"""
-    entry = index[source]
-    assert brave or not entry.secret
+    entry = index.get(source)
+
+    if entry is None:
+        puid = source.upper()
+        for index_source, index_entry in index.items():
+            if puid == inferPUID(index_source):
+                entry = index_entry
+                break
+
+    assert entry is None or brave or not entry.secret
     return entry
 
 
 def get(source: str, brave=False):
     """Returns the full data for a given source"""
     entry = get_index(source, brave)
+
+    if entry is None:
+        return model.Problem(
+            "",
+            bodies=["No Von problem found!", "No Von problem found!"],
+            source="",
+            desc="",
+            url="",
+        )
+
     return entry.full
 
 

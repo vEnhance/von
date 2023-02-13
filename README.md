@@ -70,7 +70,7 @@ To exit VON, type an EOF character.
 
 ## Meta-data
 
-- `edit "Shortlist 2016 G2"`: edit entry for problem in database
+- `edit "Shortlist 2016 G2"` or `edit "16SLG2"`: edit entry for problem in database
 
 1. Meta-data is stored at the top of each file after being added.
 2. Problems must have a _source_ like "Shortlist 2016 G2".

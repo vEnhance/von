@@ -9,6 +9,7 @@ from argparse import Namespace
 from typing import Any, Callable
 
 import yaml
+from yaml.scanner import ScannerError
 
 from .. import model, view
 from ..puid import inferPUID
@@ -135,7 +136,7 @@ def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
             traceback.print_exc()
             alert_error_tryagain("Assertions failed, please try again.")
             initial = raw_yaml
-        except yaml.scanner.ScannerError:
+        except ScannerError:
             traceback.print_exc()
             alert_error_tryagain("Could not parse YAML, please try again.")
             initial = raw_yaml
