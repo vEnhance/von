@@ -302,25 +302,35 @@ def getEntryByCacheNum(n: int) -> PickleMappingEntry:
         entry = cache[n - 1]
         return entry
 
-
-def getEntryBySource(source: str) -> PickleMappingEntry | None:
+def getEntryByTerm(term: str) -> PickleMappingEntry | None:
     with VonIndex() as index:
-        if source not in index:
-            return None
-        entry = index[source]
-    with VonCache() as cache:
-        for cache_entry in cache:
-            if cache_entry.source == entry.source:
-                return cache_entry
-        return entry
+        entry = None
+        if term in index:
+            entry = index[term]
 
+        if entry is None:
+            term_upper = term.upper()
+            for indice in index:
+                index_entry = index[indice]
+
+                if term_upper == inferPUID(index_entry.source):
+                    entry = index_entry
+                    break
+
+    if entry is not None:
+        with VonCache() as cache:
+            for cache_entry in cache:
+                if cache_entry.source == entry.source:
+                    return cache_entry
+
+    return entry
 
 def getEntryByKey(key: str):
     # TODO this shouldn't actually be in model, but blah
     if key.isdigit():
-        return getEntryByCacheNum(n=int(key))
+        return getEntryByCacheNum(int(key))
     else:
-        return getEntryBySource(source=key)
+        return getEntryByTerm(key)
 
 
 def addProblemByFileContents(path: str, text: str):
