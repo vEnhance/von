@@ -185,14 +185,6 @@ parser.add_argument(
     help="If specified, sets the source for the new problem.",
 )
 parser.add_argument(
-    "-c",
-    action="store_const",
-    default=False,
-    dest="copy",
-    const=True,
-    help="If specified, uses clipboard for either url if matching, else for body",
-)
-parser.add_argument(
     "-f",
     "--file",
     dest="filename",
@@ -214,8 +206,7 @@ def main(self: object, argv: list[str]):
             initial_text = "".join(f.readlines())
     else:
         if (
-            opts.copy
-            and PYPERCLIP_AVAILABLE
+            PYPERCLIP_AVAILABLE is True
             and (clipboard_text := pyperclip.paste().strip()) != ""
         ):
             if RE_URL.fullmatch(clipboard_text) is not None:
