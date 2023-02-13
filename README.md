@@ -124,6 +124,12 @@ The `s` command is a shorthand for `search`.
 
 You can use `search --everything` to list all problems.
 
+Alternatively, the `f` command opens an interface which 
+allows you to fuzzily search for a problem across problems with a preview. 
+It is an alias for `show` without arguments.
+
+This requires ![fzf](https://github.com/junegunn/fzf) to work.
+
 ## Displaying problems
 
 When using various commands,
