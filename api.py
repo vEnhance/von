@@ -24,6 +24,7 @@ def has_solution(source: str):
     entry = index[source]
     return len(entry.full.bodies) > 1
 
+
 def get_index(source: str, brave=False):
     """Returns the index entry for a given source"""
     entry = index.get(source)
@@ -46,9 +47,16 @@ def get(source: str, brave=False):
     entry = get_index(source, brave)
 
     if entry is None:
-        return model.Problem("", bodies=["No Von problem found!", "No Von problem found!"], source="", desc="", url="")
+        return model.Problem(
+            "",
+            bodies=["No Von problem found!", "No Von problem found!"],
+            source="",
+            desc="",
+            url="",
+        )
 
     return entry.full
+
 
 def get_statement(source: str, brave=False):
     """Returns just the problem statement for a given source"""

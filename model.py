@@ -302,6 +302,7 @@ def getEntryByCacheNum(n: int) -> PickleMappingEntry:
         entry = cache[n - 1]
         return entry
 
+
 def getEntryByTerm(term: str) -> PickleMappingEntry | None:
     with VonIndex() as index:
         entry = None
@@ -324,6 +325,7 @@ def getEntryByTerm(term: str) -> PickleMappingEntry | None:
                     return cache_entry
 
     return entry
+
 
 def getEntryByKey(key: str):
     # TODO this shouldn't actually be in model, but blah
