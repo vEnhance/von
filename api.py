@@ -43,16 +43,7 @@ def get_index(source: str, brave=False):
 def get(source: str, brave=False):
     """Returns the full data for a given source"""
     entry = get_index(source, brave)
-
-    if entry is None:
-        return model.Problem(
-            "",
-            bodies=["No Von problem found!", "No Von problem found!"],
-            source="",
-            desc="",
-            url="",
-        )
-
+    assert entry is not None
     return entry.full
 
 
