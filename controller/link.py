@@ -1,7 +1,9 @@
-from .. import model, view
 import logging
-import pyperclip
 import sys
+
+import pyperclip
+
+from .. import model, view
 
 parser = view.Parser(prog="link", description="Pastes the URL to clipboard")
 parser.add_argument("key", help="The key of the problem to open")

@@ -2,10 +2,10 @@ import argparse
 import string
 from typing import Any
 
-from .model import Problem, PickleMappingEntry
-from .termcolors import TERM_COLOR
+from .model import PickleMappingEntry, Problem
 from .puid import inferPUID
 from .rc import USER_OS
+from .termcolors import TERM_COLOR
 
 if USER_OS == "windows":
     from colorama import init  # type: ignore

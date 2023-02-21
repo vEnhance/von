@@ -1,5 +1,6 @@
-from . import term
 import sys
+
+from . import term
 
 if __name__ == "__main__":
     cmd = term.VonTerminal()

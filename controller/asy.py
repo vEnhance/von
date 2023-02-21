@@ -1,6 +1,7 @@
-from .. import model, view
 import logging
 import re
+
+from .. import model, view
 
 parser = view.Parser(
     prog="asy", description="Prints the diagram from the solution to a problem"

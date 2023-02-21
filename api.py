@@ -1,9 +1,9 @@
 # For importing von externally
-from . import model
-from .puid import inferPUID
-
 # For Pickle...
 import sys
+
+from . import model
+from .puid import inferPUID
 
 sys.modules["model"] = model
 

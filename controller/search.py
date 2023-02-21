@@ -1,5 +1,6 @@
-from .. import model, view
 import logging
+
+from .. import model, view
 
 parser = view.Parser(
     prog="search", description="Searches for problems by tags or text."

@@ -1,6 +1,7 @@
+import logging
+
 from .. import model, strparse, view
 from ..fzf import fzf_choose
-import logging
 
 parser = view.Parser(prog="show", description="Displays a problem by source name.")
 parser.add_argument(

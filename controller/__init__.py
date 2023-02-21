@@ -1,12 +1,12 @@
-from . import (
+from . import (  # NOQA
     add,
     asy,
     br,
     cd,
     clear,
     edit,
-    link,
     index,
+    link,
     nuke,
     paths,
     po,
@@ -14,7 +14,7 @@ from . import (
     show,
     solve,
     status,
-)  # NOQA
+)
 
 
 class VonController:
