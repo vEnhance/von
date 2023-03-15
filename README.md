@@ -38,12 +38,15 @@ This program assumes you have:
    and invoked by `python -m von` (to get an interactive terminal).
    If you only want to issue one command, you can also type it directly,
    e.g. `python -m von help` will list the help and exit.
-3. You may need to `pip install -r requirements.txt`.
+   (Shell users may wish to include `alias von="python -m von"` in their shell
+   configuration to save keystrokes.)
+3. You may need to `pip install -r requirements.txt` to install `pyperclip`
+   (or `sudo pacman -S python-pyperclip`, etc.).
    On Windows, you want to `pip install -r requirements-windows.txt`.
-4. LaTeX integration uses [von.sty][vonsty].
-   The previewer requires [evan.sty][evansty].
-   (See below for details.)
-5. If fuzzy searching is desired, install ![fzf](https://github.com/junegunn/fzf).
+4. Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.
+   The optional previewer requires [evan.sty][evansty]. (See below for details.)
+5. If fuzzy searching is desired (optional),
+   install [fzf](https://github.com/junegunn/fzf).
 
 ## Help
 
