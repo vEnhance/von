@@ -105,7 +105,7 @@ class Parser(argparse.ArgumentParser):
             parents=[_view_parser], *args, **kwargs
         )  # type: ignore
 
-    def process(self, *args: Any, **kwargs: Any):
+    def process(self, *args: Any, **kwargs: Any) -> argparse.Namespace:
         global OPTS
         OPTS = self.parse_args(*args, **kwargs)
         return OPTS
