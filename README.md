@@ -28,7 +28,7 @@ Here are a few hints:
 
 This program assumes you have:
 
-- Python 3 installed, and
+- Python 3.10+ installed (versions 3.8 or lower will not work), and
 - A working LaTeX compiler with `latexmk` installed.
   (I recommend [TeX Live][texlive]).
 
