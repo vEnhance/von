@@ -40,7 +40,8 @@ This program assumes you have:
    e.g. `python -m von help` will list the help and exit.
    (Shell users may wish to include `alias von="python -m von"` in their shell
    configuration to save keystrokes.)
-3. You may need to `pip install -r requirements.txt` to install `pyperclip`
+3. For clipboard functionality,
+   you may need to `pip install -r requirements.txt` to install `pyperclip`
    (or `sudo pacman -S python-pyperclip`, etc.).
    On Windows, you want to `pip install -r requirements-windows.txt`.
 4. Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.

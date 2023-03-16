@@ -1,7 +1,14 @@
 import logging
 import sys
 
-import pyperclip
+try:
+    import pyperclip
+
+    PYPERCLIP_AVAILABLE = True
+except ModuleNotFoundError:
+    PYPERCLIP_AVAILABLE = False
+    pass
+
 
 from .. import model, view
 
@@ -20,4 +27,5 @@ def main(self: object, argv: list[str]):
             print("No URL is provided for this problem")
             sys.exit(1)
         print(url)
-        pyperclip.copy(url)
+        if PYPERCLIP_AVAILABLE is True:
+            pyperclip.copy(url)
