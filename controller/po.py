@@ -220,7 +220,8 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
   \par\hspace{\fill}\rule{0.95\linewidth}{.7pt}\hspace{\fill}
   \par\nointerlineskip \vspace{\baselineskip}
 }
-"""
+
+\addtokomafont{paragraph}{\color{orange!35!black}\P\ }"""
 
 
 def main(self: object, argv: list[str]):
