@@ -109,11 +109,7 @@ url: {url}
 
 
 def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
-    if (
-        opts.copy
-        and PYPERCLIP_AVAILABLE
-        and (clipboard_text := pyperclip.paste().strip()) != ""
-    ):
+    if PYPERCLIP_AVAILABLE and (clipboard_text := pyperclip.paste().strip()):
         if RE_URL.fullmatch(clipboard_text) is not None:
             url = clipboard_text
 
