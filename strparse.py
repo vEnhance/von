@@ -91,6 +91,7 @@ def toAOPS(text: str) -> str:
     )
     text = re.sub(r"\\url{([^}]*)}", r"[url]\1[/url]", text)
     text = re.sub(r"\\href{([^}]*)}{([^}]*)}", r"[url=\1]\2[/url]", text)
+    text = text.replace(r"\arc", r"\widehat")
 
     # Join together newlines
     paragraphs = [
