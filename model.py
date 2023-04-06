@@ -278,10 +278,10 @@ def makeProblemFromPath(path: str) -> Problem:
         text = "".join(f.readlines())
     x = text.split(SEPARATOR)
     data = yaml.safe_load(x[0])
-    assert data is not None
+    assert data is not None, f"No data in {path}"
     data["bodies"] = [_.strip() for _ in x[1:]]
-    assert data["source"]
-    assert data["desc"]
+    assert data["source"], f"No source in {path}"
+    assert data["desc"], f"No description in {path}"
     return Problem(path, **data)
 
 
