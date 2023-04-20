@@ -32,21 +32,23 @@ This program assumes you have:
 - A working LaTeX compiler with `latexmk` installed.
   (I recommend [TeX Live][texlive]).
 
-1. You **must** create a copy of `rc.py` based on `rc.py.EXAMPLE`.
+1. Clone this repository (e.g. `git clone https://github.com/vEnhance/von`).
+2. You **must** create a copy of `rc.py` based on `rc.py.EXAMPLE`
+   inside the cloned repository.
    This is the "settings" file for the script.
-2. This directory should be included under PYTHONPATH,
+3. The cloned directory should be included under PYTHONPATH,
    and invoked by `python -m von` (to get an interactive terminal).
    If you only want to issue one command, you can also type it directly,
    e.g. `python -m von help` will list the help and exit.
    (Shell users may wish to include `alias von="python -m von"` in their shell
    configuration to save keystrokes.)
-3. For clipboard functionality,
+4. For clipboard functionality,
    you may need to `pip install -r requirements.txt` to install `pyperclip`
    (or `sudo pacman -S python-pyperclip`, etc.).
    On Windows, you want to `pip install -r requirements-windows.txt`.
-4. Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.
+5. Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.
    The optional previewer requires [evan.sty][evansty]. (See below for details.)
-5. If fuzzy searching is desired (optional),
+6. If fuzzy searching is desired (optional),
    install [fzf](https://github.com/junegunn/fzf).
 
 ## Help
