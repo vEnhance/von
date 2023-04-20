@@ -10,19 +10,22 @@
 
 [<img src="https://img.shields.io/badge/python%20style-black-000000.svg" alt="Python style: black">](https://github.com/psf/black)
 [<img src="https://img.shields.io/badge/types-pyright-00cca7.svg" alt="types: pyright">](https://github.com/PyCQA/pyflakes)
-[<img src="https://img.shields.io/badge/types-mypy-00cca7.svg" alt="types: mypy">](http://mypy-lang.org/)
 [<img src="https://img.shields.io/badge/lint-pyflakes-ff69b4.svg" alt="lint: pyflakes">](https://github.com/PyCQA/pyflakes)
 ![Forks](https://img.shields.io/github/forks/vEnhance/von)
 ![Stars](https://img.shields.io/github/stars/vEnhance/von)
 
 VON is a Python script I wrote in order to help me manage
-the problems and solutions to olympiad databases.
-There is no graphical user interface, and it is based on the command line.
-It is designed to run on Linux systems.
+my centralized database of solutions to olympiad problems.
+
+There is no graphical user interface; it is based on standard command line.
+Therefore, it will work best on Linux systems.
+Windows users may experience some grief,
+and Windows users unfamiliar with command line are
+[going to have a bad time](https://undertale.fandom.com/wiki/Sans).
 
 I haven't gotten around to properly documenting this,
 but posting it by popular request.
-Here are a few hints:
+Here are a few hints. Pull requests to improve this documentation are welcome.
 
 ## Setup
 
@@ -56,7 +59,7 @@ This program assumes you have:
 Use `von help` to display full help.
 The following information is mostly a subset of it.
 
-To exit VON, type an EOF character.
+To exit VON, type an EOF character (usually Ctrl-D).
 
 ## Storing problems and solutions
 
@@ -154,7 +157,7 @@ Use `show --help` and `po --help` for more details.
 
 Sometimes the list of problems and file paths might become
 messed up in some way (for example, if you move a file).
-To fix this run `von index` to recompile the entire index.
+To fix this run `von nuke` to recompile the entire index.
 
 ## Preview
 
