@@ -10,10 +10,8 @@ parser = view.Parser(prog="edit", description="Opens problem(s) by source name."
 parser.add_argument(
     "-a",
     "--all",
-    action="store_const",
+    action="store_true",
     dest="all",
-    default=False,
-    const=True,
     help="Edit all problems in cache",
 )
 parser.add_argument(

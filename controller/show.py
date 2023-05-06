@@ -19,17 +19,13 @@ parser.add_argument(
 parser.add_argument(
     "-a",
     "--aops",
-    action="store_const",
-    const=True,
-    default=False,
+    action="store_true",
     help="Returns string in `AoPS mode'. Automatically causes -b.",
 )
 parser.add_argument(
     "-p",
     "--preserve",
-    action="store_const",
-    const=True,
-    default=False,
+    action="store_true",
     help="With -b, suppress macro expansion from body.",
 )
 

@@ -11,25 +11,19 @@ parser.add_argument("filename", help="The filename to translate.")
 parser.add_argument(
     "-p",
     "--pagebreaks",
-    action="store_const",
-    const=True,
-    default=False,
+    action="store_true",
     help="Include page break after every solution (default is a bar).",
 )
 parser.add_argument(
     "-l",
     "--lazy",
-    action="store_const",
-    const=True,
-    default=False,
+    action="store_true",
     help="Don't include solutions to the problems.",
 )
 parser.add_argument(
     "-k",
     "--sourced",
-    action="store_const",
-    const=True,
-    default=False,
+    action="store_true",
     help="Always include the keyed source anyways.",
 )
 

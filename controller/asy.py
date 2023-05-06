@@ -24,9 +24,7 @@ parser.add_argument(
 parser.add_argument(
     "-c",
     "--comments",
-    action="store_const",
-    const=True,
-    default=False,
+    action="store_true",
     help="Decides whether or not commented lines should be displayed",
 )
 

@@ -18,16 +18,12 @@ parser.add_argument("--date", default=r"\today", help="Date of the LaTeX documen
 parser.add_argument(
     "-k",
     "--sourced",
-    action="store_const",
-    const=True,
-    default=False,
+    action="store_true",
     help="Include the source.",
 )
 parser.add_argument(
     "--tex",
-    action="store_const",
-    const=True,
-    default=False,
+    action="store_true",
     help="Supply only the TeX source, rather than compiling to PDF.",
 )
 parser.add_argument(
