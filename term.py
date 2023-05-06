@@ -96,7 +96,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
             func = getattr(self, "do_" + cmd)
             func(cargs[1:])
         else:
-            logging.error("Command {} not recognized".format(cmd))
+            logging.error(f"Command {cmd} not recognized")
 
     def do_help(self, argv: list[str]):
         arg = "".join(argv)
@@ -104,9 +104,9 @@ class VonTerminal(cmd.Cmd, controller.VonController):
             try:
                 func = getattr(self, "do_" + arg)
             except AttributeError:
-                logging.error("Command {} not found".format(arg))
+                logging.error(f"Command {arg} not found")
             else:
-                print(APPLY_COLOR("MAGENTA", "Getting `{} --help`...".format(arg)))
+                print(APPLY_COLOR("MAGENTA", f"Getting `{arg} --help`..."))
                 func(["--help"])
         else:
             print("Here is a list of available commands:")

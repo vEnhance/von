@@ -68,4 +68,4 @@ def main(self: object, argv: list[str]):
             else:
                 view.out(strparse.demacro(problem.bodies[b]))
         except IndexError:
-            logging.error("Couldn't access {}-th body of {}".format(b, problem.source))
+            logging.error(f"Couldn't access {b}-th body of {problem}")
