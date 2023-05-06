@@ -28,6 +28,12 @@ parser.add_argument(
     action="store_true",
     help="With -b, suppress macro expansion from body.",
 )
+parser.add_argument(
+    "-t",
+    "--twitch",
+    action="store_true",
+    help="Implies --aops --body=1 and includes an ad for Twitch Solves ISL.",
+)
 
 
 def main(self: object, argv: list[str]):
@@ -44,19 +50,22 @@ def main(self: object, argv: list[str]):
     else:
         b = opts.body
         problem = entry.full
-        if b is None and opts.aops:
+        if b is None and opts.twitch:
+            b = 1
+        elif b is None and opts.aops:
             b = 0
-        if b is None:
+        elif b is None:
             view.printProblem(problem, i=entry.i)
-        else:
-            try:
-                if opts.aops:
-                    view.out(strparse.toAOPS(problem.bodies[b]))
-                elif opts.preserve:
-                    view.out(problem.bodies[b])
-                else:
-                    view.out(strparse.demacro(problem.bodies[b]))
-            except IndexError:
-                logging.error(
-                    "Couldn't access {}-th body of {}".format(b, problem.source)
-                )
+            return
+        try:
+            if opts.twitch:
+                view.out("Solution from [i]Twitch Solves ISL[/i]:\n")
+                view.out(strparse.toAOPS(problem.bodies[b]))
+            elif opts.aops:
+                view.out(strparse.toAOPS(problem.bodies[b]))
+            elif opts.preserve:
+                view.out(problem.bodies[b])
+            else:
+                view.out(strparse.demacro(problem.bodies[b]))
+        except IndexError:
+            logging.error("Couldn't access {}-th body of {}".format(b, problem.source))
