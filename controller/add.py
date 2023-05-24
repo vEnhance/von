@@ -219,7 +219,7 @@ def main(self: object, argv: list[str]):
             PYPERCLIP_AVAILABLE is True
             and (clipboard_text := pyperclip.paste().strip()) != ""
         ):
-            if RE_URL.fullmatch(clipboard_text) is not None:
+            if RE_URL.fullmatch(clipboard_text) is not None and opts.url is not None:
                 initial_text = "<++>"
                 url = clipboard_text
             else:
