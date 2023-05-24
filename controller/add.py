@@ -195,13 +195,19 @@ parser.add_argument(
     default=None,
     help="If specified, uses contents of file as body",
 )
+parser.add_argument(
+    "-u",
+    "--url",
+    default=None,
+    help="Specify a URL on the command line",
+)
 
 
 def main(self: object, argv: list[str]):
     del self
     opts = parser.process(argv)
     opts.verbose = True
-    url = "<++>"
+    url = opts.url if opts.url is not None else "<++>"
     if opts.filename is not None:
         if not os.path.isfile(opts.filename):
             logging.error("The file " + opts.filename + " doesn't exist")
