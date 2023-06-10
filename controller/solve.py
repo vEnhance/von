@@ -43,20 +43,29 @@ def main(self: object, argv: list[str]):
                 has_star = result.group(1) is not None
                 source = result.group(2)
                 key = result.group(4)
-                if has_star and not opts.sourced:
-                    s += r"\begin{problem}" + "\n"
-                elif source is not None:
-                    s += r"\begin{problem}" + source + "\n"
-                else:
-                    s += r"\begin{problem}[" + key + "]" + "\n"
                 entry = model.getEntryByKey(key)
                 assert entry is not None, key
                 problem = entry.full
+
+                if has_star and not opts.sourced:
+                    s += r"\begin{problem}" + "\n"
+                elif source is not None:
+                    if entry.url is not None and not r"\href" in source:
+                        s += r"\begin{problem}["
+                        s += r"\href{" + entry.url + "}{" + source[1:-1] + "}"
+                        s += "]\n"
+                    else:
+                        s += r"\begin{problem}" + source + "\n"
+                else:
+                    if entry.url is not None:
+                        s += r"\begin{problem}[\href{" + entry.url + "}{" + key + "}]\n"
+                    else:
+                        s += r"\begin{problem}[" + key + "]" + "\n"
                 s += strparse.demacro(problem.bodies[0]) + "\n"
                 s += r"\end{problem}" + "\n"
                 if not opts.lazy:
                     if len(problem.bodies) > 1:
-                        s += r"\subsubsection*{\ul{Solution}}" + "\n"
+                        s += r"\subsection*{\ul{Solution}}" + "\n"
                         s += strparse.demacro(problem.bodies[1]) + "\n"
                         if opts.pagebreaks:
                             s += r"\newpage" + "\n"
