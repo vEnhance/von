@@ -35,6 +35,7 @@ parser.add_argument(
 
 LATEX_PREAMBLE = r"""\usepackage{amsmath,amssymb,amsthm}
 \usepackage[minimal]{yhmath}
+\usepackage{derivative}
 
 \PassOptionsToPackage{usenames,svgnames,dvipsnames}{xcolor}
 \usepackage{thmtools}
