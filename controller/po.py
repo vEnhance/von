@@ -214,9 +214,8 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 
 \providecommand{\arc}[1]{\wideparen{#1}}
 \newcommand{\hrulebar}{
-  \par\hspace{\fill}\rule{0.95\linewidth}{.7pt}\hspace{\fill}
-  \par\nointerlineskip \vspace{\baselineskip}
-}
+\par\hspace{\fill}\rule{0.95\linewidth}{.7pt}\hspace{\fill}
+\par\nointerlineskip \vspace{\baselineskip}}
 
 \addtokomafont{paragraph}{\color{orange!35!black}\P\ }"""
 
@@ -267,8 +266,9 @@ def main(self: object, argv: list[str]):
             s += r"\end{problem}" if len(keys) > 1 else r"\end{problem*}"
             if entry.url:
                 s += r"\noindent\emph{Link}: \url{" + entry.url + "}" + "\n"
-            s += "\n" + r"\hrulebar" + "\n\n"
-            s += strparse.demacro(problem.bodies[1]) + "\n"
+            if len(problem.bodies) > 1:
+                s += "\n" + r"\hrulebar" + "\n\n"
+                s += strparse.demacro(problem.bodies[1]) + "\n"
             s += r"\pagebreak" + "\n\n"
     s += r"\end{document}"
     if opts.tex:
