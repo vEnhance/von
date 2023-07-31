@@ -151,7 +151,7 @@ for k, v in list(lookup.items()):
 lookup["AMC 10A"] = "10A"
 lookup["AMC 10B"] = "10B"
 lookup["AMC 12A"] = "12A"
-lookup["AMC 12B"] = "12A"
+lookup["AMC 12B"] = "12B"
 lookup["ARML Local"] = "ARMLOC"
 lookup["Balkan"] = "BALK"
 lookup["Baltic Way"] = "BWAY"
