@@ -12,17 +12,10 @@ import yaml
 from yaml.scanner import ScannerError
 
 from .. import model, view
+from ..clipboard import get_clipboard
 from ..puid import inferPUID
 from ..rc import EDITOR, NSEPARATOR, SEPARATOR, TAG_HINT_TEXT
 from . import preview
-
-try:
-    import pyperclip
-
-    PYPERCLIP_AVAILABLE = True
-except ModuleNotFoundError:
-    PYPERCLIP_AVAILABLE = False
-    pass
 
 # https://urlregex.com/
 RE_URL = re.compile(
@@ -109,7 +102,7 @@ url: {url}
 
 
 def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
-    if PYPERCLIP_AVAILABLE and (clipboard_text := pyperclip.paste().strip()):
+    if clipboard_text := get_clipboard():
         if RE_URL.fullmatch(clipboard_text) is not None:
             url = clipboard_text
 
@@ -215,10 +208,7 @@ def main(self: object, argv: list[str]):
         with open(opts.filename) as f:
             initial_text = "".join(f.readlines())
     else:
-        if (
-            PYPERCLIP_AVAILABLE is True
-            and (clipboard_text := pyperclip.paste().strip()) != ""
-        ):
+        if clipboard_text := get_clipboard():
             if RE_URL.fullmatch(clipboard_text) is not None and opts.url is not None:
                 initial_text = "<++>"
                 url = clipboard_text
