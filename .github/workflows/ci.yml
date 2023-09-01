@@ -91,7 +91,7 @@ jobs:
           restore-keys: ${{ runner.os }}-pip
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pyflakes toml black git+https://github.com/codespell-project/codespell.git@fd1d5c0d8dd5d8072d0422ce4f05b6202aa89ba0 tomli
+          python -m pip install --upgrade pyflakes black codespell isort
       - name: Run Pyflakes
         run: |
           pyflakes .
