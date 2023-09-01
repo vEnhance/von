@@ -98,6 +98,9 @@ jobs:
       - name: Run black
         run: |
           black --check $(git ls-files '*.py')
+      - name: Run isort
+        run: |
+          isort --check --profile black $(git ls-files '*.py')
       - name: Run spell-check
         run: |
           codespell $(git ls-files)
