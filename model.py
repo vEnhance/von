@@ -166,7 +166,7 @@ class GenericItem:  # superclass to Problem, PickleMappingEntry
         if OTIS_HANDOUT_USED_SOURCES is not None:
             if "waltz" in self.tags:
                 if self.source in OTIS_HANDOUT_USED_SOURCES:
-                    logging.critical(f"{self.source} detected as duplicated")
+                    logging.critical(f"{self.source} in both OTIS handout and exam")
                 return True
             return self.source in OTIS_HANDOUT_USED_SOURCES
         else:
