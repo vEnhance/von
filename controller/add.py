@@ -57,7 +57,6 @@ def alert_error_tryagain(message=""):
 
 PS_INSTRUCT = r"""% Input your problem and solution below.
 % Three dashes on a newline indicate the breaking points.
-% vim: tw=80
 % URL detected: {url}
 """
 
