@@ -38,6 +38,7 @@ def main(self: object, argv: list[str]):
         problem = entry.full
         soln = problem.bodies[opts.body]
         asys = re.findall(r"\\begin\{asy\}(.+?)\\end\{asy\}", soln, flags=re.DOTALL)
+        assert opts.number >= 1
         diagram = asys[opts.number - 1]
 
         if not opts.comments:
