@@ -115,6 +115,3 @@ class VonTerminal(cmd.Cmd, controller.VonController):
                     print("*", name[3:])
             print("To exit VON, type an EOF character")
             print("(usually possible via Ctrl+D).")
-
-
-# vim: fdm=marker
