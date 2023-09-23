@@ -58,13 +58,19 @@ def alert_error_tryagain(message=""):
 PS_INSTRUCT = r"""% Input your problem and solution below.
 % Three dashes on a newline indicate the breaking points.
 % URL detected: {url}
+% TEX root = {preview_path}
 """
 
 
 def solicit_user_for_content(raw_text: str, url: str, opts: Namespace):
     del opts
     initial = (
-        PS_INSTRUCT.format(url=url if url != "<++>" else "None") + NSEPARATOR + raw_text
+        PS_INSTRUCT.format(
+            url=url if url != "<++>" else "None",
+            preview_path=preview.VON_PREVIEW_PATH,
+        )
+        + NSEPARATOR
+        + raw_text
     )
 
     def pre_hook(tempfile_name: str):
