@@ -83,11 +83,12 @@ strictListInference = false
 strictParameterNoneValue = false
 strictSetInference = false
 
+[tool.ruff]
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
 [tool.codespell]
 skip = "puid.py"
 count = ""
 quiet-level = 3
 ignore-words-list = "ques"
-
-[tool.ruff.lint]
-select = ["E4", "E7", "E9", "F", "I"]
