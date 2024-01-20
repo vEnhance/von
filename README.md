@@ -8,9 +8,9 @@
 [<img src="https://github.com/vEnhance/von/actions/workflows/ci.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
 [<img src="https://github.com/vEnhance/von/actions/workflows/codeql-analysis.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
 
-[<img src="https://img.shields.io/badge/python%20style-black-000000.svg" alt="Python style: black">](https://github.com/psf/black)
-[<img src="https://img.shields.io/badge/types-pyright-00cca7.svg" alt="types: pyright">](https://github.com/PyCQA/pyflakes)
-[<img src="https://img.shields.io/badge/lint-pyflakes-ff69b4.svg" alt="lint: pyflakes">](https://github.com/PyCQA/pyflakes)
+[<img src="https://img.shields.io/badge/python%20style-black-000000.svg" alt="style: black">](https://github.com/psf/black)
+[<img src="https://img.shields.io/badge/types-pyright-00cca7.svg" alt="types: pyright">](https://github.com/Microsoft/pyright)
+[<img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="lint: ruff">](https://github.com/astral-sh/ruff)
 ![Forks](https://img.shields.io/github/forks/vEnhance/von)
 ![Stars](https://img.shields.io/github/stars/vEnhance/von)
 
