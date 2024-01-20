@@ -98,4 +98,4 @@ jobs:
           ruff format --diff $(git ls-files '*.py')
       - name: Run spell-check
         run: |
-          codespell $(git ls-files) --toml pyproject.toml -q 0
+          codespell $(git ls-files)
