@@ -89,6 +89,5 @@ count = ""
 quiet-level = 3
 ignore-words-list = "ques"
 
-[tool.yapf]
-based_on_style = "google"
-column_limit = 80
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
