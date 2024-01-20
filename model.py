@@ -156,7 +156,7 @@ class GenericItem:  # superclass to Problem, PickleMappingEntry
 
     @property
     def sortkey(self):
-        if type(self.hardness) == int:
+        if isinstance(self.hardness, int):
             return (self.sortvalue, self.hardness, self.source)
         else:
             return (self.sortvalue, -1, self.source)

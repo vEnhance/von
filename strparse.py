@@ -38,8 +38,7 @@ def demacro(text: str) -> str:
 
 
 def remove_soft_newlines(text: str) -> str:
-    rm_newline = lambda m: m.group(0).replace("\n", " ")
-    return re.sub(r"[a-zA-Z]\n[a-zA-Z]", rm_newline, text)
+    return re.sub(r"[a-zA-Z]\n[a-zA-Z]", lambda m: m.group(0).replace("\n", " "), text)
 
 
 def toAOPS(text: str) -> str:

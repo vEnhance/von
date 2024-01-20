@@ -64,7 +64,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
                 print("^C")
             except SystemExit:
                 pass
-            except:
+            except Exception:
                 traceback.print_exc()
         print("\n" + GOODBYE_STRING)
 

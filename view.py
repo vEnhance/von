@@ -44,11 +44,14 @@ def get_author_initials(author: str) -> str:
             return capitals
         return a
     else:  # len(author_words) > 1
-        passes = lambda a: a and (
-            a[0] in string.ascii_uppercase
-            or a == ","
-            or all(_ in string.ascii_letters + string.digits for _ in a)
-        )
+
+        def passes(a: str):
+            return a and (
+                a[0] in string.ascii_uppercase
+                or a == ","
+                or all(_ in string.ascii_letters + string.digits for _ in a)
+            )
+
         return "".join(a[0] for a in author_words if passes(a))
 
 
@@ -101,9 +104,7 @@ OPTS = _view_parser.parse_args([])
 
 class Parser(argparse.ArgumentParser):
     def __init__(self, *args: Any, **kwargs: Any):
-        super(Parser, self).__init__(
-            parents=[_view_parser], *args, **kwargs
-        )  # type: ignore
+        super(Parser, self).__init__(parents=[_view_parser], *args, **kwargs)  # type: ignore
 
     def process(self, *args: Any, **kwargs: Any) -> argparse.Namespace:
         global OPTS
@@ -176,7 +177,7 @@ def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = Non
     s += " " * max(1, 17 - len(source_string))
 
     # hardness
-    if type(entry.hardness) == int:
+    if isinstance(entry.hardness, int):
         s += APPLY_COLOR("BOLD_RED", f"{entry.hardness:2}M")
         s += " "
 

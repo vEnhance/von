@@ -50,7 +50,7 @@ def main(self: object, argv: list[str]):
                 if has_star and not opts.sourced:
                     s += r"\begin{problem}" + "\n"
                 elif source is not None:
-                    if entry.url is not None and not r"\href" in source:
+                    if entry.url is not None and r"\href" not in source:
                         s += r"\begin{problem}["
                         s += r"\href{" + entry.url + "}{" + source[1:-1] + "}"
                         s += "]\n"
