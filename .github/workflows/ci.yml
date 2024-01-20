@@ -91,13 +91,11 @@ jobs:
           restore-keys: ${{ runner.os }}-pip
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade ruff codespell
+          python -m pip install --upgrade ruff codespell tomli
       - name: Run ruff
         run: |
           ruff check --output-format=github $(git ls-files '*.py')
           ruff format --diff $(git ls-files '*.py')
       - name: Run spell-check
         run: |
-          ls
-          cat pyproject.toml
           codespell $(git ls-files) --toml pyproject.toml -q 0
