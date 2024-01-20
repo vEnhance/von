@@ -100,4 +100,4 @@ jobs:
         run: |
           ls
           cat pyproject.toml
-          codespell $(git ls-files)
+          codespell $(git ls-files) --toml pyproject.toml -q 0
