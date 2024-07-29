@@ -7,6 +7,7 @@ from . import (  # NOQA
     edit,
     index,
     link,
+    markup,
     nuke,
     paths,
     po,
@@ -30,6 +31,8 @@ class VonController:
     do_edit = edit.main
     do_f = show.main  # alias find
     do_link = link.main
+    do_m = markup.main
+    do_markup = markup.main
     do_index = index.main
     do_nuke = nuke.main
     do_paths = paths.main
