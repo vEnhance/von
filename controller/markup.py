@@ -80,6 +80,8 @@ def main(self: object, argv: list[str]):
             view.out(header)
             if opts.discord is True:
                 view.out(r"```latex")
+            else:
+                view.out("")
             view.out(
                 statement if opts.preserve is True else strparse.demacro(statement)
             )
