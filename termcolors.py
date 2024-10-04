@@ -23,6 +23,6 @@ TERM_COLOR["BG_BLUE"] = "\033[44m"
 TERM_COLOR["BG_MAGENTA"] = "\033[45m"
 TERM_COLOR["BG_CYAN"] = "\033[46m"
 
-if USE_COLOR is False:
+if USE_COLOR is False:  # type: ignore
     for key in list(TERM_COLOR.keys()):
         TERM_COLOR[key] = ""
