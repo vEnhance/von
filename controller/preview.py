@@ -1,6 +1,6 @@
 import os
 
-from ..rc import USER_OS, VON_PREVIEW_PATH, VON_DEFAULT_AUTHOR
+from ..rc import USER_OS, VON_DEFAULT_AUTHOR, VON_PREVIEW_PATH
 
 def make_preview(full_path: str):
     if not os.path.exists(os.path.dirname(VON_PREVIEW_PATH)):
