@@ -1,7 +1,6 @@
 import os
 
-from ..rc import USER_OS, VON_PREVIEW_PATH
-
+from ..rc import USER_OS, VON_PREVIEW_PATH, VON_DEFAULT_AUTHOR
 
 def make_preview(full_path: str):
     if not os.path.exists(os.path.dirname(VON_PREVIEW_PATH)):
@@ -12,6 +11,7 @@ def make_preview(full_path: str):
     with open(VON_PREVIEW_PATH, "w") as f:
         print(r"\documentclass[11pt]{scrartcl}", file=f)
         print(r"\usepackage[sexy,diagrams]{evan}", file=f)
+        print(r"\author{"+VON_DEFAULT_AUTHOR+"}", file=f)
 
         print(r"\title{VON Preview}", file=f)
         print(r"\begin{document}", file=f)
