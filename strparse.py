@@ -5,7 +5,8 @@ import re
 def demacro(text: str) -> str:
     # TODO this doesn't quite work, but oh well
     replacements: list[tuple[str, str]] = [
-        (r"\ii", r"\item"),
+        (r"\ii ", r"\item "),
+        (r"\ii[", r"\item["),
         (r"\wh", r"\widehat"),
         (r"\wt", r"\widetilde"),
         (r"\ol", r"\overline"),
