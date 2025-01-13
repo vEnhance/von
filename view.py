@@ -137,7 +137,7 @@ def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = Non
     if i is None:
         i = entry.i
     if i is not None:
-        index_string = f"{i+1:3}"
+        index_string = f"{i + 1:3}"
         if "final" in entry.tags:
             s += APPLY_COLOR("YELLOW", index_string)
         elif "waltz" in entry.tags:
