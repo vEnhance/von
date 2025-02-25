@@ -14,7 +14,7 @@ if USER_OS != "windows":
 
     readline.set_completer_delims(" \t\n")
 else:
-    from pyreadline import Readline  # type: ignore
+    from pyreadline3 import Readline  # type: ignore
 
     readline = Readline()
     from colorama import init  # type: ignore
