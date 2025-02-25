@@ -1,2 +1,0 @@
-pyperclip>=1.7.0
-pyyaml>=5.3.1
