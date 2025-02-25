@@ -9,15 +9,14 @@ repository = "https://github.com/vEnhance/von/"
 
 [tool.poetry.dependencies]
 python = ">=3.10, <4.0"
-pyperclip = "^1.8.2"
-PyYaml = "^6.0.1"
+pyperclip = "^1.9.0"
+PyYaml = "^6.0.2"
 
 [tool.poetry.group.dev.dependencies]
-codespell = "^2.3.0"
-pyflakes = "^3.1.0"
-pyright = "^1.1.391"
+codespell = "^2.4.1"
+pyright = "^1.1.394"
 toml = "^0.10.2"
-ruff = "^0.9.1"
+ruff = "^0.9.7"
 
 [tool.pyright]
 enableTypeIgnoreComments = true
