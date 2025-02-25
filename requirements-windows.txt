@@ -1,2 +1,0 @@
-pyreadline3>=3.0.6
-colorama>=0.4.3

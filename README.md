@@ -27,33 +27,22 @@ I haven't gotten around to properly documenting this,
 but posting it by popular request.
 Here are a few hints. Pull requests to improve this documentation are welcome.
 
-## Setup
+## Installation
 
-This program assumes you have:
-
-- Python 3.10+ installed (versions 3.8 or lower will not work), and
-- A working LaTeX compiler with `latexmk` installed.
-  (I recommend [TeX Live][texlive]).
-
-1. Clone this repository (e.g. `git clone https://github.com/vEnhance/von`).
-2. You **must** create a copy of `rc.py` based on `rc.py.EXAMPLE`
-   inside the cloned repository.
-   This is the "settings" file for the script.
-3. The cloned directory should be included under PYTHONPATH,
-   and invoked by `python -m von` (to get an interactive terminal).
-   If you only want to issue one command, you can also type it directly,
-   e.g. `python -m von help` will list the help and exit.
-   (Shell users may wish to include `alias von="python -m von"` in their shell
-   configuration to save keystrokes.)
-4. If not pre-installed, you should `pip install pyyaml`
-   (or `sudo pacman -S python-pyyaml`, etc.).
-   For optional clipboard functionality, you may need to `pip install pyperclip`
-   (or `sudo pacman -S python-pyperclip`, etc.).
-   You can do both commands at once with `pip install -r requirements.txt`.
-   On Windows, you should additionally `pip install -r requirements-windows.txt`.
-5. Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.
+1. Run `pip install vondb` (note the package name on PyPI is `vondb` and not `von`;
+   but the command and module are named `von`).
+   (Here is the [PyPI listing](https://pypi.org/project/vondb/).)
+   Or if you're on Arch Linux, install from [python-vondb in AUR](https://aur.archlinux.org/packages/python-vondb).
+2. When first run, the program will (try to) create a configuration file
+   `~/.config/von/config` or similar if it does not exist.
+   You should then edit that file and choose some values.
+   The program will be unlikely to work correctly
+   until after you have chosen e.g. the `base_path` parameter.
+3. Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.
    The optional previewer requires [evan.sty][evansty]. (See below for details.)
-6. If fuzzy searching is desired (optional),
+   This assumes a working LaTeX compiler with `latexmk` installed.
+   (I recommend [TeX Live][texlive]).
+4. If fuzzy searching is desired (optional),
    install [fzf](https://github.com/junegunn/fzf).
 
 ## Help
@@ -108,7 +97,7 @@ An example of an entry:
 desc:  $5^n$ has six consecutive zeros
 author: Evan Chen
 source:  JMO 2016/2
-tags:  [wishful, favorite, mods, construct, mine, 2016-04, free, brave]
+tags:  [favorite, construct, medium]
 hardness: 25
 
 ---

@@ -29,6 +29,7 @@ def demacro(text: str) -> str:
         (r"\defeq", r"\overset{\text{def}}{=}"),
         (r"\id", r"\operatorname{id}"),
         (r"\ord", r"\operatorname{ord}"),
+        (r"\sign", r"\operatorname{sign}"),
         (r"\injto", r"\hookrightarrow"),
         (r"\vdotswithin=", r"\vdots"),
     ]
