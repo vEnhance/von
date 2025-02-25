@@ -1,18 +1,11 @@
 name: PyPI Release
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+  release:
+    types: [published]
 
 jobs:
   pypi-publish:
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      startsWith(github.event.workflow_run.head_branch, 'refs/tags/')
-
     name: Upload release to PyPI
     runs-on: ubuntu-latest
     environment:
