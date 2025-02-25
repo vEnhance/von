@@ -36,21 +36,23 @@ This program assumes you have:
   (I recommend [TeX Live][texlive]).
 
 1. Clone this repository (e.g. `git clone https://github.com/vEnhance/von`).
-2. You **must** create a copy of `rc.py` based on `rc.py.EXAMPLE`
-   inside the cloned repository.
-   This is the "settings" file for the script.
-3. The cloned directory should be included under PYTHONPATH,
+2. The cloned directory should be included under PYTHONPATH,
    and invoked by `python -m von` (to get an interactive terminal).
    If you only want to issue one command, you can also type it directly,
    e.g. `python -m von help` will list the help and exit.
    (Shell users may wish to include `alias von="python -m von"` in their shell
    configuration to save keystrokes.)
-4. If not pre-installed, you should `pip install pyyaml`
+3. If not pre-installed, you should `pip install pyyaml`
    (or `sudo pacman -S python-pyyaml`, etc.).
    For optional clipboard functionality, you may need to `pip install pyperclip`
    (or `sudo pacman -S python-pyperclip`, etc.).
    You can do both commands at once with `pip install -r requirements.txt`.
    On Windows, you should additionally `pip install -r requirements-windows.txt`.
+4. When first run, the program will (try to) create a configuration file
+   `~/.config/von/config` or similar if it does not exist.
+   You should then edit that file and choose some values.
+   The program will be unlikely to work correctly
+   until after you have chosen e.g. the `base_path` parameter.
 5. Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.
    The optional previewer requires [evan.sty][evansty]. (See below for details.)
 6. If fuzzy searching is desired (optional),
