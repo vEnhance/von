@@ -48,7 +48,7 @@ jobs:
           python-version: "3.13"
       - name: Install Hatch
         run: pipx install hatch
-      - uses: actions/cache@v5
+      - uses: actions/cache@v4
         with:
           path: ~/.cache/hatch
           key: ${{ runner.os }}-hatch
