@@ -113,5 +113,6 @@ class VonTerminal(cmd.Cmd, controller.VonController):
             for name in sorted(self.get_names()):
                 if name[:3] == "do_" and name != "do_help" and name != "do_EOF":
                     print("*", name[3:])
-            print("To exit VON, type an EOF character")
-            print("(usually possible via Ctrl+D).")
+            print("Running with no arguments starts an interactive terminal.")
+            print("You can get more help on a command by typing its name then --help.")
+            print("To exit VON, type an EOF character (usually possible via Ctrl+D).")
