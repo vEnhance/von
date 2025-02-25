@@ -100,7 +100,7 @@ EDITOR = config.get("editor", None) or os.environ.get("EDITOR", "vim")
 TAG_HINT_TEXT = config.get("tag_hint_text", "")
 USE_COLOR = config.get("color", True)
 
-# OS detector (can be overriden)
+# OS detector (can be overridden)
 USER_OS: Literal["windows"] | Literal["mac"] | Literal["linux"]
 
 if (user_os := config.get("os")) is not None:
