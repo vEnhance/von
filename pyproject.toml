@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "von"
+name = "vondb"
 version = "3.0.0"
 description = "VON: vEnhance's Olympiad Navigator"
 authors = [{ name = "Evan Chen", email = "evan@evanchen.cc" }]
@@ -17,6 +17,9 @@ dependencies = [
     'pyreadline>=2.1; sys_platform == "win32"',
     'colorama>=0.4.3; sys_platform == "win32"'
 ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["von"]
 
 [project.scripts]
 von = "von.__main__:main"
