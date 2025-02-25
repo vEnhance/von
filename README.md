@@ -31,6 +31,7 @@ Here are a few hints. Pull requests to improve this documentation are welcome.
 
 1. Run `pip install vondb` (note the package name on PyPi is `vondb` and not `von`;
    but the command and module are named `von`).
+   (Here is the [PyPi listing](https://pypi.org/project/vondb/).)
 2. When first run, the program will (try to) create a configuration file
    `~/.config/von/config` or similar if it does not exist.
    You should then edit that file and choose some values.
