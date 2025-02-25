@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vondb"
-version = "3.0.0"
+version = "3.0.1"
 description = "VON: vEnhance's Olympiad Navigator"
 authors = [{ name = "Evan Chen", email = "evan@evanchen.cc" }]
 license = { text = "MIT" }
