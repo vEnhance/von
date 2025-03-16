@@ -56,7 +56,7 @@ tags: ["trivial", "easy", "medium", "hard", "brutal"]
 # define it here. This will also override any "standard"
 # lookups in `puid.py`. (This should be in python dictionary
 # format)
-# lookups: {"contest-1": "abbreviation-1", "contest-2": "abbreviation-2"}
+# lookup: {"contest-1": "abbreviation-1", "contest-2": "abbreviation-2"}
 """
 
 if not CONFIG_DIR.exists():
