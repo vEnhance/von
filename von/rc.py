@@ -49,7 +49,15 @@ tags: ["trivial", "easy", "medium", "hard", "brutal"]
 
 # Name of text editor to invoke
 # By default, it detects from $EDITOR automatically
-# editor: vim"""
+# editor: vim
+
+# If you would like to define a custom contest name
+# (to be used in the PUID script), then you should
+# define it here. This will also override any "standard"
+# lookups in `puid.py`. (This should be in python dictionary
+# format)
+# lookups: {"contest-1": "abbreviation-1", "contest-2": "abbreviation-2"}
+"""
 
 if not CONFIG_DIR.exists():
     try:
@@ -111,6 +119,11 @@ elif sys.platform.startswith("darwin"):
     USER_OS = "mac"
 else:
     USER_OS = "linux"  # including cygwin
+
+if (custom_lookup := config.get("lookup")) is not None:
+    VON_CUSTOM_LOOKUP = custom_lookup
+else:
+    VON_CUSTOM_LOOKUP = {}
 
 # These used to be editable but I don't think it's worth it
 VON_INDEX_NAME = "index"
