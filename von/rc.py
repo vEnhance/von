@@ -120,7 +120,7 @@ elif sys.platform.startswith("darwin"):
 else:
     USER_OS = "linux"  # including cygwin
 
-VON_CUSTOM_PUID = config.get("abbreviations", {})
+VON_CUSTOM_LOOKUP = config.get("abbreviations", {})
 
 # These used to be editable but I don't think it's worth it
 VON_INDEX_NAME = "index"
