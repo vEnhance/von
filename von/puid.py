@@ -1,6 +1,8 @@
 import hashlib
 import re
 
+from rc import VON_CUSTOM_LOOKUP
+
 lookup = {
     "Afghanistan": "AFG",
     "Albania": "ALB",
@@ -207,6 +209,7 @@ lookup["USAMO"] = "AMO"
 lookup["USAMTS"] = "USMT"
 lookup["USA GST"] = "USAEST"
 
+lookup.update(VON_CUSTOM_LOOKUP)
 # whooooo
 REGEX = r"(?P<contest>[a-zA-Z][a-zA-Z0-9 ]+)(19|20)(?P<year>[0-9][0-9])(?P<stem>[ \/](?P<locator>[0-9A-Za-z\.\/\- ]+))?$"
 re_generic = re.compile(REGEX)
