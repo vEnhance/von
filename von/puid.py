@@ -1,7 +1,7 @@
 import hashlib
 import re
 
-from rc import VON_CUSTOM_LOOKUP
+from .rc import VON_CUSTOM_LOOKUP
 
 lookup = {
     "Afghanistan": "AFG",
