@@ -47,6 +47,13 @@ tags: ["trivial", "easy", "medium", "hard", "brutal"]
 # If this fails for some reason, you can set it to `windows`, `mac`, or `linux` below
 # os: linux
 
+# path to store von cache
+# von_cache_path: "tmp/"
+# path to put previewer TeX file
+# von_preview_path: "tmp/preview_shenloh/von_preview.tex"
+# path to put posted output files
+# von_post_output_dir: "tmp/po_shenloh/"
+
 # Name of text editor to invoke
 # By default, it detects from $EDITOR automatically
 # editor: vim
@@ -126,13 +133,21 @@ VON_CUSTOM_LOOKUP = config.get("abbreviations", {})
 VON_INDEX_NAME = "index"
 VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
 VON_CACHE_NAME = "von_cache_" + getpass.getuser()
-VON_CACHE_PATH = os.path.join(tempfile.gettempdir(), VON_CACHE_NAME)
-VON_PREVIEW_PATH = os.path.join(
-    tempfile.gettempdir(),
-    "preview_" + getpass.getuser(),
-    "von_preview.tex",
+
+# I guess it's worth it
+VON_CACHE_PATH = config.get(
+    "von_cache_path", os.path.join(tempfile.gettempdir(), VON_CACHE_NAME)
+)
+VON_PREVIEW_PATH = config.get(
+    "von_preview_path",
+    os.path.join(
+        tempfile.gettempdir(),
+        "preview_" + getpass.getuser(),
+        "von_preview.tex",
+    ),
 )
 VON_POST_OUTPUT_DIR = os.path.join(
+    "von_post_output_dir",
     tempfile.gettempdir(),
     "po_" + getpass.getuser(),
 )
