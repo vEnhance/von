@@ -48,8 +48,8 @@ tags: ["trivial", "easy", "medium", "hard", "brutal"]
 # os: linux
 
 # path to store temporary files (von cache, TeX previewer, posted output files)
-# Defaults to tmp/
-# von_tmp_path: "~/Documents/vondb/"
+# Defaults to the output of Python's tempfile.gettempdir()
+# von_tmp_path: "/tmp"
 
 # Name of text editor to invoke
 # By default, it detects from $EDITOR automatically
