@@ -131,7 +131,7 @@ VON_TMP_PATH = config.get("von_tmp_path", tempfile.gettempdir())
 VON_INDEX_NAME = "index"
 VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
 VON_CACHE_NAME = "von_cache_" + getpass.getuser()
-VON_CACHE_PATH = os.path.join(tempfile.gettempdir(), VON_CACHE_NAME)
+VON_CACHE_PATH = os.path.join(VON_TMP_PATH, VON_CACHE_NAME)
 VON_PREVIEW_PATH = os.path.join(
     VON_TMP_PATH, "preview_" + getpass.getuser(), "von_preview.tex"
 )
