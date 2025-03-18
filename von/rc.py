@@ -47,6 +47,10 @@ tags: ["trivial", "easy", "medium", "hard", "brutal"]
 # If this fails for some reason, you can set it to `windows`, `mac`, or `linux` below
 # os: linux
 
+# path to store temporary files (von cache, TeX previewer, posted output files)
+# Defaults to the output of Python's tempfile.gettempdir()
+# von_tmp_path: "/tmp"
+
 # Name of text editor to invoke
 # By default, it detects from $EDITOR automatically
 # editor: vim
@@ -122,20 +126,16 @@ else:
 
 VON_CUSTOM_LOOKUP = config.get("abbreviations", {})
 
+VON_TMP_PATH = config.get("von_tmp_path", tempfile.gettempdir())
 # These used to be editable but I don't think it's worth it
 VON_INDEX_NAME = "index"
 VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
 VON_CACHE_NAME = "von_cache_" + getpass.getuser()
-VON_CACHE_PATH = os.path.join(tempfile.gettempdir(), VON_CACHE_NAME)
+VON_CACHE_PATH = os.path.join(VON_TMP_PATH, VON_CACHE_NAME)
 VON_PREVIEW_PATH = os.path.join(
-    tempfile.gettempdir(),
-    "preview_" + getpass.getuser(),
-    "von_preview.tex",
+    VON_TMP_PATH, "preview_" + getpass.getuser(), "von_preview.tex"
 )
-VON_POST_OUTPUT_DIR = os.path.join(
-    tempfile.gettempdir(),
-    "po_" + getpass.getuser(),
-)
+VON_POST_OUTPUT_DIR = os.path.join(VON_TMP_PATH, "po_" + getpass.getuser())
 
 SEPARATOR = "\n---\n"
 NSEPARATOR = "\n" + SEPARATOR + "\n"
