@@ -1,0 +1,35 @@
+name: PyPI Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  pypi-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/vondb
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install Hatch
+        run: pipx install hatch
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/hatch
+          key: ${{ runner.os }}-hatch
+          restore-keys: ${{ runner.os }}-hatch
+      - name: Build package
+        run: hatch build
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
