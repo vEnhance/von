@@ -126,7 +126,8 @@ else:
 
 VON_CUSTOM_LOOKUP = config.get("abbreviations", {})
 
-VON_TMP_PATH = config.get("von_tmp_path", tempfile.gettempdir())
+VON_TMP_PATH = str(Path(config.get("von_tmp_path", tempfile.gettempdir())).expanduser())
+
 # These used to be editable but I don't think it's worth it
 VON_INDEX_NAME = "index"
 VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
