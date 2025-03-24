@@ -57,6 +57,8 @@ def toAOPS(text: str) -> str:
     text = text.replace(r"\end{enumerate}", "[/list]")
     text = text.replace(r"\begin{itemize}", "[list]")
     text = text.replace(r"\end{itemize}", "[/list]")
+    text = text.replace(r"\begin{description}", "[list]")
+    text = text.replace(r"\end{description}", "[/list]")
     for env in [
         "theorem",
         "claim",
@@ -94,6 +96,9 @@ def toAOPS(text: str) -> str:
     text = re.sub(r"\\subparagraph{([^}]*)}", DIVIDER + r"[b]\1[/b]", text)
     text = re.sub(r"\\url{([^}]*)}", r"[url]\1[/url]", text)
     text = re.sub(r"\\href{([^}]*)}{([^}]*)}", r"[url=\1]\2[/url]", text)
+    text = re.sub(
+        r"\\item\[([^\]]*)\]", r"[*] [b]\1[/b]", text
+    )  # for description items
     text = text.replace(r"\arc", r"\widehat")
 
     # Join together newlines
