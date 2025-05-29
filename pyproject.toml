@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "vondb"
 description = "VON: vEnhance's Olympiad Navigator"
 authors = [{ name = "Evan Chen", email = "evan@evanchen.cc" }]
-license = { text = "MIT" }
+license = { text = "MPL-2.0" }
 readme = "README.md"
 urls = { repository = "https://github.com/vEnhance/von/" }
 requires-python = ">=3.10,<4.0"
