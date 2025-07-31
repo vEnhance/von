@@ -21,7 +21,7 @@ There is no graphical user interface; it is based on standard command line.
 Therefore, it will work best on Linux systems.
 Windows users may experience some grief,
 and Windows users unfamiliar with command line are
-[going to have a bad time](https://undertale.fandom.com/wiki/Sans).
+[going to have a bad time](https://undertale.wiki/w/Sans).
 
 I haven't gotten around to properly documenting this,
 but posting it by popular request.
@@ -87,7 +87,6 @@ To exit VON, type an EOF character (usually Ctrl-D).
    but will be replaced by placeholders (unless `--brave` is passed).
 
    There are two ways to mark a problem as SECRET:
-
    - Include `SECRET` as a substring of the problem's source.
    - Include `secret` as one of the problem's tags.
 
