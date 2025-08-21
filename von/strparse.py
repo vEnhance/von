@@ -1,8 +1,4 @@
-#!/usr/bin/env python3
-
 import re
-
-import pyperclip
 
 oper_macros = {
     "\\floor": (" \\left\\lfloor ", " \\right\\rfloor "),
@@ -11,10 +7,6 @@ oper_macros = {
     "\\norm": (" \\left\\lVert ", " \\right\\lVert "),
     "\\anbr": (" \\left\\langle ", " \\right\\rangle "),
     "\\sbr": (" \\left[ ", " \\right] "),
-}
-derv_macros = {
-    "\\dd": "\\mathrm{d}",
-    "\\pd": "\\partial",
 }
 
 
@@ -33,35 +25,6 @@ def bracket_cpos(text: str, brac: tuple, pos: int) -> int:
     return charpos
 
 
-def derv_demacro(text: str) -> str:
-    for key, value in derv_macros.items():
-        while text.find(key) != -1:
-            pos = text.find(key)
-            if text[pos + len(key)] == "{":
-                first_cur_cpos = bracket_cpos(text, ("{", "}"), pos + len(key))
-                second_cur_cpos = bracket_cpos(text, ("{", "}"), first_cur_cpos + 1)
-                inner_text_1 = text[pos + len(key) + 1 : first_cur_cpos]
-                inner_text_2 = text[first_cur_cpos + 2 : second_cur_cpos]
-                text = (
-                    text[:pos]
-                    + f"\\frac{{{value} {inner_text_1}}}{{{value} {inner_text_2}}}"
-                    + text[second_cur_cpos + 1 :]
-                )
-            elif text[pos + len(key)] == "[":
-                sq_cpos = bracket_cpos(text, ("[", "]"), pos + len(key))
-                first_cur_cpos = bracket_cpos(text, ("{", "}"), sq_cpos + 1)
-                second_cur_cpos = bracket_cpos(text, ("{", "}"), first_cur_cpos + 1)
-                func_deg = text[pos + len(key) + 1 : sq_cpos]
-                inner_text_1 = text[sq_cpos + 2 : first_cur_cpos]
-                inner_text_2 = text[first_cur_cpos + 2 : second_cur_cpos]
-                text = (
-                    text[:pos]
-                    + f"\\frac{{{value}^{{{func_deg}}} {inner_text_1}}}{{{value} {inner_text_2}^{{{func_deg}}}}}"
-                    + text[second_cur_cpos + 1 :]
-                )
-    return text
-
-
 def oper_demacro(text: str) -> str:
     for key, value in oper_macros.items():
         while text.find(key) != -1:
@@ -74,7 +37,7 @@ def oper_demacro(text: str) -> str:
     return text
 
 
-def comm_demacro(text: str) -> str:
+def demacro(text: str) -> str:
     replacements: list[tuple[str, str]] = [
         (r"\ii ", r"\item "),
         (r"\ii[", r"\item["),
@@ -89,12 +52,12 @@ def comm_demacro(text: str) -> str:
         (r"\half", r"\frac{1}{2}"),
         (r"\GL", r"\operatorname{GL}"),
         (r"\SL", r"\operatorname{SL}"),
-        # (r"\NN", r"{\mathbb N}"),
-        # (r"\ZZ", r"{\mathbb Z}"),
-        # (r"\CC", r"{\mathbb C}"),
-        # (r"\RR", r"{\mathbb R}"),
-        # (r"\QQ", r"{\mathbb Q}"),
-        # (r"\FF", r"{\mathbb F}"),
+        (r"\CC", r"\mathbb{C}"),
+        (r"\FF", r"\mathbb{F}"),
+        (r"\NN", r"\mathbb{N}"),
+        (r"\QQ", r"\mathbb{Q}"),
+        (r"\RR", r"\mathbb{R}"),
+        (r"\ZZ", r"\mathbb{Z}"),
         (r"\ts", r"\textsuperscript"),
         (r"\opname", r"\operatorname"),
         (r"\defeq", r"\overset{\text{def}}{=}"),
@@ -103,29 +66,7 @@ def comm_demacro(text: str) -> str:
         (r"\sign", r"\operatorname{sign}"),
         (r"\injto", r"\hookrightarrow"),
         (r"\vdotswithin=", r"\vdots"),
-        # Bubu additions
-        (r"\csc", r"\operatorname{cosec}"),
-        (r"\arccsc", r"\operatorname{arccsc}"),
-        (r"\arcsec", r"\operatorname{arcsec}"),
-        (r"\arccot", r"\operatorname{arccot}"),
-        (r"\ul", r"\underline"),
-        (r"\tri", r"\triangle"),
-        (r"\para", r"\parallel"),
         (r"\arc", r"\widehat"),
-        (r"\hrulebar", "\n-----\n"),
-        (r"\CC", r"\mathbb{C}"),
-        (r"\FF", r"\mathbb{F}"),
-        (r"\NN", r"\mathbb{N}"),
-        (r"\QQ", r"\mathbb{Q}"),
-        (r"\RR", r"\mathbb{R}"),
-        (r"\ZZ", r"\mathbb{Z}"),
-        (r"\OO", r"\mathcal{O}"),
-        (r"\ang", r"\ang"),
-        (r"\ray", r"\overrightarrow"),
-        (r"\trans", r"^{\mathsf{T}}"),
-        (r"\oo", r"\infty"),
-        (r"\dgnin", r"90^{\circ}"),
-        (r"\dgone", r"180^{\circ}"),
     ]
     s = text
     for short, full in replacements:
@@ -135,7 +76,7 @@ def comm_demacro(text: str) -> str:
 
 def remove_soft_newlines(text: str) -> str:
     return re.sub(
-        r"[a-zA-Z.,;—\"–'):$]\n[a-zA-Z$]",
+        r"[a-zA-Z.,;—\"–'):$]\n[a-zA-Z$'\"]",
         lambda m: m.group(0).replace("\n", " "),
         text,
     )
@@ -143,9 +84,8 @@ def remove_soft_newlines(text: str) -> str:
 
 def toAOPS(text: str) -> str:
     DIVIDER = "\n" + r"-------------------" + "\n\n"
-    text = derv_demacro(text)
     text = oper_demacro(text)
-    text = comm_demacro(text)
+    text = demacro(text)
     text = text.replace(r"\qedhere", "")
     text = text.replace(r"\begin{asy}", "\n" + "[asy]" + "\n")
     text = text.replace(r"\end{asy}", "\n" + "[/asy]")
@@ -191,7 +131,7 @@ def toAOPS(text: str) -> str:
     text = re.sub(r"\\textit{([^}]*)}", r"[i]\1[/i]", text)
     text = re.sub(r"\\textbf{([^}]*)}", r"[b]\1[/b]", text)
     text = re.sub(
-        r"\\paragraph{([^}]*)}", DIVIDER + r"[color=blue][b]\1[/b][/solor]", text
+        r"\\paragraph{([^}]*)}", DIVIDER + r"[color=blue][b]\1[/b][/color]", text
     )
     text = re.sub(r"\\subparagraph{([^}]*)}", DIVIDER + r"[b]\1[/b]", text)
     text = re.sub(r"\\url{([^}]*)}", r"[url]\1[/url]", text)
@@ -200,17 +140,9 @@ def toAOPS(text: str) -> str:
         r"\\item\[([^\]]*)\]", r"[*] [b]\1[/b]", text
     )  # for description items
 
-    return text
-    # # Join together newlines
-    # paragraphs = [
-    #     " ".join([line.strip() for line in paragraph.splitlines()]).strip()
-    #     for paragraph in text.split("\n\n")
-    # ]
-    # return "\n".join(paragraphs)
-
-
-if __name__ == "__main__":
-    cliptext = pyperclip.paste()
-    cliptext = remove_soft_newlines(cliptext)
-    cliptext = toAOPS(cliptext)
-    pyperclip.copy(cliptext)
+    # Join together newlines
+    paragraphs = [
+        " ".join([line.strip() for line in paragraph.splitlines()]).strip()
+        for paragraph in text.split("\n\n")
+    ]
+    return "\n".join(paragraphs)
