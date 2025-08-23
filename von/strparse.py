@@ -10,7 +10,7 @@ oper_macros = {
 }
 
 
-def bracket_cpos(text: str, brac: tuple, pos: int) -> int:
+def bracket_cpos(text: str, brac: tuple[str, str], pos: int) -> int:
     close_counter = 0
     open_counter = 1
     charpos = pos + 1
