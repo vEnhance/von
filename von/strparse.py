@@ -1,9 +1,43 @@
 import re
 
+oper_macros = {
+    "\\floor": (" \\left\\lfloor ", " \\right\\rfloor "),
+    "\\ceil": (" \\left\\lceil ", " \\right\\rceil "),
+    "\\abs": (" \\left\\lvert ", " \\right\\lvert "),
+    "\\norm": (" \\left\\lVert ", " \\right\\lVert "),
+    "\\anbr": (" \\left\\langle ", " \\right\\rangle "),
+    "\\sbr": (" \\left[ ", " \\right] "),
+}
 
-# Demacro
+
+def bracket_cpos(text: str, brac: tuple, pos: int) -> int:
+    close_counter = 0
+    open_counter = 1
+    charpos = pos + 1
+    for i in text[pos + 1 :]:
+        if i == brac[0]:
+            open_counter += 1
+        elif i == brac[1]:
+            close_counter += 1
+        if close_counter == open_counter:
+            break
+        charpos += 1
+    return charpos
+
+
+def oper_demacro(text: str) -> str:
+    for key, value in oper_macros.items():
+        while text.find(key) != -1:
+            pos = text.find(key)
+            cur_cpos = bracket_cpos(text, ("{", "}"), pos + len(key))
+            inner_text_1 = text[pos + len(key) + 1 : cur_cpos]
+            text = (
+                text[:pos] + value[0] + inner_text_1 + value[1] + text[cur_cpos + 1 :]
+            )
+    return text
+
+
 def demacro(text: str) -> str:
-    # TODO this doesn't quite work, but oh well
     replacements: list[tuple[str, str]] = [
         (r"\ii ", r"\item "),
         (r"\ii[", r"\item["),
@@ -18,12 +52,12 @@ def demacro(text: str) -> str:
         (r"\half", r"\frac{1}{2}"),
         (r"\GL", r"\operatorname{GL}"),
         (r"\SL", r"\operatorname{SL}"),
-        (r"\NN", r"{\mathbb N}"),
-        (r"\ZZ", r"{\mathbb Z}"),
-        (r"\CC", r"{\mathbb C}"),
-        (r"\RR", r"{\mathbb R}"),
-        (r"\QQ", r"{\mathbb Q}"),
-        (r"\FF", r"{\mathbb F}"),
+        (r"\CC", r"\mathbb{C}"),
+        (r"\FF", r"\mathbb{F}"),
+        (r"\NN", r"\mathbb{N}"),
+        (r"\QQ", r"\mathbb{Q}"),
+        (r"\RR", r"\mathbb{R}"),
+        (r"\ZZ", r"\mathbb{Z}"),
         (r"\ts", r"\textsuperscript"),
         (r"\opname", r"\operatorname"),
         (r"\defeq", r"\overset{\text{def}}{=}"),
@@ -32,6 +66,7 @@ def demacro(text: str) -> str:
         (r"\sign", r"\operatorname{sign}"),
         (r"\injto", r"\hookrightarrow"),
         (r"\vdotswithin=", r"\vdots"),
+        (r"\arc", r"\widehat"),
     ]
     s = text
     for short, full in replacements:
@@ -41,7 +76,7 @@ def demacro(text: str) -> str:
 
 def remove_soft_newlines(text: str) -> str:
     return re.sub(
-        r"[a-zA-Z.,;—\"–'):]\n[a-zA-Z$]",
+        r"[a-zA-Z.,;—\"–'):$]\n[a-zA-Z$'\"]",
         lambda m: m.group(0).replace("\n", " "),
         text,
     )
@@ -49,6 +84,7 @@ def remove_soft_newlines(text: str) -> str:
 
 def toAOPS(text: str) -> str:
     DIVIDER = "\n" + r"-------------------" + "\n\n"
+    text = oper_demacro(text)
     text = demacro(text)
     text = text.replace(r"\qedhere", "")
     text = text.replace(r"\begin{asy}", "\n" + "[asy]" + "\n")
@@ -103,7 +139,6 @@ def toAOPS(text: str) -> str:
     text = re.sub(
         r"\\item\[([^\]]*)\]", r"[*] [b]\1[/b]", text
     )  # for description items
-    text = text.replace(r"\arc", r"\widehat")
 
     # Join together newlines
     paragraphs = [
