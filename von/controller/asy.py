@@ -43,6 +43,8 @@ def main(self: object, argv: list[str]):
 
         if not opts.comments:
             diagram = re.sub(r"/\*.*?\*/", "", diagram, flags=re.DOTALL)
-        lines = [line.rstrip() for line in diagram.strip().split("\n")]
-        min_indent = min(len(line) - len(line.lstrip()) for line in lines)
+        lines = [line.rstrip() for line in diagram.lstrip("\n").rstrip().split("\n")]
+        min_indent = min(
+            len(line) - len(line.lstrip()) for line in lines if line.strip()
+        )
         print("\n".join(line[min_indent:] for line in lines))
