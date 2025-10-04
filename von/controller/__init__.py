@@ -1,14 +1,14 @@
-from . import (  # NOQA
+from . import (
     add,
     asy,
     br,
     cd,
     clear,
     edit,
+    fixnames,
     index,
     link,
     markup,
-    nuke,
     paths,
     po,
     search,
@@ -30,11 +30,13 @@ class VonController:
     do_cs = do_cd
     do_edit = edit.main
     do_f = show.main  # alias find
+    do_fix = fixnames.main
+    do_fixnames = fixnames.main
     do_link = link.main
     do_m = markup.main
     do_markup = markup.main
     do_index = index.main
-    do_nuke = nuke.main
+    do_nuke = fixnames.main
     do_paths = paths.main
     do_po = po.main
     do_s = search.main
