@@ -46,7 +46,7 @@ def demacro(text: str) -> str:
         (r"\ol", r"\overline"),
         (r"\epsilon", r"\eps"),
         (r"\eps", r"\varepsilon"),
-        (r"\dang", r"\measuredangle"),
+        (r"\dang ", r"\measuredangle "),
         (r"\dg", r"^{\circ}"),
         (r"\inv", r"^{-1}"),
         (r"\half", r"\frac{1}{2}"),
@@ -66,7 +66,7 @@ def demacro(text: str) -> str:
         (r"\sign", r"\operatorname{sign}"),
         (r"\injto", r"\hookrightarrow"),
         (r"\vdotswithin=", r"\vdots"),
-        (r"\arc", r"\widehat"),
+        (r"\arc{", r"\widehat{"),
     ]
     s = text
     for short, full in replacements:
