@@ -75,10 +75,11 @@ def demacro(text: str) -> str:
 
 
 def remove_soft_newlines(text: str) -> str:
+    strip_text = "\n".join(line.lstrip() for line in text.splitlines())
     return re.sub(
         r"[a-zA-Z.,;—\"–'):$]\n[a-zA-Z$'\"]",
         lambda m: m.group(0).replace("\n", " "),
-        text,
+        strip_text,
     )
 
 
@@ -118,8 +119,8 @@ def toAOPS(text: str) -> str:
             "\n\n" + "[b][color=red]" + env.title() + ":[/color][/b] ",
         )
         text = text.replace(r"\end{" + env + "}", "")
-    text = text.replace(r"\begin{proof}", "[i]Proof.[/i] ")
-    text = text.replace(r"\end{proof}", r"$\blacksquare$" + "\n")
+    text = text.replace("\\begin{proof}\n", "[i]Proof.[/i] ")
+    text = text.replace("\n\\end{proof}", r" $\blacksquare$" + "\n")
     text = text.replace(r"\bigskip", DIVIDER)
     text = text.replace(r"\medskip", DIVIDER)
     text = text.replace(r"\#", "#")
