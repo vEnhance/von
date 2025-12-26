@@ -66,7 +66,7 @@ To exit VON, type an EOF character (usually Ctrl-D).
 
 1. Problems are stored in TeX files in `VON_BASE_PATH`. You can
    keep subdirectories in here, as well, to organize those files.
-2. Problems and solutions are separated using `SEPARATOR` in `rc.py`,
+2. Problems and solutions are separated using `SEPARATOR` in `config`,
    which by default is three dashes padded by newlines.
    So when entering new problems, write the statement, the separator,
    and then the solution.
@@ -83,7 +83,7 @@ To exit VON, type an EOF character (usually Ctrl-D).
 1. Metadata is stored at the top of each file after being added.
 2. Problems must have a _source_ like "Shortlist 2016 G2".
 3. Problems should also have a description, and a set of tags.
-   If a tag is specified as a sorting tag in `rc.py`,
+   If a tag is specified as a sorting tag in `config`,
    it will be displayed differently,
    but otherwise functionally equivalently.
 4. Problems can also have an "author" attribute, which is displayed.
