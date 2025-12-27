@@ -72,14 +72,14 @@ repos:
     hooks:
       - id: pytest
         name: pytest
-        entry: pytest
+        entry: uv run pytest
         language: system
         pass_filenames: false
         stages: [pre-push]
 
       - id: pyright
         name: pyright
-        entry: pyright .
+        entry: uv run pyright .
         language: system
         pass_filenames: false
         stages: [pre-push]
