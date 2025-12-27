@@ -2,64 +2,34 @@ name: CI
 
 on:
   push:
-    branches: ["*"]
+    branches: [main]
   pull_request:
-    branches: ["*"]
-  workflow_dispatch:
+    branches: [main]
 
 jobs:
-  types:
-    name: "Typecheck"
+  ci:
+    name: ✨ Full CI Audit Workflow
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - name: Install Hatch
-        run: pipx install hatch
-      - uses: actions/cache@v4
-        with:
-          path: ~/.cache/hatch
-          key: ${{ runner.os }}-hatch
-          restore-keys: ${{ runner.os }}-hatch
-      - name: Install dependencies
-        run: |
-          hatch env create dev
-      - name: Run pyright
-        run: |
-          hatch run dev:pyright
-      - name: Ensure Hatch environment is in PATH
-        run: echo "$HOME/.cache/hatch/venv/bin" >> $GITHUB_PATH
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v6
 
-  style:
-    name: "Style check"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-      - name: Install Hatch
-        run: pipx install hatch
-      - uses: actions/cache@v4
+
+      - name: 📦 Install uv
+        uses: astral-sh/setup-uv@v7
         with:
-          path: ~/.cache/hatch
-          key: ${{ runner.os }}-hatch
-          restore-keys: ${{ runner.os }}-hatch
-      - name: Install dependencies
-        run: hatch env create dev
-      - name: Run ruff
-        run: |
-          hatch run dev:ruff check --output-format=github $(git ls-files '*.py')
-          hatch run dev:ruff format --diff $(git ls-files '*.py')
-      - name: Run spell-check
-        run: |
-          hatch run dev:codespell $(git ls-files)
+          enable-cache: true
+
+      - name: 📥 Install dependencies
+        run: uv sync
+
+      - name: 🧼 Check formatting
+        run: uv run prek --all-files
+
+      - name: 🧪 Run tests
+        run: uv run prek --all-files --hook-stage pre-push
