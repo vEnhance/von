@@ -38,40 +38,42 @@ def oper_demacro(text: str) -> str:
 
 
 def demacro(text: str) -> str:
-    replacements: list[tuple[str, str]] = [
-        (r"\ii ", r"\item "),
-        (r"\ii[", r"\item["),
-        (r"\wh", r"\widehat"),
-        (r"\wt", r"\widetilde"),
-        (r"\ol", r"\overline"),
-        (r"\epsilon", r"\eps"),
-        (r"\eps", r"\varepsilon"),
-        (r"\dang ", r"\measuredangle "),
-        (r"\dg", r"^{\circ}"),
-        (r"\inv", r"^{-1}"),
-        (r"\half", r"\frac{1}{2}"),
-        (r"\GL", r"\operatorname{GL}"),
-        (r"\SL", r"\operatorname{SL}"),
-        (r"\CC", r"\mathbb{C}"),
-        (r"\FF", r"\mathbb{F}"),
-        (r"\NN", r"\mathbb{N}"),
-        (r"\QQ", r"\mathbb{Q}"),
-        (r"\RR", r"\mathbb{R}"),
-        (r"\ZZ", r"\mathbb{Z}"),
-        (r"\ts", r"\textsuperscript"),
-        (r"\opname", r"\operatorname"),
-        (r"\defeq", r"\overset{\text{def}}{=}"),
-        (r"\id", r"\operatorname{id}"),
-        (r"\ord", r"\operatorname{ord}"),
-        (r"\sign", r"\operatorname{sign}"),
-        (r"\injto", r"\hookrightarrow"),
-        (r"\vdotswithin=", r"\vdots"),
-        (r"\arc{", r"\widehat{"),
+    text = text.replace(r"\vdotswithin=", r"\vdots")
+    expansions: list[tuple[str, str]] = [
+        (r"ii", r"\item"),
+        (r"wh", r"\widehat"),
+        (r"wt", r"\widetilde"),
+        (r"ol", r"\overline"),
+        (r"epsilon", r"\eps"),
+        (r"eps", r"\varepsilon"),
+        (r"dang", r"\measuredangle"),
+        (r"dg", r"^{\circ}"),
+        (r"inv", r"^{-1}"),
+        (r"half", r"\frac{1}{2}"),
+        (r"GL", r"\operatorname{GL}"),
+        (r"SL", r"\operatorname{SL}"),
+        (r"CC", r"\mathbb{C}"),
+        (r"FF", r"\mathbb{F}"),
+        (r"NN", r"\mathbb{N}"),
+        (r"QQ", r"\mathbb{Q}"),
+        (r"RR", r"\mathbb{R}"),
+        (r"ZZ", r"\mathbb{Z}"),
+        (r"ts", r"\textsuperscript"),
+        (r"opname", r"\operatorname"),
+        (r"defeq", r"\overset{\text{def}}{=}"),
+        (r"id", r"\operatorname{id}"),
+        (r"ord", r"\operatorname{ord}"),
+        (r"sign", r"\operatorname{sign}"),
+        (r"injto", r"\hookrightarrow"),
+        (r"arc", r"\widehat"),
     ]
-    s = text
-    for short, full in replacements:
-        s = s.replace(short, full)
-    return s
+    for command_name, expansion in expansions:
+        text = re.sub(
+            rf"\\{command_name}(?![a-zA-Z])",
+            expansion.replace("\\", "\\\\"),
+            text,
+        )
+    return text
 
 
 def toAOPS(text: str) -> str:
