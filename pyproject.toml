@@ -2,6 +2,12 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.version]
+path = "von/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["von"]
+
 [project]
 name = "vondb"
 description = "VON: vEnhance's Olympiad Navigator"
@@ -18,17 +24,13 @@ dependencies = [
 ]
 dynamic = ["version"]
 
-[tool.hatch.version]
-path = "von/__about__.py"
-
-[tool.hatch.build.targets.wheel]
-packages = ["von"]
-
 [project.scripts]
 von = "von.__main__:main"
 
-[tool.hatch.envs.dev]
-dependencies = [
+[dependency-groups]
+dev = [
+    "prek>=0.2.25",
+    "pytest>=9.0.2",
     "codespell>=2.4.1",
     "pyright>=1.1.394",
     "toml>=0.10.2",
@@ -108,9 +110,3 @@ skip = "von/puid.py"
 count = ""
 quiet-level = 3
 ignore-words-list = "ques"
-
-[dependency-groups]
-dev = [
-    "prek>=0.2.25",
-    "pytest>=9.0.2",
-]
