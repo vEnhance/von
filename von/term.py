@@ -49,7 +49,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
     def emptyline(self):
         pass
 
-    def completedefault(self, text: str, line: str, start_idx: int, end_idx: int):
+    def completedefault(self, text: str, line: str, start_idx: int, end_idx: int):  # type: ignore[invalid-method-override]
         del line, start_idx, end_idx
         return _complete_path(text)
 
@@ -98,7 +98,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
         else:
             logging.error(f"Command {cmd} not recognized")
 
-    def do_help(self, argv: list[str]):
+    def do_help(self, argv: list[str]):  # type: ignore[invalid-method-override]
         arg = "".join(argv)
         if arg:
             try:

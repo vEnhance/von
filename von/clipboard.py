@@ -1,8 +1,10 @@
+from types import ModuleType
+
 try:
     import pyperclip
 except ModuleNotFoundError:
     PYPERCLIP_AVAILABLE = False
-    pyperclip = None
+    pyperclip: ModuleType | None = None
 else:
     PYPERCLIP_AVAILABLE = True
 

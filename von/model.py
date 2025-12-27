@@ -104,9 +104,7 @@ class pickleDictVonIndex(pickleObj):
 
 class pickleListVonCache(pickleObj):
     store: list["PickleMappingEntry"]
-
-    def __getitem__(self, idx: int) -> "PickleMappingEntry":
-        return super().__getitem__(idx)
+    __getitem__: Callable[[int], "PickleMappingEntry"]
 
     def _initial(self) -> list["PickleMappingEntry"]:
         return []
@@ -172,7 +170,9 @@ class GenericItem:  # superclass to Problem, PickleMappingEntry
         else:
             return False
 
-    def __eq__(self, other: "GenericItem") -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, GenericItem):
+            return False
         return self.sortkey == other.sortkey
 
     def __lt__(self, other: "GenericItem") -> bool:
@@ -252,7 +252,7 @@ class PickleMappingEntry(GenericItem):
 
     @property
     def entry(self):
-        logging.warn("sketchy af")
+        logging.warning("sketchy af")
         return self
 
     @property

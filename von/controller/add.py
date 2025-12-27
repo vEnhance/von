@@ -26,7 +26,7 @@ RE_URL = re.compile(
 def user_file_input(
     initial="",
     extension=".tmp",
-    pre_hook: Callable[[str], None] = None,
+    pre_hook: Callable[[str], None] | None = None,
     delete: bool = False,
 ):
     """Opens in $EDITOR a file with content 'initial'
