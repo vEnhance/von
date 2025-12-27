@@ -111,5 +111,6 @@ ignore-words-list = "ques"
 
 [dependency-groups]
 dev = [
+    "prek>=0.2.25",
     "pytest>=9.0.2",
 ]

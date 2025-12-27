@@ -1,0 +1,85 @@
+default_install_hook_types:
+  - pre-commit
+  - commit-msg
+  - pre-push
+
+default_stages: [pre-commit]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.10
+    hooks:
+      - id: ruff-format
+        name: ruff format
+        types: [python]
+      - id: ruff
+        name: ruff check
+        args: [--fix]
+        types: [python]
+
+  - repo: https://github.com/JoC0de/pre-commit-prettier
+    rev: v3.7.4
+    hooks:
+      - id: prettier
+        types_or: [css, javascript, markdown, json, toml, yaml]
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        additional_dependencies:
+          - tomli
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.3.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args:
+          [
+            feat,
+            fix,
+            build,
+            ci,
+            chore,
+            docs,
+            drop,
+            edit,
+            perf,
+            polish,
+            root,
+            refactor,
+            revert,
+            style,
+            temp,
+            tests,
+          ]
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: pytest
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
+
+      - id: pyright
+        name: pyright
+        entry: pyright .
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
