@@ -24,6 +24,7 @@ class VonController:
 
     do_add = add.main
     do_asy = asy.main
+    do_build = fixnames.main
     do_br = br.main
     do_cd = cd.main
     do_clear = clear.main

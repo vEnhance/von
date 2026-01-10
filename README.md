@@ -155,8 +155,8 @@ Use `show --help` and `po --help` for more details.
 
 Sometimes the list of problems and file paths might become
 messed up in some way (for example, if you move a file).
-To fix this run `von nuke` to recompile the entire index.
-`von nuke` is also useful in the cases of deleting a file
+To fix this run `von build` to recompile the entire index.
+`von build` is also useful in the cases of deleting a file
 and thus problem from the index.
 
 ## Preview
