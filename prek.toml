@@ -99,7 +99,7 @@ hooks = [
   {
     id = "ty",
     name = "ty",
-    entry = "uv run ty check .",
+    entry = "uv run ty check",
     language = "system",
     types = ["python"]
   },
