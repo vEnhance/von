@@ -4,6 +4,7 @@ import logging
 import os
 import shlex
 import traceback
+from typing import Any
 
 from . import controller, model
 from .rc import USER_OS, VON_BASE_PATH
@@ -49,8 +50,8 @@ class VonTerminal(cmd.Cmd, controller.VonController):
     def emptyline(self):
         pass
 
-    def completedefault(self, text: str, line: str, start_idx: int, end_idx: int):  # type: ignore[invalid-method-override]
-        del line, start_idx, end_idx
+    def completedefault(self, *ignored: Any) -> list[str]:
+        text = ignored[0] if ignored else ""
         return _complete_path(text)
 
     def run(self):
@@ -98,7 +99,8 @@ class VonTerminal(cmd.Cmd, controller.VonController):
         else:
             logging.error(f"Command {cmd} not recognized")
 
-    def do_help(self, argv: list[str]):  # type: ignore[invalid-method-override]
+    def do_help(self, arg: str) -> None:
+        argv = arg.split()
         arg = "".join(argv)
         if arg:
             try:
