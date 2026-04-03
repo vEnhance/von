@@ -5,9 +5,21 @@
 default_install_hook_types = [
   "pre-commit",
   "commit-msg",
-  "pre-push"
+  "pre-push",
 ]
 default_stages = ["pre-commit"]
+
+[[repos]]
+repo = "https://github.com/compilerla/conventional-pre-commit"
+rev = "v4.4.0"
+hooks = [
+  {
+    id = "conventional-pre-commit",
+    stages = ["commit-msg"],
+    args = ["feat", "fix", "build", "ci", "chore", "docs", "drop", "edit",
+     "perf", "polish", "root", "refactor", "revert", "style", "temp", "tests"]
+  }
+]
 
 [[repos]]
 repo = "builtin"
@@ -17,82 +29,38 @@ hooks = [
   { id = "check-merge-conflict" },
   { id = "check-symlinks" },
   { id = "check-toml" },
-  { id = "check-yaml" },
+  { id = "check-yaml", args = ["--allow-multiple-documents"] },
   { id = "detect-private-key" },
   { id = "end-of-file-fixer" },
   { id = "fix-byte-order-marker" },
   { id = "mixed-line-ending" },
-  {
-    id = "trailing-whitespace",
-    args = ["--markdown-linebreak-ext=md"]
-  }
+  { id = "trailing-whitespace" },
 ]
 
 [[repos]]
 repo = "meta"
-hooks = [
-  { id = "check-useless-excludes" },
-]
+hooks = [{ id = "check-useless-excludes" }]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.15.9"
+hooks = [{ id = "ruff-check" }, { id = "ruff-format" }]
 
 [[repos]]
 repo = "https://github.com/codespell-project/codespell"
 rev = "v2.4.2"
-hooks = [
-  { id = "codespell" }
-]
-
-[[repos]]
-repo = "https://github.com/astral-sh/ruff-pre-commit"
-rev = "v0.15.8"
-hooks = [
-  { id = "ruff-check" },
-  { id = "ruff-format" }
-]
+hooks = [{ id = "codespell" }]
 
 [[repos]]
 repo = "https://github.com/JoC0de/pre-commit-prettier"
 rev = "v3.8.1"
-hooks = [
-  {
-    id = "prettier",
-    types_or = ["css", "javascript", "ts", "markdown", "json", "yaml"],
-  }
-]
+hooks = [{ id = "prettier", types_or = ["css", "javascript", "json", "yaml"] }]
 
 [[repos]]
 repo = "https://github.com/astral-sh/uv-pre-commit"
 rev = "0.11.3"
-hooks = [
-  { id = "uv-lock" }
-]
+hooks = [{ id = "uv-lock" }]
 
-[[repos]]
-repo = "https://github.com/compilerla/conventional-pre-commit"
-rev = "v4.4.0"
-hooks = [
-  {
-    id = "conventional-pre-commit",
-    stages = ["commit-msg"],
-    args = [
-      "feat",
-      "fix",
-      "build",
-      "ci",
-      "chore",
-      "docs",
-      "drop",
-      "edit",
-      "perf",
-      "polish",
-      "root",
-      "refactor",
-      "revert",
-      "style",
-      "temp",
-      "tests"
-    ]
-  }
-]
 [[repos]]
 repo = "local"
 hooks = [
