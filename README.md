@@ -29,27 +29,27 @@ Here are a few hints. Pull requests to improve this documentation are welcome.
 
 ## Installation
 
-1. Install `vondb` from PyPI (note the package name is `vondb` and not `von`;
-   but the command and module are named `von`).
-   Here is the [PyPI listing](https://pypi.org/project/vondb/).
-   - If you're unfamiliar with how to do this, I suggest using [uv][uv]:
-     you can do `uv tool install vondb`.
-   - Or `pip install vondb` works too, if you want to use Pip directly.
-     (But I think `uv` is better.)
-   - If you're on Arch Linux, you can also install from
-     [python-vondb in AUR](https://aur.archlinux.org/packages/python-vondb).
+1.  Install `vondb` from PyPI (note the package name is `vondb` and not `von`;
+    but the command and module are named `von`).
+    Here is the [PyPI listing](https://pypi.org/project/vondb/).
+    - If you're unfamiliar with how to do this, I suggest using [uv][uv]:
+      you can do `uv tool install vondb`.
+    - Or `pip install vondb` works too, if you want to use Pip directly.
+      (But I think `uv` is better.)
+    - If you're on Arch Linux, you can also install from
+      [python-vondb in AUR](https://aur.archlinux.org/packages/python-vondb).
 
-2. When first run, the program will (try to) create a configuration file
-   `~/.config/von/config` or similar if it does not exist.
-   You should then edit that file and choose some values.
-   The program won't work correctly
-   until after you have chosen e.g. the `base_path` parameter.
-3. Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.
-   The optional previewer requires [evan.sty][evansty]. (See below for details.)
-   This assumes a working LaTeX compiler with `latexmk` installed.
-   (I recommend [TeX Live][texlive]).
-4. If fuzzy searching is desired (optional),
-   install [fzf](https://github.com/junegunn/fzf).
+2.  When first run, the program will (try to) create a configuration file
+    `~/.config/von/config` or similar if it does not exist.
+    You should then edit that file and choose some values.
+    The program won't work correctly
+    until after you have chosen e.g. the `base_path` parameter.
+3.  Optional LaTeX integration uses [von.sty][vonsty] and PythonTeX.
+    The optional previewer requires [evan.sty][evansty]. (See below for details.)
+    This assumes a working LaTeX compiler with `latexmk` installed.
+    (I recommend [TeX Live][texlive]).
+4.  If fuzzy searching is desired (optional),
+    install [fzf](https://github.com/junegunn/fzf).
 
 [uv]: https://docs.astral.sh/uv/
 
@@ -64,43 +64,43 @@ To exit VON, type an EOF character (usually Ctrl-D).
 
 - `add "Shortlist 2016 G2"`: add problem to database
 
-1. Problems are stored in TeX files in `VON_BASE_PATH`. You can
-   keep subdirectories in here, as well, to organize those files.
-2. Problems and solutions are separated using `SEPARATOR` in `config`,
-   which by default is three dashes padded by newlines.
-   So when entering new problems, write the statement, the separator,
-   and then the solution.
-3. Actually more generally, each problem and solution is separated into
-   several "bodies", delimited by the separator.
-   It's basically assumed that 0'th body is the problem statement
-   and the 1'st body is the solution,
-   but you can have further bodies for other purposes too.
+1.  Problems are stored in TeX files in `VON_BASE_PATH`. You can
+    keep subdirectories in here, as well, to organize those files.
+2.  Problems and solutions are separated using `SEPARATOR` in `config`,
+    which by default is three dashes padded by newlines.
+    So when entering new problems, write the statement, the separator,
+    and then the solution.
+3.  Actually more generally, each problem and solution is separated into
+    several "bodies", delimited by the separator.
+    It's basically assumed that 0'th body is the problem statement
+    and the 1'st body is the solution,
+    but you can have further bodies for other purposes too.
 
 ## Metadata
 
 - `edit "Shortlist 2016 G2"` or `edit "16SLG2"`: edit entry for problem in database
 
-1. Metadata is stored at the top of each file after being added.
-2. Problems must have a _source_ like "Shortlist 2016 G2".
-3. Problems should also have a description, and a set of tags.
-   If a tag is specified as a sorting tag in `config`,
-   it will be displayed differently,
-   but otherwise functionally equivalently.
-4. Problems can also have an "author" attribute, which is displayed.
-5. Problems can also have a "hardness" attribute, an integer,
-   which is displayed differently by the user interface.
-   You can pick any scale you want; [here is mine][mohs].
-6. Problems can be marked as _SECRET_.
-   Problems marked as SECRET will appear in searches,
-   but will be replaced by placeholders (unless `--brave` is passed).
+1.  Metadata is stored at the top of each file after being added.
+2.  Problems must have a _source_ like "Shortlist 2016 G2".
+3.  Problems should also have a description, and a set of tags.
+    If a tag is specified as a sorting tag in `config`,
+    it will be displayed differently,
+    but otherwise functionally equivalently.
+4.  Problems can also have an "author" attribute, which is displayed.
+5.  Problems can also have a "hardness" attribute, an integer,
+    which is displayed differently by the user interface.
+    You can pick any scale you want; [here is mine][mohs].
+6.  Problems can be marked as _SECRET_.
+    Problems marked as SECRET will appear in searches,
+    but will be replaced by placeholders (unless `--brave` is passed).
 
-   There are two ways to mark a problem as SECRET:
-   - Include `SECRET` as a substring of the problem's source.
-   - Include `secret` as one of the problem's tags.
+    There are two ways to mark a problem as SECRET:
+    - Include `SECRET` as a substring of the problem's source.
+    - Include `secret` as one of the problem's tags.
 
 An example of an entry:
 
-```
+```text
 desc:  $5^n$ has six consecutive zeros
 author: Evan Chen
 source:  JMO 2016/2
