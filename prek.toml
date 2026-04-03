@@ -57,6 +57,11 @@ rev = "v3.8.1"
 hooks = [{ id = "prettier", types_or = ["css", "javascript", "json", "yaml"] }]
 
 [[repos]]
+repo = "https://github.com/rvben/rumdl-pre-commit"
+rev = "v0.1.66"
+hooks = [{ id = "rumdl" }, { id = "rumdl-fmt" }]
+
+[[repos]]
 repo = "https://github.com/astral-sh/uv-pre-commit"
 rev = "0.11.3"
 hooks = [{ id = "uv-lock" }]
