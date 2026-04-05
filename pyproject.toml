@@ -12,7 +12,7 @@ packages = ["von"]
 name = "vondb"
 description = "VON: vEnhance's Olympiad Navigator"
 authors = [{ name = "Evan Chen", email = "evan@evanchen.cc" }]
-license = { text = "MPL-2.0" }
+license = "MPL-2.0"
 readme = "README.md"
 urls = { repository = "https://github.com/vEnhance/von/" }
 requires-python = ">=3.11,<4.0"
