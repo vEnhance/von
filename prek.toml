@@ -79,7 +79,8 @@ hooks = [
     name = "ty",
     entry = "uv run ty check",
     language = "system",
-    types = ["python"]
+    types = ["python"],
+    stages = ["pre-push"],
   },
   {
     id = "pytest",
