@@ -31,9 +31,7 @@ von = "von.__main__:main"
 dev = [
     "prek>=0.3.6",
     "pytest>=9.0.2",
-    "codespell>=2.4.1",
     "toml>=0.10.2",
-    "ruff>=0.9.7",
     "ty>=0.0.24",
 ]
 
