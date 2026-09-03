@@ -1,5 +1,6 @@
 import logging
 import os
+import subprocess
 
 from .. import model, strparse, view
 from ..fzf import fzf_choose
@@ -276,4 +277,4 @@ def main(self: object, argv: list[str]):
         with open(filepath, "w") as f:
             print(s, file=f)
         os.chdir(VON_POST_OUTPUT_DIR)
-        os.system("latexmk -pv %s" % filepath)
+        subprocess.run(["latexmk", "-pv", filepath])
