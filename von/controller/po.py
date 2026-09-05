@@ -50,36 +50,42 @@ LATEX_PREAMBLE = r"""\usepackage{amsmath,amssymb,amsthm}
 \makeatother
 
 \tcbset{
+  evanbox/.style={ % shared by all
+    enhanced, coltitle=black, fonttitle=\bfseries,
+    left=8pt, right=8pt, top=6pt, bottom=6pt,
+  },
+  evanbg/.style={colback=#1, colbacktitle=#1},
+  evansidebar/.style={
+    evanbox, breakable, sharp corners, boxrule=0pt, frame hidden,
+    left=10pt, right=10pt,
+  },
+  % --------------------------------------------------------
   bluebox/.style={
-    enhanced,
-    arc=9pt, outer arc=10pt,
-    colframe=blue, colback=TealBlue!5, boxrule=1pt,
-    before skip=12pt, after skip=2pt,
-    left=10pt, right=10pt, top=6pt, bottom=9pt,
+    evanbox, evanbg=TealBlue!5, arc=9pt, outer arc=10pt, colframe=blue, boxrule=1pt,
   },
   redbox/.style={
-    enhanced, sharp corners,
-    colframe=RawSienna, colback=Salmon!5, boxrule=0.5pt,
-    before skip=12pt, after skip=2pt,
-    left=10pt, right=10pt, top=4pt, bottom=8pt,
+    evanbox, evanbg=Salmon!5, sharp corners, colframe=RawSienna, boxrule=0.5pt,
   },
   greenbox/.style={
-    enhanced, breakable, sharp corners,
-    boxrule=0pt, frame hidden,
-    borderline west={2pt}{0pt}{ForestGreen},
-    colback=ForestGreen!5,
-    before skip=8pt, after skip=0pt,
-    left=10pt, right=10pt,
+    evansidebar, evanbg=ForestGreen!5, borderline west={2pt}{0pt}{ForestGreen},
   },
   blackbox/.style={
-    enhanced, breakable, sharp corners,
-    boxrule=0pt, frame hidden,
-    borderline west={3pt}{0pt}{black},
-    colback=RedViolet!5!gray!5,
-    before skip=8pt,
-    left=10pt, right=10pt,
+    evansidebar, evanbg=RedViolet!5!gray!5, borderline west={3pt}{0pt}{black},
+    top = 4pt, bottom = 4pt % smaller font size, so shrink padding a bit too
+  },
+  purplebox/.style={
+    evanbox, arc=9pt, outer arc=10pt, colframe=black, colback=Orchid!10,
+    boxrule=1pt, colbacktitle=Violet!50!black, coltitle=white,
+    fonttitle=\bfseries\sffamily, drop shadow=black!30,
+    after skip = 12pt % bit of extra space after the drop shadow
+  },
+  % --------------------------------------------------------
+  plainbox/.style={ % just a plain box, for a border
+    evanbox, evanbg=white, breakable, sharp corners,
+    colframe=black, boxrule=0.4pt,
   },
 }
+
 \declarekeytheoremstyle{thmbluebox}{
   headfont=\sffamily\bfseries\color{MidnightBlue},
   bodyfont=\normalfont,
@@ -105,6 +111,13 @@ LATEX_PREAMBLE = r"""\usepackage{amsmath,amssymb,amsthm}
   bodyfont=\normalfont\small,
   tcolorbox-no-titlebar={blackbox},
 }
+\declarekeytheoremstyle{thminline}{
+  headfont=\color{blue!40!black}\normalfont\bfseries,
+  spaceabove=8pt,
+  spacebelow=8pt,
+  bodyfont=\normalfont,
+}
+\fi
 
 \newkeytheorem{theorem}[style=thmbluebox,name=Theorem,parent=section]
 \newkeytheorem{theorem*}[style=thmbluebox,name=Theorem,numbered=no]
