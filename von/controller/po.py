@@ -117,7 +117,6 @@ LATEX_PREAMBLE = r"""\usepackage{amsmath,amssymb,amsthm}
   spacebelow=8pt,
   bodyfont=\normalfont,
 }
-\fi
 
 \newkeytheorem{theorem}[style=thmbluebox,name=Theorem,parent=section]
 \newkeytheorem{theorem*}[style=thmbluebox,name=Theorem,numbered=no]
