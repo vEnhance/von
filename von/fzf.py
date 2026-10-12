@@ -1,4 +1,6 @@
+import shlex
 import subprocess
+import sys
 
 from .model import PickleMappingEntry, VonIndex, setCache
 from .puid import inferPUID
@@ -21,7 +23,7 @@ def fzf_choose() -> str:
             "-d",
             r"\t",
             "--preview",
-            "python -m von show {2}",
+            f"{shlex.quote(sys.executable)} -m von show {{2}}",
             "--preview-window",
             "down",
         ],

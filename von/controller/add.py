@@ -2,6 +2,7 @@ import datetime
 import logging
 import os
 import re
+import shlex
 import subprocess
 import tempfile
 import traceback
@@ -40,7 +41,7 @@ def user_file_input(
         filename = tf.name
     if pre_hook is not None:
         pre_hook(filename)
-    subprocess.run([EDITOR, filename])
+    subprocess.run([*shlex.split(EDITOR), filename])
 
     with open(filename, "r") as tf:
         edited_message = "".join(_ for _ in tf.readlines())
