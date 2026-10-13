@@ -1,4 +1,5 @@
 import logging
+import shlex
 import subprocess
 
 from .. import model, view
@@ -37,7 +38,7 @@ def main(self: object, argv: list[str]):
         else:
             full_path = model.completePath(entry.path)
             preview.make_preview(full_path)
-            subprocess.call([EDITOR, full_path])  # do editing
+            subprocess.call([*shlex.split(EDITOR), full_path])  # do editing
 
             problem = model.makeProblemFromPath(entry.path)
             new_entry = model.updateEntryByProblem(old_entry=entry, new_problem=problem)
