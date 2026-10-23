@@ -5,8 +5,8 @@
 ![Language: Python](https://img.shields.io/github/languages/top/vEnhance/von)
 ![License](https://img.shields.io/github/license/vEnhance/von)
 ![Last commit](https://img.shields.io/github/last-commit/vEnhance/von)
-[<img src="https://github.com/vEnhance/von/actions/workflows/ci.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
-[<img src="https://github.com/vEnhance/von/actions/workflows/codeql-analysis.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
+[<img src="https://github.com/vEnhance/von/actions/workflows/prek.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
+[<img src="https://github.com/vEnhance/von/actions/workflows/pytest.yml/badge.svg" alt="von status">](https://github.com/vEnhance/von/actions)
 
 [<img src="https://img.shields.io/badge/python%20style-black-000000.svg" alt="style: black">](https://github.com/psf/black)
 [<img src="https://img.shields.io/badge/types-pyright-00cca7.svg" alt="types: pyright">](https://github.com/Microsoft/pyright)
