@@ -2,35 +2,44 @@ import shlex
 import subprocess
 import sys
 
+from . import view
 from .model import PickleMappingEntry, VonIndex, setCache
 from .puid import inferPUID
 
 
 def _fzf_line(entry: PickleMappingEntry, tags: bool) -> str:
-    puid = inferPUID(entry.source)
-    line = f"{puid}\t{entry.source:<13}\t"
+    puid = view.APPLY_COLOR("CYAN", inferPUID(entry.source))
+    source = view.APPLY_COLOR(view.getSourceColor(entry), f"{entry.source:<13}")
+    line = f"{puid}\t{source}\t"
     if not tags:
         return line + entry.desc
-    hashtags = " ".join(f"#{tag}" for tag in entry.tags)
+    hashtags = view.APPLY_COLOR("RED", " ".join(f"#{tag}" for tag in entry.tags))
     return line + f"{entry.desc:<50}\t{hashtags}"
 
 
 def fzf_choose(tags=True) -> str:
+    brave = view.OPTS.brave
+    color = view.OPTS.color
     with VonIndex() as index:
-        choices = "\n".join(_fzf_line(entry, tags) for entry in index.values())
+        choices = "\n".join(
+            _fzf_line(entry, tags)
+            for entry in index.values()
+            if brave or not entry.secret
+        )
     try:
         chosen = subprocess.check_output(
             args=[
                 "fzf",
                 "-e",
-                # Force left-align results if searching tags.
-                *(["--no-hscroll"] if tags else []),
+                *(["--ansi"] if color else []),
                 "--tabstop",
                 "12",
                 "-d",
                 r"\t",
                 "--preview",
-                f"{shlex.quote(sys.executable)} -m von show {{2}}",
+                f"{shlex.quote(sys.executable)} -m von show"
+                + (" --brave" if brave else "")
+                + " {2}",
                 "--preview-window",
                 "down",
             ],
