@@ -29,6 +29,7 @@ class VonController:
     do_cd = cd.main
     do_clear = clear.main
     do_cs = do_cd
+    do_e = edit.main
     do_edit = edit.main
     do_f = show.main  # alias find
     do_fix = fixnames.main
@@ -43,7 +44,6 @@ class VonController:
     do_s = search.main
     do_search = search.main
     do_show = show.main
-    do_solve = solve.main
     do_solve = solve.main
     do_ss = status.main
     do_status = status.main
