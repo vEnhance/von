@@ -119,6 +119,17 @@ def getProblemString(problem: Problem, i: int | None = None):
     return s
 
 
+def getSourceColor(entry: PickleMappingEntry) -> str:
+    if "favorite" in entry.tags:
+        return "BOLD_YELLOW"
+    elif "nice" in entry.tags:
+        return "BOLD_CYAN"
+    elif "good" in entry.tags:
+        return "BOLD_MAGENTA"
+    else:
+        return "BOLD_BLUE"
+
+
 def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = None):
     # SPECIAL hide brave
     if OPTS.verbose is True:
@@ -166,14 +177,7 @@ def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = Non
             else:
                 source_string += word + " "
         source_string = source_string.strip()
-    if "favorite" in entry.tags:
-        s += APPLY_COLOR("BOLD_YELLOW", source_string)
-    elif "nice" in entry.tags:
-        s += APPLY_COLOR("BOLD_CYAN", source_string)
-    elif "good" in entry.tags:
-        s += APPLY_COLOR("BOLD_MAGENTA", source_string)
-    else:
-        s += APPLY_COLOR("BOLD_BLUE", source_string)
+    s += APPLY_COLOR(getSourceColor(entry), source_string)
     s += " " * max(1, 17 - len(source_string))
 
     # hardness
