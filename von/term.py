@@ -99,8 +99,9 @@ class VonTerminal(cmd.Cmd, controller.VonController):
         else:
             logging.error(f"Command {cmd} not recognized")
 
-    def do_help(self, arg: str) -> None:
-        argv = arg.split()
+    def do_help(self, arg: str | list[str]) -> None:
+        # onecmd() and direct() pass a list of shlex-split args
+        argv = arg.split() if isinstance(arg, str) else arg
         arg = "".join(argv)
         if arg:
             try:
