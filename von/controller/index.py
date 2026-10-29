@@ -6,4 +6,5 @@ parser = view.Parser(
 
 
 def main(self: object, argv: list[str]):
+    parser.parse_args(argv)
     model.rebuildIndex()
