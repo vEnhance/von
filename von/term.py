@@ -2,7 +2,9 @@ import cmd
 import glob
 import logging
 import os
+import re
 import shlex
+import sys
 import traceback
 from typing import Any
 
@@ -39,13 +41,18 @@ class VonTerminal(cmd.Cmd, controller.VonController):
 
     @property
     def prompt(self):
-        return (
+        s = (
             APPLY_COLOR("BOLD_CYAN", "VON/")
             + APPLY_COLOR("YELLOW", self.getcwd())
             + "\n"
             + APPLY_COLOR("BOLD_GREEN", ":)")
             + " "
         )
+        if USER_OS != "windows" and sys.stdin.isatty():
+            # mark escape sequences as zero-width so readline computes
+            # the prompt length (and hence cursor position) correctly
+            s = re.sub(r"(\033\[[0-9;]*m)", "\001\\1\002", s)
+        return s
 
     def emptyline(self):
         pass
