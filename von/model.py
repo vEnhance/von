@@ -6,8 +6,9 @@ import logging
 import os
 import pickle as pickle
 import random
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, TextIO
+from typing import Any, Callable, Iterable, TextIO
 
 import yaml
 
@@ -46,8 +47,8 @@ class pickleObj(collections.abc.MutableMapping):
         if not os.path.isfile(path) or os.path.getsize(path) == 0:
             self.store = self._initial()
         else:
-            with vonOpen(path, "rb") as f:
-                self.store = pickle.load(f)  # type: ignore
+            with open(path, "rb") as f:
+                self.store = pickle.load(f)
         self.path = path
         self.mode = mode
 
@@ -56,7 +57,7 @@ class pickleObj(collections.abc.MutableMapping):
 
     def __exit__(self, *_: Any):
         if self.mode == "wb":
-            with vonOpen(self.path, "wb") as f:
+            with open(self.path, "wb") as f:
                 pickle.dump(self.store, f)
 
     def __getitem__(self, key: Any):
@@ -273,10 +274,8 @@ def getCompleteCwd():
     return completePath(getcwd())
 
 
-def makeProblemFromPath(path: str) -> Problem:
-    # Creates a problem instance from a source, without looking at Index
-    with vonOpen(path, "r") as f:
-        text = "".join(f.readlines())
+def parseProblem(path: str, text: str) -> Problem:
+    """Creates a problem instance from the contents of its TeX file"""
     x = text.split(SEPARATOR)
     data = yaml.safe_load(x[0])
     assert data is not None, f"No data in {path}"
@@ -284,6 +283,12 @@ def makeProblemFromPath(path: str) -> Problem:
     assert data["source"], f"No source in {path}"
     assert data["desc"], f"No description in {path}"
     return Problem(path, **data)
+
+
+def makeProblemFromPath(path: str) -> Problem:
+    # Creates a problem instance from a source, without looking at Index
+    with vonOpen(path, "r") as f:
+        return parseProblem(path, f.read())
 
 
 def getAllProblems() -> list[Problem]:
@@ -304,19 +309,21 @@ def getEntryByCacheNum(n: int) -> PickleMappingEntry:
         return entry
 
 
+def findEntryByTerm(
+    index: dict[str, PickleMappingEntry], term: str
+) -> PickleMappingEntry | None:
+    """Looks up an entry by its exact source, or else by its PUID"""
+    if term in index:
+        return index[term]
+    puid = term.upper()
+    for index_source, index_entry in index.items():
+        if puid == inferPUID(index_source):
+            return index_entry
+    return None
+
+
 def getEntryByTerm(term: str) -> PickleMappingEntry | None:
-    with VonIndex() as index:
-        entry = None
-        if term in index:
-            entry = index[term]
-
-        if entry is None:
-            puid = term.upper()
-            for index_source, index_entry in index.store.items():
-                if puid == inferPUID(index_source):
-                    entry = index_entry
-                    break
-
+    entry = findEntryByTerm(VonIndex().store, term)
     if entry is not None:
         with VonCache() as cache:
             for cache_entry in cache:
@@ -335,6 +342,7 @@ def getEntryByKey(key: str):
 
 
 def addProblemByFileContents(path: str, text: str):
+    os.makedirs(os.path.dirname(completePath(path)), exist_ok=True)
     with vonOpen(path, "w") as f:
         print(text, file=f)
     logging.info("Wrote to " + path)
@@ -365,6 +373,41 @@ def viewDirectory(path: str):
     return (entries, dirs)
 
 
+@dataclass(frozen=True)
+class SearchQuery:
+    terms: tuple[str, ...] = ()
+    tags: tuple[str, ...] = ()
+    sources: tuple[str, ...] = ()
+    authors: tuple[str, ...] = ()
+    path: str = ""
+    in_otis: bool | None = None
+    has_url: bool | None = None
+
+    def matches(self, entry: PickleMappingEntry) -> bool:
+        if self.in_otis is not None and getOtisUsedSources() is not None:
+            if entry.used_by_otis != self.in_otis:
+                return False
+        if self.has_url is not None:
+            if (entry.url is not None) != self.has_url:
+                return False
+        return (
+            entry.path.startswith(self.path)
+            and all(entry.hasTag(_) for _ in self.tags)
+            and all(entry.hasTerm(_) for _ in self.terms)
+            and all(entry.hasSource(_) for _ in self.sources)
+            and all(entry.hasAuthor(_) for _ in self.authors)
+        )
+
+
+def sortEntries(
+    entries: Iterable[PickleMappingEntry], alph_sort=False
+) -> list[PickleMappingEntry]:
+    if alph_sort:
+        return sorted(entries, key=lambda e: e.source)
+    else:
+        return sorted(entries)
+
+
 def runSearch(
     terms: list[str] | None = None,
     tags: list[str] | None = None,
@@ -376,41 +419,17 @@ def runSearch(
     in_otis: bool | None = None,
     has_url: bool | None = None,
 ) -> list[PickleMappingEntry]:
-    def _lambda_is_matching(entry: PickleMappingEntry):
-        if getOtisUsedSources() is not None:
-            if entry.used_by_otis and in_otis is False:
-                return False
-            elif not entry.used_by_otis and in_otis is True:
-                return False
-
-        if has_url is not None:
-            if entry.url is None and has_url is True:
-                return False
-            if entry.url is not None and has_url is False:
-                return False
-
-        return all(
-            (
-                entry.path.startswith(path),
-                (not tags or all([entry.hasTag(_) for _ in tags])),
-                (not terms or all([entry.hasTerm(_) for _ in terms])),
-                (not sources or all([entry.hasSource(_) for _ in sources])),
-                (not authors or all([entry.hasAuthor(_) for _ in authors])),
-            )
-        )
-
-    if refine is False:
-        with VonIndex() as index:
-            result: list[PickleMappingEntry] = [
-                entry for entry in index.values() if _lambda_is_matching(entry)
-            ]
-    else:
-        with VonCache() as cache:
-            result = [entry for entry in cache.values() if _lambda_is_matching(entry)]
-    if alph_sort:
-        result.sort(key=lambda e: e.source)
-    else:
-        result.sort()
+    query = SearchQuery(
+        terms=tuple(terms or ()),
+        tags=tuple(tags or ()),
+        sources=tuple(sources or ()),
+        authors=tuple(authors or ()),
+        path=path,
+        in_otis=in_otis,
+        has_url=has_url,
+    )
+    candidates = VonCache().store if refine else VonIndex().store.values()
+    result = sortEntries(filter(query.matches, candidates), alph_sort)
     if len(result) > 0:
         setCache(result)
     return result
@@ -475,9 +494,10 @@ def setEntireIndex(von_index_dict: dict[str, PickleMappingEntry]):
         index.set(von_index_dict)
 
 
-def rebuildIndex():
+def buildIndex(problems: Iterable[Problem]) -> dict[str, PickleMappingEntry]:
+    """Makes an index out of problems, renaming any repeated sources"""
     d: dict[str, PickleMappingEntry] = {}
-    for p in getAllProblems():
+    for p in problems:
         if p.source in d:
             fake_source = f"DUPLICATE {random.randrange(10**6, 10**7)}"
             logging.error(
@@ -485,4 +505,8 @@ def rebuildIndex():
             )
             p.source = fake_source
         d[p.source] = p.entry
-    setEntireIndex(d)
+    return d
+
+
+def rebuildIndex():
+    setEntireIndex(buildIndex(getAllProblems()))

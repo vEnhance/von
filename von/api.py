@@ -26,15 +26,7 @@ def has_solution(source: str) -> bool:
 
 def get_index(source: str, brave=False) -> model.PickleMappingEntry | None:
     """Returns the index entry for a given source, or None"""
-    entry = index.get(source)
-
-    if entry is None:
-        puid = source.upper()
-        for index_source, index_entry in index.items():
-            if puid == inferPUID(index_source):
-                entry = index_entry
-                break
-
+    entry = model.findEntryByTerm(index, source)
     if entry is not None and entry.secret:
         assert brave, f"{entry} requires security clearance"
     return entry
