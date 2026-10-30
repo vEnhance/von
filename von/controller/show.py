@@ -37,11 +37,12 @@ parser.add_argument(
 
 
 def main(self: object, argv: list[str]):
-    opts = parser.process(argv)
+    opts = parser.parse_args(argv)
+    display = view.Display.from_opts(opts)
     if opts.key is not None:
         entry = model.getEntryByKey(opts.key)
     else:
-        entry = model.getEntryByKey(fzf_choose())
+        entry = model.getEntryByKey(fzf_choose(display))
     if entry is None:
         logging.error(opts.key + " not found")
     elif entry.secret and not opts.brave:
@@ -55,7 +56,7 @@ def main(self: object, argv: list[str]):
         elif b is None and opts.aops:
             b = 0
         elif b is None:
-            view.printProblem(problem, i=entry.i)
+            view.printProblem(problem, display, i=entry.i)
             return
         try:
             if opts.twitch:

@@ -30,7 +30,7 @@ parser.add_argument(
 
 
 def main(self: object, argv: list[str]):
-    opts = parser.process(argv)
+    opts = parser.parse_args(argv)
     entry = model.getEntryByKey(opts.key)
     if entry is None:
         logging.error(opts.key + " not found")

@@ -11,7 +11,7 @@ parser = view.Parser(
 
 
 def main(self: object, argv: list[str]):
-    parser.process(argv)
+    parser.parse_args(argv)
     base_path = Path(config().base_path)
     for p in model.getAllProblems():
         puid = inferPUID(p.source)

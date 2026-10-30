@@ -23,13 +23,13 @@ parser.add_argument(
 
 
 def main(self: object, argv: list[str]):
-    opts = parser.process(argv)
-    opts.verbose = True
+    opts = parser.parse_args(argv)
+    display = view.Display.from_opts(opts, verbose=True)
 
     if opts.all is True:
         entries = model.readCache()
     elif len(opts.keys) == 0:
-        entries = [model.getEntryByKey(fzf_choose())]
+        entries = [model.getEntryByKey(fzf_choose(display))]
     else:
         entries = [model.getEntryByKey(key) for key in opts.keys]
     for entry in entries:
@@ -43,4 +43,4 @@ def main(self: object, argv: list[str]):
             problem = model.makeProblemFromPath(entry.path)
             new_entry = model.updateEntryByProblem(old_entry=entry, new_problem=problem)
             # update cache after editing problem
-            view.printEntry(new_entry)
+            view.printEntry(new_entry, display)

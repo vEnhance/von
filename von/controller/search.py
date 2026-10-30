@@ -67,7 +67,8 @@ url_group.add_argument(
 
 
 def main(self: object, argv: list[str]):
-    opts = parser.process(argv)
+    opts = parser.parse_args(argv)
+    display = view.Display.from_opts(opts)
 
     query_is_empty = (
         len(opts.s_terms + opts.s_tags + opts.s_sources + opts.s_authors) == 0
@@ -100,7 +101,7 @@ def main(self: object, argv: list[str]):
     if search_path != "":
         logging.info(
             "Search restricted to "
-            + view.APPLY_COLOR("BOLD_GREEN", view.formatPath(search_path))
+            + display.paint("BOLD_GREEN", view.formatPath(search_path))
         )
     result = model.runSearch(
         terms=opts.s_terms,
@@ -115,6 +116,6 @@ def main(self: object, argv: list[str]):
     )
 
     for entry in result:
-        view.printEntry(entry)
+        view.printEntry(entry, display)
     if len(result) == 0:
         logging.warning("No matches found.")

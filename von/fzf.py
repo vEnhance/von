@@ -5,24 +5,25 @@ import sys
 from . import view
 from .model import PickleMappingEntry, VonIndex, setCache
 from .puid import inferPUID
+from .rc import config
 
 
-def _fzf_line(entry: PickleMappingEntry, tags: bool) -> str:
-    puid = view.APPLY_COLOR("CYAN", inferPUID(entry.source))
-    source = view.APPLY_COLOR(view.getSourceColor(entry), f"{entry.source:<13}")
+def _fzf_line(entry: PickleMappingEntry, tags: bool, display: view.Display) -> str:
+    puid = display.paint("CYAN", inferPUID(entry.source))
+    source = display.paint(view.getSourceColor(entry), f"{entry.source:<13}")
     line = f"{puid}\t{source}\t"
     if not tags:
         return line + entry.desc
-    hashtags = view.APPLY_COLOR("RED", " ".join(f"#{tag}" for tag in entry.tags))
+    hashtags = display.paint("RED", " ".join(f"#{tag}" for tag in entry.tags))
     return line + f"{entry.desc:<50}\t{hashtags}"
 
 
-def fzf_choose(tags=True) -> str:
-    brave = view.OPTS.brave
-    color = view.OPTS.color
+def fzf_choose(display: view.Display, tags=True) -> str:
+    brave = display.brave
+    color = display.color and config().color
     with VonIndex() as index:
         choices = "\n".join(
-            _fzf_line(entry, tags)
+            _fzf_line(entry, tags, display)
             for entry in index.values()
             if brave or not entry.secret
         )

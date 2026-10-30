@@ -9,7 +9,7 @@ parser.add_argument("key", help="The key of the problem to open")
 
 
 def main(self: object, argv: list[str]):
-    opts = parser.process(argv)
+    opts = parser.parse_args(argv)
     entry = model.getEntryByKey(opts.key)
     if entry is None:
         logging.error(opts.key + " not found")

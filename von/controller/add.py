@@ -176,7 +176,7 @@ def do_add_problem(raw_text: str, url: str, opts: Namespace):
     p = model.addProblemByFileContents(target, out_text)
     assert p is not None
     model.augmentCache(p.entry)
-    view.printEntry(p.entry)
+    view.printEntry(p.entry, view.Display.from_opts(opts, verbose=True))
 
 
 parser = view.Parser(prog="add", description="Adds a problem to VON.")
@@ -203,8 +203,7 @@ parser.add_argument(
 
 def main(self: object, argv: list[str]):
     del self
-    opts = parser.process(argv)
-    opts.verbose = True
+    opts = parser.parse_args(argv)
     url = opts.url if opts.url is not None else "<++>"
     if opts.filename is not None:
         if not os.path.isfile(opts.filename):

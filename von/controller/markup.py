@@ -35,16 +35,16 @@ parser_display_modes.add_argument(
 
 
 def main(self: object, argv: list[str]):
-    opts = parser.process(argv)
+    opts = parser.parse_args(argv)
     keys = opts.keys
     if len(keys) == 0:
-        keys = [fzf_choose()]
+        keys = [fzf_choose(view.Display.from_opts(opts))]
 
     for i, key in enumerate(keys):
         entry = model.getEntryByKey(key)
 
         if entry is None:
-            logging.error(opts.key + " not found")
+            logging.error(key + " not found")
             return
         elif entry.secret and not opts.brave:
             logging.error("Problem can't be shown without --brave option")

@@ -228,13 +228,13 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 
 
 def main(self: object, argv: list[str]):
-    opts = parser.process(argv)
+    opts = parser.parse_args(argv)
     if opts.author is None:
         opts.author = config().name
 
     keys = opts.keys
     if len(keys) == 0:
-        keys = [fzf_choose()]
+        keys = [fzf_choose(view.Display.from_opts(opts))]
 
     # Better default title:
     if opts.title is not None:

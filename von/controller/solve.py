@@ -31,7 +31,7 @@ r = re.compile(r"\\von(\*)?(\[([^\]]+)\])?\{([A-Za-z0-9 /\-?,.!]+)\}")
 
 
 def main(self: object, argv: list[str]):
-    opts = parser.process(argv)
+    opts = parser.parse_args(argv)
     s = ""
 
     with open(opts.filename) as f:

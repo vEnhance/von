@@ -1,6 +1,7 @@
 import argparse
 import string
 import sys
+from dataclasses import dataclass
 from typing import Any
 
 from .model import PickleMappingEntry, Problem
@@ -14,8 +15,8 @@ if sys.platform == "win32":
     init()
 
 
-def APPLY_COLOR(color_name: str, s: str):
-    if OPTS.color is False or config().color is False:
+def APPLY_COLOR(color_name: str, s: str, enabled: bool = True):
+    if enabled is False or config().color is False:
         return s
     num_leading_spaces = len(s) - len(s.lstrip())
     return (
@@ -56,8 +57,7 @@ def get_author_initials(author: str) -> str:
         return "".join(a[0] for a in author_words if passes(a))
 
 
-# Arguments hacking whee
-# We have _OPTS here which will pick up any parse_args()
+# Display options shared by every command
 _view_parser = argparse.ArgumentParser(add_help=False)
 _view_parser.add_argument(
     "-q",
@@ -100,23 +100,40 @@ _view_parser.add_argument(
     help="More verbose displays (e.g. include problem tags).",
 )
 
-OPTS = _view_parser.parse_args([])
-
 
 class Parser(argparse.ArgumentParser):
     def __init__(self, *args: Any, **kwargs: Any):
         super(Parser, self).__init__(parents=[_view_parser], *args, **kwargs)
 
-    def process(self, *args: Any, **kwargs: Any) -> argparse.Namespace:
-        global OPTS
-        OPTS = self.parse_args(*args, **kwargs)
-        return OPTS
+
+@dataclass(frozen=True)
+class Display:
+    """How to render output, from the options shared by every command"""
+
+    color: bool = True
+    verbose: bool = False
+    tabs: bool = False
+    brave: bool = False
+
+    @classmethod
+    def from_opts(cls, opts: argparse.Namespace, **overrides: bool) -> "Display":
+        kwargs = {
+            "color": opts.color,
+            "verbose": opts.verbose,
+            "tabs": opts.tabs,
+            "brave": opts.brave,
+        }
+        kwargs.update(overrides)
+        return cls(**kwargs)
+
+    def paint(self, color_name: str, s: str) -> str:
+        return APPLY_COLOR(color_name, s, enabled=self.color)
 
 
-def getProblemString(problem: Problem, i: int | None = None):
-    s = getEntryString(problem.entry, verbose=True, i=i)
+def getProblemString(problem: Problem, display: Display, i: int | None = None):
+    s = getEntryString(problem.entry, display, verbose=True, i=i)
     s += "\n"
-    s += APPLY_COLOR("CYAN", problem.state.strip())
+    s += display.paint("CYAN", problem.state.strip())
     return s
 
 
@@ -131,14 +148,20 @@ def getSourceColor(entry: PickleMappingEntry) -> str:
         return "BOLD_BLUE"
 
 
-def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = None):
+def getEntryString(
+    entry: PickleMappingEntry,
+    display: Display,
+    verbose=False,
+    i: int | None = None,
+):
+    paint = display.paint
     # SPECIAL hide brave
-    if OPTS.verbose is True:
+    if display.verbose is True:
         verbose = True
-    if entry.secret and not OPTS.brave:
-        return APPLY_COLOR("BOLD_YELLOW", "Problem not shown")
+    if entry.secret and not display.brave:
+        return paint("BOLD_YELLOW", "Problem not shown")
 
-    if OPTS.tabs is True:
+    if display.tabs is True:
         s = "\t".join([entry.source, entry.desc, entry.sortstring])
         if verbose:
             s += "\t" + " ".join(entry.tags)
@@ -151,17 +174,17 @@ def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = Non
     if i is not None:
         index_string = f"{i + 1:3}"
         if "final" in entry.tags:
-            s += APPLY_COLOR("YELLOW", index_string)
+            s += paint("YELLOW", index_string)
         elif "waltz" in entry.tags:
-            s += APPLY_COLOR("GREEN", index_string)
+            s += paint("GREEN", index_string)
         elif entry.url is not None and entry.used_by_otis is False:
-            s += APPLY_COLOR("BOLD_RED", index_string)
+            s += paint("BOLD_RED", index_string)
         elif entry.url is not None and entry.used_by_otis is True:
-            s += APPLY_COLOR("RED", index_string)
+            s += paint("RED", index_string)
         elif entry.used_by_otis is False:  # url missing
-            s += APPLY_COLOR("BG_BLUE", index_string)
+            s += paint("BG_BLUE", index_string)
         else:  # url missing, used by OTIS
-            s += APPLY_COLOR("BG_MAGENTA", index_string)
+            s += paint("BG_MAGENTA", index_string)
         s += " "
 
     # source (glows for favorite or nice)
@@ -178,32 +201,32 @@ def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = Non
             else:
                 source_string += word + " "
         source_string = source_string.strip()
-    s += APPLY_COLOR(getSourceColor(entry), source_string)
+    s += paint(getSourceColor(entry), source_string)
     s += " " * max(1, 17 - len(source_string))
 
     # hardness
     if isinstance(entry.hardness, int):
-        s += APPLY_COLOR("BOLD_RED", f"{entry.hardness:2}M")
+        s += paint("BOLD_RED", f"{entry.hardness:2}M")
         s += " "
 
     # author
     if entry.author is not None:
-        s += APPLY_COLOR("GREEN", "[" + get_author_initials(entry.author) + "]")
+        s += paint("GREEN", "[" + get_author_initials(entry.author) + "]")
         s += " "
 
     # the description
     s += entry.desc if verbose else entry.desc[:40]
 
     # sorting hashtag
-    s += " " + APPLY_COLOR("RED", "#" + entry.sortstring)
+    s += " " + paint("RED", "#" + entry.sortstring)
 
     # PUID, author credits
     if verbose:
         s += "\n" + " " * 4
-        s += "PUID:" + APPLY_COLOR("CYAN", inferPUID(entry.source))
+        s += "PUID:" + paint("CYAN", inferPUID(entry.source))
         if entry.author is not None:
-            s += APPLY_COLOR("RESET", " | ")
-            s += APPLY_COLOR("GREEN", entry.author)
+            s += paint("RESET", " | ")
+            s += paint("GREEN", entry.author)
         if entry.url is not None:
             url = entry.url
             if url.startswith("http://"):
@@ -215,12 +238,12 @@ def getEntryString(entry: PickleMappingEntry, verbose=False, i: int | None = Non
             if len(url) > 32:
                 url = url[:29] + "..."
             s += " | "
-            s += APPLY_COLOR("BG_BLUE", url)
+            s += paint("BG_BLUE", url)
 
     # tags
     if verbose:
         s += "\n" + " " * 4
-        s += APPLY_COLOR("MAGENTA", " ".join(entry.tags))
+        s += paint("MAGENTA", " ".join(entry.tags))
     return s
 
 
@@ -228,20 +251,25 @@ def formatPath(path: str):
     return "VON/" + path
 
 
-def getDirString(path: str):
-    return "Directory " + APPLY_COLOR("BOLD_BLUE", path)
+def getDirString(path: str, display: Display):
+    return "Directory " + display.paint("BOLD_BLUE", path)
 
 
-def printProblem(*args: Any, **kwargs: Any):
-    print(getProblemString(*args, **kwargs))
+def printProblem(problem: Problem, display: Display, i: int | None = None):
+    print(getProblemString(problem, display, i=i))
 
 
-def printEntry(*args: Any, **kwargs: Any):
-    print(getEntryString(*args, **kwargs))
+def printEntry(
+    entry: PickleMappingEntry,
+    display: Display,
+    verbose=False,
+    i: int | None = None,
+):
+    print(getEntryString(entry, display, verbose=verbose, i=i))
 
 
-def printDir(*args: Any, **kwargs: Any):
-    print(getDirString(*args, **kwargs))
+def printDir(path: str, display: Display):
+    print(getDirString(path, display))
 
 
 def out(msg: str):
