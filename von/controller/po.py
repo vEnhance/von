@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+from argparse import Namespace
 
 from .. import model, strparse, view
 from ..fzf import fzf_choose
@@ -227,34 +228,27 @@ path Drawing(path g, pen p = defaultpen, arrowbar ar = None) {
 \addtokomafont{paragraph}{\color{orange!35!black}\P\ }"""
 
 
-def main(self: object, argv: list[str]):
-    opts = parser.parse_args(argv)
-    if opts.author is None:
-        opts.author = config().name
-
-    keys = opts.keys
-    if len(keys) == 0:
-        keys = [fzf_choose(view.Display.from_opts(opts))]
-
-    # Better default title:
-    if opts.title is not None:
-        title = opts.title
-    elif len(keys) == 1:
+def default_title(keys: list[str]) -> str:
+    if len(keys) == 1:
         entry = model.getEntryByKey(keys[0])
         if entry is not None:
-            title = entry.source
-        else:
-            title = "Solution"
-    else:
-        title = "Solutions"
+            return entry.source
+        return "Solution"
+    return "Solutions"
+
+
+def render(keys: list[str], opts: Namespace) -> str | None:
+    """Returns the LaTeX document for keys, or None (after logging) on error"""
+    author = opts.author if opts.author is not None else config().name
+    title = opts.title if opts.title is not None else default_title(keys)
 
     s = r"\documentclass[11pt]{scrartcl}" + "\n"
-    s += LATEX_PREAMBLE.replace("AUTHOR", opts.author).replace("TITLE", title)
+    s += LATEX_PREAMBLE.replace("AUTHOR", author).replace("TITLE", title)
     s += r"\begin{document}" + "\n"
     s += r"\title{" + title + "}" + "\n"
     if opts.subtitle is not None:
         s += r"\subtitle{" + opts.subtitle + "}" + "\n"
-    s += r"\author{" + opts.author + "}" + "\n"
+    s += r"\author{" + author + "}" + "\n"
     s += r"\date{" + opts.date + "}" + "\n"
     s += r"\maketitle" + "\n"
     s += "\n"
@@ -264,7 +258,7 @@ def main(self: object, argv: list[str]):
             logging.error(key + " not found")
         elif entry.secret and not opts.brave:
             logging.error(f"Problem `{entry.source}` not shown without --brave")
-            return
+            return None
         else:
             problem = entry.full
             s += r"\begin{problem}" if len(keys) > 1 else r"\begin{problem*}"
@@ -280,6 +274,18 @@ def main(self: object, argv: list[str]):
                 s += strparse.demacro(problem.bodies[1]) + "\n"
             s += r"\pagebreak" + "\n\n"
     s += r"\end{document}"
+    return s
+
+
+def main(self: object, argv: list[str]):
+    opts = parser.parse_args(argv)
+    keys = opts.keys
+    if len(keys) == 0:
+        keys = [fzf_choose(view.Display.from_opts(opts))]
+    s = render(keys, opts)
+    if s is None:
+        return
+    title = opts.title if opts.title is not None else default_title(keys)
     if opts.tex:
         view.out(s)
     else:

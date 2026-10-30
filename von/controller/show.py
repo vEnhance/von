@@ -1,4 +1,5 @@
 import logging
+from argparse import Namespace
 
 from .. import model, strparse, view
 from ..fzf import fzf_choose
@@ -36,37 +37,42 @@ parser.add_argument(
 )
 
 
+def render(
+    entry: model.PickleMappingEntry, opts: Namespace, display: view.Display
+) -> str | None:
+    """Returns the text to show for entry, or None (after logging) on error"""
+    if entry.secret and not opts.brave:
+        logging.error("Problem can't be shown without --brave option")
+        return None
+    b = opts.body
+    problem = entry.full
+    if b is None and opts.twitch:
+        b = 1
+    elif b is None and opts.aops:
+        b = 0
+    elif b is None:
+        return view.getProblemString(problem, display, i=entry.i)
+    try:
+        body = problem.bodies[b]
+    except IndexError:
+        logging.error(f"Couldn't access {b}-th body of {problem}")
+        return None
+    if opts.twitch:
+        return "Solution from [i]Twitch Solves ISL[/i]:\n\n" + strparse.toAOPS(body)
+    elif opts.aops:
+        return strparse.toAOPS(body)
+    elif opts.preserve:
+        return body
+    else:
+        return strparse.demacro(body)
+
+
 def main(self: object, argv: list[str]):
     opts = parser.parse_args(argv)
     display = view.Display.from_opts(opts)
-    if opts.key is not None:
-        entry = model.getEntryByKey(opts.key)
-    else:
-        entry = model.getEntryByKey(fzf_choose(display))
+    key = opts.key if opts.key is not None else fzf_choose(display)
+    entry = model.getEntryByKey(key)
     if entry is None:
-        logging.error(opts.key + " not found")
-    elif entry.secret and not opts.brave:
-        logging.error("Problem can't be shown without --brave option")
-        return
-    else:
-        b = opts.body
-        problem = entry.full
-        if b is None and opts.twitch:
-            b = 1
-        elif b is None and opts.aops:
-            b = 0
-        elif b is None:
-            view.printProblem(problem, display, i=entry.i)
-            return
-        try:
-            if opts.twitch:
-                view.out("Solution from [i]Twitch Solves ISL[/i]:\n")
-                view.out(strparse.toAOPS(problem.bodies[b]))
-            elif opts.aops:
-                view.out(strparse.toAOPS(problem.bodies[b]))
-            elif opts.preserve:
-                view.out(problem.bodies[b])
-            else:
-                view.out(strparse.demacro(problem.bodies[b]))
-        except IndexError:
-            logging.error(f"Couldn't access {b}-th body of {problem}")
+        logging.error(key + " not found")
+    elif (text := render(entry, opts, display)) is not None:
+        view.out(text)

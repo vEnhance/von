@@ -4,7 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from von import model
+from von import model, view
+from von.controller import asy, markup, po, search, show, solve
 from von.term import VonTerminal
 
 from .conftest import write_problem
@@ -204,3 +205,60 @@ class TestOptionsDoNotLeak:
         assert "Hidden" in run("search", "--brave", "--nocolor", "hidden")
         assert "Hidden" not in run("status", "--nocolor")
         assert "Problem not shown" in run("status", "--nocolor")
+
+
+class TestWorkFunctions:
+    """The data-returning halves of the commands, called directly."""
+
+    def test_search_run(self, db: Path):
+        result = search.run(search.parser.parse_args(["-t", "alg", "-l"]))
+        assert result == []
+        result = search.run(search.parser.parse_args(["-t", "alg", "-a"]))
+        assert result is not None
+        assert [e.source for e in result] == ["IMO 2005/3", "USAMO 2000/6"]
+        assert search.run(search.parser.parse_args([])) is None
+
+    def test_show_render(self, db: Path):
+        entry = model.getEntryByKey("USAMO 2000/6")
+        assert entry is not None
+        opts = show.parser.parse_args(["-b", "1"])
+        assert show.render(entry, opts, view.Display()) == "Solution here."
+        opts = show.parser.parse_args(["-b", "9"])
+        assert show.render(entry, opts, view.Display()) is None
+
+    def test_show_render_secret(self, db: Path):
+        write_problem(db, "s.tex", "SECRET 1", desc="Hidden")
+        model.rebuildIndex()
+        entry = model.getEntryByKey("SECRET 1")
+        assert entry is not None
+        opts = show.parser.parse_args(["-b", "0"])
+        assert show.render(entry, opts, view.Display()) is None
+        opts = show.parser.parse_args(["-b", "0", "--brave"])
+        assert show.render(entry, opts, view.Display()) == "Statement."
+
+    def test_markup_render(self, db: Path):
+        entry = model.getEntryByKey("IMO 2005/3")
+        assert entry is not None
+        opts = markup.parser.parse_args(["--preserve"])
+        assert markup.render([entry], opts) == "## IMO 2005/3.\n\nStatement."
+
+    def test_po_render(self, db: Path):
+        opts = po.parser.parse_args(["-k", "--title", "Hi"])
+        tex = po.render(["IMO 2005/3", "IMO 2005/2"], opts)
+        assert tex is not None
+        assert r"\title{Hi}" in tex
+        assert "\\begin{problem}[IMO 2005/3]\nStatement.\n\\end{problem}" in tex
+        assert po.default_title(["IMO 2005/3"]) == "IMO 2005/3"
+        assert po.default_title(["nope"]) == "Solution"
+        assert po.default_title(["a", "b"]) == "Solutions"
+
+    def test_solve_render(self, db: Path):
+        opts = solve.parser.parse_args(["unused.tex", "--lazy", "--pagebreaks"])
+        assert solve.render(["\\von[Hi]{IMO 2005/3}\n"], opts) == (
+            "\\begin{problem}[Hi]\nStatement.\n\\end{problem}\n"
+        )
+
+    def test_asy_extract(self):
+        sol = "\\begin{asy}\n  a; /* x */\n    b;\n\\end{asy}"
+        assert asy.extract(sol) == "a;\n  b;"
+        assert asy.extract(sol, comments=True) == "a; /* x */\n  b;"

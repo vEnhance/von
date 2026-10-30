@@ -1,4 +1,5 @@
 import logging
+from argparse import Namespace
 
 from .. import model, view
 
@@ -66,10 +67,8 @@ url_group.add_argument(
 )
 
 
-def main(self: object, argv: list[str]):
-    opts = parser.parse_args(argv)
-    display = view.Display.from_opts(opts)
-
+def run(opts: Namespace) -> list[model.PickleMappingEntry] | None:
+    """Runs the search described by opts, or returns None if it's malformed"""
     query_is_empty = (
         len(opts.s_terms + opts.s_tags + opts.s_sources + opts.s_authors) == 0
     )
@@ -78,10 +77,10 @@ def main(self: object, argv: list[str]):
         logging.warning(
             "Must supply at least one search keyword or pass --everything option."
         )
-        return
+        return None
     if opts.everything is True and query_is_empty is False:
         logging.warning("Passing --everything with parameters makes no sense.")
-        return
+        return None
 
     if opts.notused is True:
         in_otis = False
@@ -101,9 +100,11 @@ def main(self: object, argv: list[str]):
     if search_path != "":
         logging.info(
             "Search restricted to "
-            + display.paint("BOLD_GREEN", view.formatPath(search_path))
+            + view.APPLY_COLOR(
+                "BOLD_GREEN", view.formatPath(search_path), enabled=opts.color
+            )
         )
-    result = model.runSearch(
+    return model.runSearch(
         terms=opts.s_terms,
         tags=opts.s_tags,
         sources=opts.s_sources,
@@ -115,6 +116,13 @@ def main(self: object, argv: list[str]):
         has_url=has_url,
     )
 
+
+def main(self: object, argv: list[str]):
+    opts = parser.parse_args(argv)
+    result = run(opts)
+    if result is None:
+        return
+    display = view.Display.from_opts(opts)
     for entry in result:
         view.printEntry(entry, display)
     if len(result) == 0:
