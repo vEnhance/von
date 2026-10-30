@@ -1,20 +1,21 @@
 import argparse
 import string
+import sys
 from typing import Any
 
 from .model import PickleMappingEntry, Problem
 from .puid import inferPUID
-from .rc import USER_OS
+from .rc import config
 from .termcolors import TERM_COLOR
 
-if USER_OS == "windows":
+if sys.platform == "win32":
     from colorama import init  # type: ignore
 
     init()
 
 
 def APPLY_COLOR(color_name: str, s: str):
-    if OPTS.color is False:
+    if OPTS.color is False or config().color is False:
         return s
     num_leading_spaces = len(s) - len(s.lstrip())
     return (

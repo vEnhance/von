@@ -1,22 +1,31 @@
-import os
-import tempfile
+from collections.abc import Iterator
 from pathlib import Path
 
-# von.rc reads (and may create) the user's config at import time,
-# so point it at a throwaway config before any test imports von.
-_TEST_ROOT = Path(tempfile.mkdtemp(prefix="von-test-"))
-_CONFIG_DIR = _TEST_ROOT / "config" / "von"
-_BASE_PATH = _TEST_ROOT / "vondb"
-_TMP_PATH = _TEST_ROOT / "tmp"
-for d in (_CONFIG_DIR, _BASE_PATH, _TMP_PATH):
-    d.mkdir(parents=True)
-(_CONFIG_DIR / "config").write_text(
-    f"""name: "Test Author"
-base_path: "{_BASE_PATH}"
-von_tmp_path: "{_TMP_PATH}"
+import pytest
+
+from von.rc import Config, load_config, set_config
+
+
+@pytest.fixture(autouse=True)
+def von_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Config]:
+    """Gives every test its own config file and empty VON database."""
+    base_path = tmp_path / "vondb"
+    tmp_dir = tmp_path / "tmp"
+    config_dir = tmp_path / "config" / "von"
+    for d in (base_path, tmp_dir, config_dir):
+        d.mkdir(parents=True)
+    (config_dir / "config").write_text(
+        f"""name: "Test Author"
+base_path: "{base_path}"
+von_tmp_path: "{tmp_dir}"
 tags: ["easy", "medium", "hard"]
 """
-)
+    )
+    # also picked up by `python -m von` subprocesses
+    monkeypatch.delenv("APPconfig", raising=False)
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(config_dir.parent))
 
-os.environ.pop("APPconfig", None)
-os.environ["XDG_CONFIG_HOME"] = str(_CONFIG_DIR.parent)
+    cfg = load_config()
+    set_config(cfg)
+    yield cfg
+    set_config(None)

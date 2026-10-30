@@ -6,35 +6,32 @@ import logging
 import os
 import pickle as pickle
 import random
+from pathlib import Path
 from typing import Any, Callable, TextIO
 
 import yaml
 
 from .puid import inferPUID
-from .rc import (  # NOQA
-    OTIS_EVIL_JSON_PATH,
-    SEPARATOR,
-    SORT_TAGS,
-    VON_BASE_PATH,
-    VON_CACHE_PATH,
-    VON_INDEX_PATH,
-)
+from .rc import SEPARATOR, config
 
-OTIS_USED_SOURCES_LIST: list[str] | None
-if OTIS_EVIL_JSON_PATH is not None:
-    with open(OTIS_EVIL_JSON_PATH) as f:
-        evil_json = json.load(f)
-        OTIS_HANDOUT_USED_SOURCES = evil_json.values()
-else:
-    OTIS_HANDOUT_USED_SOURCES = None
+
+@functools.cache
+def _readOtisUsedSources(evil_path: Path) -> list[str]:
+    with open(evil_path) as f:
+        return list(json.load(f).values())
+
+
+def getOtisUsedSources() -> list[str] | None:
+    evil_path = config().evil_path
+    return _readOtisUsedSources(evil_path) if evil_path is not None else None
 
 
 def shortenPath(path: str):
-    return os.path.relpath(path, VON_BASE_PATH)
+    return os.path.relpath(path, config().base_path)
 
 
 def completePath(path: str):
-    return os.path.join(VON_BASE_PATH, path)
+    return os.path.join(config().base_path, path)
 
 
 def vonOpen(path: str, *args: Any, **kwargs: Any) -> TextIO:
@@ -116,11 +113,11 @@ class pickleListVonCache(pickleObj):
 
 
 def VonIndex(mode="rb"):
-    return pickleDictVonIndex(VON_INDEX_PATH, mode)
+    return pickleDictVonIndex(config().index_path, mode)
 
 
 def VonCache(mode="rb"):
-    return pickleListVonCache(VON_CACHE_PATH, mode)
+    return pickleListVonCache(config().cache_path, mode)
 
 
 @functools.total_ordering
@@ -140,14 +137,14 @@ class GenericItem:  # superclass to Problem, PickleMappingEntry
 
     @property
     def sortvalue(self):
-        for i, d in enumerate(SORT_TAGS):
+        for i, d in enumerate(config().tags):
             if d in self.tags:
                 return i
         return -1
 
     @property
     def sortstring(self):
-        for d in SORT_TAGS:
+        for d in config().tags:
             if d in self.tags:
                 return d
         return "NONE"
@@ -161,12 +158,13 @@ class GenericItem:  # superclass to Problem, PickleMappingEntry
 
     @property
     def used_by_otis(self):
-        if OTIS_HANDOUT_USED_SOURCES is not None:
+        used_sources = getOtisUsedSources()
+        if used_sources is not None:
             if "waltz" in self.tags:
-                if self.source in OTIS_HANDOUT_USED_SOURCES:
+                if self.source in used_sources:
                     logging.critical(f"{self.source} in both OTIS handout and exam")
                 return True
-            return self.source in OTIS_HANDOUT_USED_SOURCES
+            return self.source in used_sources
         else:
             return False
 
@@ -264,8 +262,9 @@ class PickleMappingEntry(GenericItem):
 
 def getcwd():
     true_dir = os.getcwd()
-    if true_dir.startswith(VON_BASE_PATH) and true_dir != VON_BASE_PATH:
-        return os.path.relpath(true_dir, VON_BASE_PATH)
+    base_path = config().base_path
+    if true_dir.startswith(base_path) and true_dir != base_path:
+        return os.path.relpath(true_dir, base_path)
     else:
         return ""
 
@@ -289,7 +288,7 @@ def makeProblemFromPath(path: str) -> Problem:
 
 def getAllProblems() -> list[Problem]:
     ret: list[Problem] = []
-    for root, _, filenames in os.walk(VON_BASE_PATH):
+    for root, _, filenames in os.walk(config().base_path):
         for fname in filenames:
             if not fname.endswith(".tex"):
                 continue
@@ -378,7 +377,7 @@ def runSearch(
     has_url: bool | None = None,
 ) -> list[PickleMappingEntry]:
     def _lambda_is_matching(entry: PickleMappingEntry):
-        if OTIS_HANDOUT_USED_SOURCES is not None:
+        if getOtisUsedSources() is not None:
             if entry.used_by_otis and in_otis is False:
                 return False
             elif not entry.used_by_otis and in_otis is True:

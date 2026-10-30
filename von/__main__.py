@@ -2,9 +2,15 @@ import sys
 
 from . import term
 from .__about__ import __version__ as VERSION
+from .rc import ConfigError, config
 
 
 def main():
+    try:
+        config()
+    except ConfigError as e:
+        print(e, file=sys.stderr)
+        sys.exit(1)
     cmd = term.VonTerminal()
     if len(sys.argv) == 1:
         cmd.run()

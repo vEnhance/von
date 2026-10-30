@@ -15,7 +15,7 @@ from yaml.scanner import ScannerError
 from .. import model, view
 from ..clipboard import get_clipboard
 from ..puid import inferPUID
-from ..rc import EDITOR, NSEPARATOR, SEPARATOR, TAG_HINT_TEXT
+from ..rc import NSEPARATOR, SEPARATOR, config
 from . import preview
 
 # https://urlregex.com/
@@ -41,7 +41,7 @@ def user_file_input(
         filename = tf.name
     if pre_hook is not None:
         pre_hook(filename)
-    subprocess.run([*shlex.split(EDITOR), filename])
+    subprocess.run([*shlex.split(config().editor), filename])
 
     with open(filename, "r") as tf:
         edited_message = "".join(_ for _ in tf.readlines())
@@ -68,7 +68,7 @@ def solicit_user_for_content(raw_text: str, url: str, opts: Namespace):
     initial = (
         PS_INSTRUCT.format(
             url=url if url != "<++>" else "None",
-            preview_path=preview.VON_PREVIEW_PATH,
+            preview_path=config().preview_path,
         )
         + NSEPARATOR
         + raw_text
@@ -95,7 +95,6 @@ def solicit_user_for_content(raw_text: str, url: str, opts: Namespace):
             initial = raw_ps
 
 
-DEFAULT_PATH = model.getcwd()
 YAML_DATA_FILE = """# Input your problem metadata here
 
 source: {source}     # e.g. USAMO 2000/6. This must be unique
@@ -113,10 +112,10 @@ def solicit_user_for_yaml(opts: Namespace, url: str) -> None | tuple[str, Any]:
             url = clipboard_text
 
     initial = YAML_DATA_FILE.format(
-        path=model.completePath(DEFAULT_PATH),
+        path=model.getCompleteCwd(),
         now=datetime.datetime.now(),
         source="<++>" if opts.source is None else opts.source,
-        hint=TAG_HINT_TEXT,
+        hint=config().tag_hint_text,
         url=url,
     )
     while True:

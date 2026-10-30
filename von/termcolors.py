@@ -1,5 +1,3 @@
-from .rc import USE_COLOR
-
 TERM_COLOR: dict[str, str] = {}
 TERM_COLOR["NORMAL"] = ""
 TERM_COLOR["RESET"] = "\033[m"
@@ -22,7 +20,3 @@ TERM_COLOR["BG_YELLOW"] = "\033[43m"
 TERM_COLOR["BG_BLUE"] = "\033[44m"
 TERM_COLOR["BG_MAGENTA"] = "\033[45m"
 TERM_COLOR["BG_CYAN"] = "\033[46m"
-
-if USE_COLOR is False:
-    for key in list(TERM_COLOR.keys()):
-        TERM_COLOR[key] = ""

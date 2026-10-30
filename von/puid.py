@@ -1,7 +1,8 @@
+import functools
 import hashlib
 import re
 
-from .rc import VON_CUSTOM_LOOKUP
+from .rc import config
 
 lookup = {
     "Afghanistan": "AFG",
@@ -211,13 +212,19 @@ lookup["USAMO"] = "AMO"
 lookup["USAMTS"] = "USMT"
 lookup["USA GST"] = "USAEST"
 
-lookup.update(VON_CUSTOM_LOOKUP)
 # whooooo
 REGEX = r"(?P<contest>[a-zA-Z][a-zA-Z0-9 ]+)(19|20)(?P<year>[0-9][0-9])(?P<stem>[ \/](?P<locator>[0-9A-Za-z\.\/\- ]+))?$"
 re_generic = re.compile(REGEX)
 
-sorted_lookup_keys = list(lookup.keys())
-sorted_lookup_keys.sort(key=lambda x: (-len(x), x))
+
+@functools.cache
+def _getLookup(
+    custom: tuple[tuple[str, str], ...],
+) -> tuple[dict[str, str], list[str]]:
+    """Merges custom abbreviations from the config into the standard lookup
+    and returns it together with its keys sorted longest first."""
+    table = {**lookup, **dict(custom)}
+    return table, sorted(table, key=lambda x: (-len(x), x))
 
 
 def getOnlyAlphanum(s: str) -> str:
@@ -225,6 +232,9 @@ def getOnlyAlphanum(s: str) -> str:
 
 
 def inferPUID(source: str) -> str:
+    lookup, sorted_lookup_keys = _getLookup(
+        tuple(sorted(config().abbreviations.items()))
+    )
     source = source.replace("Finals", "F")
     if (m := re_generic.match(source)) is not None:
         d = m.groupdict()

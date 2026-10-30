@@ -2,20 +2,45 @@ import getpass
 import os
 import sys
 import tempfile
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 import yaml
 
-CONFIG_DIR = (
-    Path(
-        os.environ.get("APPconfig")
-        or os.environ.get("XDG_CONFIG_HOME")
-        or os.path.join(os.environ["HOME"], ".config")
+SEPARATOR = "\n---\n"
+NSEPARATOR = "\n" + SEPARATOR + "\n"
+
+# These used to be editable but I don't think it's worth it
+VON_INDEX_NAME = "index"
+
+OSName = Literal["windows", "mac", "linux"]
+
+
+class ConfigError(Exception):
+    pass
+
+
+def default_config_path() -> Path:
+    return (
+        Path(
+            os.environ.get("APPconfig")
+            or os.environ.get("XDG_CONFIG_HOME")
+            or os.path.join(os.environ["HOME"], ".config")
+        )
+        / "von"
+        / "config"
     )
-    / "von"
-)
-CONFIG_FILE = CONFIG_DIR / "config"
+
+
+def detect_os() -> OSName:
+    if sys.platform.startswith("win32"):
+        return "windows"
+    elif sys.platform.startswith("darwin"):
+        return "mac"
+    else:
+        return "linux"  # including cygwin
+
 
 EXAMPLE_CONFIG_STRING = """# vim: ft=yaml
 # This is an example of a VON config file
@@ -63,80 +88,104 @@ tags: ["trivial", "easy", "medium", "hard", "brutal"]
 #   Inter Universe Math Olympiad: IUMO
 """
 
-if not CONFIG_DIR.exists():
-    try:
-        CONFIG_DIR.mkdir()
-    except PermissionError:
-        print(
-            f"{CONFIG_DIR} does not exist! Could not load configuration.",
-            file=sys.stderr,
+
+@dataclass(frozen=True)
+class Config:
+    # Mandatory fields
+    name: str
+    base_path: str
+    tags: list[str]
+    # Optional fields
+    evil_path: Path | None = None
+    editor: str = field(default_factory=lambda: os.environ.get("EDITOR", "vim"))
+    tag_hint_text: str = ""
+    color: bool = True
+    os: OSName = field(default_factory=detect_os)
+    abbreviations: dict[str, str] = field(default_factory=dict)
+    tmp_path: str = field(default_factory=tempfile.gettempdir)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Config":
+        missing = [k for k in ("name", "base_path", "tags") if k not in data]
+        if missing:
+            raise ConfigError(
+                f"Config is missing required fields: {', '.join(missing)}"
+            )
+        kwargs: dict[str, Any] = {
+            "name": data["name"],
+            "base_path": str(Path(data["base_path"]).expanduser()),
+            "tags": data["tags"],
+        }
+        if evil_path := data.get("evil_path"):
+            kwargs["evil_path"] = Path(evil_path).expanduser()
+        if editor := data.get("editor"):
+            kwargs["editor"] = editor
+        if "tag_hint_text" in data:
+            kwargs["tag_hint_text"] = data["tag_hint_text"]
+        if "color" in data:
+            kwargs["color"] = data["color"]
+        if data.get("os") is not None:
+            kwargs["os"] = data["os"]
+        if data.get("abbreviations"):
+            kwargs["abbreviations"] = data["abbreviations"]
+        if tmp_path := data.get("von_tmp_path"):
+            kwargs["tmp_path"] = str(Path(tmp_path).expanduser())
+        return cls(**kwargs)
+
+    @property
+    def index_path(self) -> str:
+        return os.path.join(self.base_path, VON_INDEX_NAME)
+
+    @property
+    def cache_path(self) -> str:
+        return os.path.join(self.tmp_path, "von_cache_" + getpass.getuser())
+
+    @property
+    def preview_path(self) -> str:
+        return os.path.join(
+            self.tmp_path, "preview_" + getpass.getuser(), "von_preview.tex"
         )
-        sys.exit(1)
 
-if not CONFIG_FILE.exists():
-    try:
-        with open(CONFIG_FILE, "w") as f:
-            print(EXAMPLE_CONFIG_STRING, file=f)
-    except PermissionError:
-        print(
-            f"{CONFIG_FILE} does not exist and could not be written!", file=sys.stderr
+    @property
+    def post_output_dir(self) -> str:
+        return os.path.join(self.tmp_path, "po_" + getpass.getuser())
+
+
+def load_config(path: Path | None = None) -> Config:
+    """Reads the config file, writing an example one if it doesn't exist."""
+    if path is None:
+        path = default_config_path()
+    if not path.exists():
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(EXAMPLE_CONFIG_STRING + "\n")
+        except OSError as e:
+            raise ConfigError(
+                f"{path} does not exist and could not be written ({e})."
+            ) from e
+        raise ConfigError(
+            f"{path} does not exist, so we wrote a default file for you.\n"
+            "You should probably open this file and change its contents."
         )
-        sys.exit(1)
-    else:
-        print(
-            f"{CONFIG_FILE} does not exist, so we wrote a default file for you.",
-            file=sys.stderr,
-        )
-        print(
-            "You should probably open this file and change its contents.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    if not isinstance(data, dict):
+        raise ConfigError(f"{path} does not contain a valid config.")
+    return Config.from_dict(data)
 
 
-with open(CONFIG_FILE) as f:
-    config = yaml.load(f, Loader=yaml.SafeLoader)
+_config: Config | None = None
 
-# Mandatory fields in config
-VON_DEFAULT_AUTHOR = config["name"]
-SORT_TAGS = config["tags"]
-VON_BASE_PATH = str(Path(config["base_path"]).expanduser())
 
-# Optional fields
-if evil_path := config.get("evil_path", None):
-    OTIS_EVIL_JSON_PATH = Path(evil_path).expanduser()
-else:
-    OTIS_EVIL_JSON_PATH = None
+def config() -> Config:
+    """Returns the active config, loading it from disk on first use."""
+    global _config
+    if _config is None:
+        _config = load_config()
+    return _config
 
-EDITOR = config.get("editor", None) or os.environ.get("EDITOR", "vim")
-TAG_HINT_TEXT = config.get("tag_hint_text", "")
-USE_COLOR = config.get("color", True)
 
-# OS detector (can be overridden)
-USER_OS: Literal["windows"] | Literal["mac"] | Literal["linux"]
-
-if (user_os := config.get("os")) is not None:
-    USER_OS = user_os
-elif sys.platform.startswith("win32"):
-    USER_OS = "windows"
-elif sys.platform.startswith("darwin"):
-    USER_OS = "mac"
-else:
-    USER_OS = "linux"  # including cygwin
-
-VON_CUSTOM_LOOKUP = config.get("abbreviations", {})
-
-VON_TMP_PATH = str(Path(config.get("von_tmp_path", tempfile.gettempdir())).expanduser())
-
-# These used to be editable but I don't think it's worth it
-VON_INDEX_NAME = "index"
-VON_INDEX_PATH = os.path.join(VON_BASE_PATH, VON_INDEX_NAME)
-VON_CACHE_NAME = "von_cache_" + getpass.getuser()
-VON_CACHE_PATH = os.path.join(VON_TMP_PATH, VON_CACHE_NAME)
-VON_PREVIEW_PATH = os.path.join(
-    VON_TMP_PATH, "preview_" + getpass.getuser(), "von_preview.tex"
-)
-VON_POST_OUTPUT_DIR = os.path.join(VON_TMP_PATH, "po_" + getpass.getuser())
-
-SEPARATOR = "\n---\n"
-NSEPARATOR = "\n" + SEPARATOR + "\n"
+def set_config(cfg: Config | None) -> None:
+    """Replaces the active config (None means reload from disk on next use)."""
+    global _config
+    _config = cfg

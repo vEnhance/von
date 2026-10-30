@@ -9,10 +9,10 @@ import traceback
 from typing import Any
 
 from . import controller, model
-from .rc import USER_OS, VON_BASE_PATH
+from .rc import config
 from .view import APPLY_COLOR
 
-if USER_OS != "windows":
+if sys.platform != "win32":
     import readline
 
     readline.set_completer_delims(" \t\n")
@@ -24,9 +24,6 @@ else:
 
     init()
 
-WELCOME_STRING = APPLY_COLOR("BOLD_YELLOW", "Welcome to VON!")
-GOODBYE_STRING = APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D")
-
 
 def _complete_path(path: str):
     if os.path.isdir(path):
@@ -37,7 +34,7 @@ def _complete_path(path: str):
 
 class VonTerminal(cmd.Cmd, controller.VonController):
     def getcwd(self):
-        return model.getcwd().replace(VON_BASE_PATH.rstrip("/"), "")
+        return model.getcwd().replace(config().base_path.rstrip("/"), "")
 
     @property
     def prompt(self):
@@ -48,7 +45,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
             + APPLY_COLOR("BOLD_GREEN", ":)")
             + " "
         )
-        if USER_OS != "windows" and sys.stdin.isatty():
+        if config().os != "windows" and sys.stdin.isatty():
             # mark escape sequences as zero-width so readline computes
             # the prompt length (and hence cursor position) correctly
             s = re.sub(r"(\033\[[0-9;]*m)", "\001\\1\002", s)
@@ -62,7 +59,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
         return _complete_path(text)
 
     def run(self):
-        print(WELCOME_STRING)
+        print(APPLY_COLOR("BOLD_YELLOW", "Welcome to VON!"))
         os.chdir(model.getCompleteCwd())
         while 1:
             try:
@@ -74,7 +71,7 @@ class VonTerminal(cmd.Cmd, controller.VonController):
                 pass
             except Exception:
                 traceback.print_exc()
-        print("\n" + GOODBYE_STRING)
+        print("\n" + APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D"))
 
     def onecmd(self, line):
         """Interpret the argument as though it had been typed in response
