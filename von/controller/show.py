@@ -67,7 +67,7 @@ def render(
         return strparse.demacro(body)
 
 
-def main(self: object, argv: list[str]):
+def main(argv: list[str]):
     opts = parser.parse_args(argv)
     display = view.Display.from_opts(opts)
     key = opts.key if opts.key is not None else fzf_choose(display)

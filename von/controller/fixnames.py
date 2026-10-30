@@ -10,7 +10,7 @@ parser = view.Parser(
 )
 
 
-def main(self: object, argv: list[str]):
+def main(argv: list[str]):
     parser.parse_args(argv)
     base_path = Path(config().base_path)
     for p in model.getAllProblems():

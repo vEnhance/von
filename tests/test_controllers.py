@@ -5,15 +5,10 @@ from pathlib import Path
 import pytest
 
 from von import model, view
-from von.controller import asy, markup, po, search, show, solve
+from von.controller import asy, dispatch, markup, po, search, show, solve
 from von.term import VonTerminal
 
 from .conftest import write_problem
-
-
-def dispatch(argv: list[str]) -> None:
-    VonTerminal().direct(argv)
-
 
 ESC = "\033["
 
@@ -196,7 +191,7 @@ class TestOptionsDoNotLeak:
     def test_nocolor(self, run, monkeypatch: pytest.MonkeyPatch):
         monkeypatch.setattr("sys.stdin.isatty", lambda: False)
         run("search", "--nocolor", "-t", "alg")
-        assert ESC in VonTerminal().prompt
+        assert ESC in VonTerminal().make_prompt()
         assert ESC in run("status")
 
     def test_brave(self, run, db: Path):

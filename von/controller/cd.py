@@ -6,7 +6,7 @@ parser = view.Parser(prog="cd", description="Changes the working directory.")
 parser.add_argument("path", help="The path to change to")
 
 
-def main(self: object, argv: list[str]):
+def main(argv: list[str]):
     opts = parser.parse_args(argv)
     os.chdir(opts.path)
 

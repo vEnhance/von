@@ -1,3 +1,7 @@
+import logging
+from collections.abc import Callable
+
+from ..view import APPLY_COLOR
 from . import (
     add,
     asy,
@@ -17,33 +21,69 @@ from . import (
     status,
 )
 
+Command = Callable[[list[str]], None]
 
-class VonController:
-    def do_ls(self, argv: list[str]):
-        self.do_cd(["."] + argv)
 
-    do_add = add.main
-    do_asy = asy.main
-    do_build = fixnames.main
-    do_br = br.main
-    do_cd = cd.main
-    do_clear = clear.main
-    do_cs = do_cd
-    do_e = edit.main
-    do_edit = edit.main
-    do_f = show.main  # alias find
-    do_fix = fixnames.main
-    do_fixnames = fixnames.main
-    do_link = link.main
-    do_m = markup.main
-    do_markup = markup.main
-    do_index = index.main
-    do_nuke = fixnames.main
-    do_paths = paths.main
-    do_po = po.main
-    do_s = search.main
-    do_search = search.main
-    do_show = show.main
-    do_solve = solve.main
-    do_ss = status.main
-    do_status = status.main
+def ls(argv: list[str]):
+    cd.main(["."] + argv)
+
+
+COMMANDS: dict[str, Command] = {
+    "add": add.main,
+    "asy": asy.main,
+    "br": br.main,
+    "build": fixnames.main,
+    "cd": cd.main,
+    "clear": clear.main,
+    "cs": cd.main,
+    "e": edit.main,
+    "edit": edit.main,
+    "f": show.main,  # alias find
+    "fix": fixnames.main,
+    "fixnames": fixnames.main,
+    "index": index.main,
+    "link": link.main,
+    "ls": ls,
+    "m": markup.main,
+    "markup": markup.main,
+    "nuke": fixnames.main,
+    "paths": paths.main,
+    "po": po.main,
+    "s": search.main,
+    "search": search.main,
+    "show": show.main,
+    "solve": solve.main,
+    "ss": status.main,
+    "status": status.main,
+}
+
+
+def show_help(argv: list[str]):
+    if argv:
+        name = argv[0]
+        if name not in COMMANDS:
+            logging.error(f"Command {name} not found")
+        else:
+            print(APPLY_COLOR("MAGENTA", f"Getting `{name} --help`..."))
+            COMMANDS[name](["--help"])
+    else:
+        print("Here is a list of available commands:")
+        for name in sorted(COMMANDS):
+            print("*", name)
+        print("Running with no arguments starts an interactive terminal.")
+        print("You can get more help on a command by typing its name then --help.")
+        print("To exit VON, type an EOF character (usually possible via Ctrl+D).")
+
+
+def dispatch(argv: list[str]):
+    """Runs a command given as a list of arguments, e.g. ["show", "-b", "1", "X"]"""
+    if len(argv) == 0:
+        logging.error("No command given")
+        return
+    name, args = argv[0], argv[1:]
+    if name == "help":
+        show_help(args)
+    elif name in COMMANDS:
+        COMMANDS[name](args)
+    else:
+        logging.error(f"Command {name} not recognized")

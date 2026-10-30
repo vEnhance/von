@@ -277,7 +277,7 @@ def render(keys: list[str], opts: Namespace) -> str | None:
     return s
 
 
-def main(self: object, argv: list[str]):
+def main(argv: list[str]):
     opts = parser.parse_args(argv)
     keys = opts.keys
     if len(keys) == 0:

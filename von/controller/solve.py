@@ -76,7 +76,7 @@ def render(lines: Iterable[str], opts: Namespace) -> str:
     return s
 
 
-def main(self: object, argv: list[str]):
+def main(argv: list[str]):
     opts = parser.parse_args(argv)
     with open(opts.filename) as f:
         view.out(render(f, opts))

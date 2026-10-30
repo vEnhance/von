@@ -1,6 +1,5 @@
 import cmd
 import glob
-import logging
 import os
 import re
 import shlex
@@ -32,12 +31,11 @@ def _complete_path(path: str):
         return glob.glob(path + "*")
 
 
-class VonTerminal(cmd.Cmd, controller.VonController):
+class VonTerminal(cmd.Cmd):
     def getcwd(self):
         return model.getcwd().replace(config().base_path.rstrip("/"), "")
 
-    @property
-    def prompt(self):
+    def make_prompt(self) -> str:
         s = (
             APPLY_COLOR("BOLD_CYAN", "VON/")
             + APPLY_COLOR("YELLOW", self.getcwd())
@@ -51,8 +49,20 @@ class VonTerminal(cmd.Cmd, controller.VonController):
             s = re.sub(r"(\033\[[0-9;]*m)", "\001\\1\002", s)
         return s
 
-    def emptyline(self):
-        pass
+    def preloop(self):
+        self.prompt = self.make_prompt()
+
+    def postcmd(self, stop: bool, line: str) -> bool:
+        self.prompt = self.make_prompt()  # cwd may have changed
+        return stop
+
+    def emptyline(self) -> bool:
+        return False
+
+    def completenames(self, text: str, *ignored: Any) -> list[str]:
+        return [
+            name for name in [*controller.COMMANDS, "help"] if name.startswith(text)
+        ]
 
     def completedefault(self, *ignored: Any) -> list[str]:
         text = ignored[0] if ignored else ""
@@ -73,53 +83,13 @@ class VonTerminal(cmd.Cmd, controller.VonController):
                 traceback.print_exc()
         print("\n" + APPLY_COLOR("BOLD_YELLOW", "OK, goodbye! :D"))
 
-    def onecmd(self, line):
-        """Interpret the argument as though it had been typed in response
-        to the prompt."""
+    def onecmd(self, line: str) -> bool:
+        """Runs a line typed at the prompt; returns True to exit"""
         if line.strip() == "":
             return self.emptyline()
-        _ = shlex.split(line)
-        cmd = _[0]
-        argv = _[1:]
         self.lastcmd = line
         if line == "EOF":
             self.lastcmd = ""
-            return 1
-        else:
-            try:
-                func = getattr(self, "do_" + cmd)
-            except AttributeError:
-                return self.default(line)
-            return func(argv)
-
-    def direct(self, cargs: list[str]):
-        # cargs = sys.argv ostensibly
-        if len(cargs) == 0:
-            logging.error("No command given")
-        cmd = cargs[0]
-        if hasattr(self, "do_" + cmd):
-            func = getattr(self, "do_" + cmd)
-            func(cargs[1:])
-        else:
-            logging.error(f"Command {cmd} not recognized")
-
-    def do_help(self, arg: str | list[str]) -> None:
-        # onecmd() and direct() pass a list of shlex-split args
-        argv = arg.split() if isinstance(arg, str) else arg
-        arg = "".join(argv)
-        if arg:
-            try:
-                func = getattr(self, "do_" + arg)
-            except AttributeError:
-                logging.error(f"Command {arg} not found")
-            else:
-                print(APPLY_COLOR("MAGENTA", f"Getting `{arg} --help`..."))
-                func(["--help"])
-        else:
-            print("Here is a list of available commands:")
-            for name in sorted(self.get_names()):
-                if name[:3] == "do_" and name != "do_help" and name != "do_EOF":
-                    print("*", name[3:])
-            print("Running with no arguments starts an interactive terminal.")
-            print("You can get more help on a command by typing its name then --help.")
-            print("To exit VON, type an EOF character (usually possible via Ctrl+D).")
+            return True
+        controller.dispatch(shlex.split(line))
+        return False

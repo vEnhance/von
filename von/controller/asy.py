@@ -43,7 +43,7 @@ def extract(solution: str, number: int = 1, comments: bool = False) -> str:
     return "\n".join(line[min_indent:] for line in lines)
 
 
-def main(self: object, argv: list[str]):
+def main(argv: list[str]):
     opts = parser.parse_args(argv)
     entry = model.getEntryByKey(opts.key)
     if entry is None:

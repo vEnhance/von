@@ -201,8 +201,7 @@ parser.add_argument(
 )
 
 
-def main(self: object, argv: list[str]):
-    del self
+def main(argv: list[str]):
     opts = parser.parse_args(argv)
     url = opts.url if opts.url is not None else "<++>"
     if opts.filename is not None:

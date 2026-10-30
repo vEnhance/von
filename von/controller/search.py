@@ -117,7 +117,7 @@ def run(opts: Namespace) -> list[model.PickleMappingEntry] | None:
     )
 
 
-def main(self: object, argv: list[str]):
+def main(argv: list[str]):
     opts = parser.parse_args(argv)
     result = run(opts)
     if result is None:
