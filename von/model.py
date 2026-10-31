@@ -102,7 +102,9 @@ class pickleDictVonIndex(pickleObj):
 
 class pickleListVonCache(pickleObj):
     store: list["PickleMappingEntry"]
-    __getitem__: Callable[[int], "PickleMappingEntry"]
+
+    def __getitem__(self, key: int) -> "PickleMappingEntry":
+        return super().__getitem__(key)
 
     def _initial(self) -> list["PickleMappingEntry"]:
         return []

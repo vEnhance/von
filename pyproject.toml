@@ -29,9 +29,9 @@ von = "von.__main__:main"
 
 [dependency-groups]
 dev = [
-    "prek>=0.5.0",
-    "pytest>=9.1.1",
-    "ty>=0.0.75",
+    "prek>=0.5.9",
+    "pytest>=9.2.0",
+    "ty>=0.0.95",
 ]
 
 [tool.ruff]
