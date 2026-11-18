@@ -159,6 +159,7 @@ messed up in some way (for example, if you move a file).
 To fix this run `von build` to recompile the entire index.
 `von build` is also useful in the cases of deleting a file
 and thus problem from the index.
+It also clears the cache of search results.
 
 ## Preview
 

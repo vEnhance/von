@@ -1,7 +1,8 @@
 from .. import model, view
 
 parser = view.Parser(
-    prog="index", description="Rebuilds the problem index. No arguments."
+    prog="index",
+    description="Rebuilds the problem index and clears the cache. No arguments.",
 )
 
 

@@ -80,6 +80,13 @@ class TestCacheCommands:
         run("clear")
         assert run("status") == ""
 
+    @pytest.mark.parametrize("cmd", ["index", "fixnames", "build"])
+    def test_reindex_clears_cache(self, run, cmd: str):
+        run("search", "-t", "alg")
+        assert run("status") != ""
+        run(cmd)
+        assert run("status") == ""
+
     def test_ls(self, run, db: Path, monkeypatch: pytest.MonkeyPatch):
         monkeypatch.chdir(db)
         assert run("ls", "--nocolor").splitlines() == [

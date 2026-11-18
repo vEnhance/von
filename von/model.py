@@ -512,3 +512,5 @@ def buildIndex(problems: Iterable[Problem]) -> dict[str, PickleMappingEntry]:
 
 def rebuildIndex():
     setEntireIndex(buildIndex(getAllProblems()))
+    # cached entries may point at stale paths/sources, so drop them
+    clearCache()

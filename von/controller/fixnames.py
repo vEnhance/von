@@ -6,7 +6,7 @@ from ..rc import config
 
 parser = view.Parser(
     prog="fixnames",
-    description="Fixes all the filenames to match PUID and rebuilds the index.",
+    description="Fixes all the filenames to match PUID, rebuilds the index, and clears the cache.",
 )
 
 
